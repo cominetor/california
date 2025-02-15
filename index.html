@@ -98,6 +98,42 @@
       padding-left: 10px;
       border-left: 1px solid #ccc;
     }
+    /* Alloggio styling - nuovo layout a card */
+    .alloggio-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .alloggio-card {
+      background: #f9f9f9;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .alloggio-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #444;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    .alloggio-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .alloggio-card ul li {
+      margin-bottom: 8px;
+    }
+    .alloggio-card ul li a {
+      text-decoration: none;
+      color: #444;
+      transition: color 0.3s ease;
+    }
+    .alloggio-card ul li a:hover {
+      color: #000;
+    }
     /* Calcolatore styling */
     .calculator-container {
       background: #f9f9f9;
@@ -136,7 +172,7 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    /* Spazio verticale tra pulsanti in una stessa form-row */
+    /* Spazio verticale tra pulsanti */
     .form-row button + button {
       margin-top: 10px;
     }
@@ -170,6 +206,37 @@
     .checklist-category p {
       font-size: 0.9rem;
       color: #666;
+    }
+    /* Costi Stimati styling */
+    #costi-section table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    #costi-section th, 
+    #costi-section td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+    #costi-section th {
+      background-color: #444;
+      color: #fff;
+      font-weight: 700;
+    }
+    #costi-section tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    #costi-section tbody tr:hover {
+      background-color: #e0e0e0;
+    }
+    #costi-section p {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -315,57 +382,64 @@
       </div>
     </section>
     
-    <!-- Alloggio Section -->
+    <!-- Alloggio Section (stile a card) -->
     <section id="alloggio-section">
       <h2>Alloggio</h2>
       <p>Scopri le opzioni di hotel per ogni tappa del viaggio:</p>
-      <ul>
-        <li><strong>Los Angeles:</strong>
+      <div class="alloggio-cards">
+        <div class="alloggio-card">
+          <h3>Los Angeles</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/freehand-los-angeles.html" target="_blank">Freehand Los Angeles</a></li>
             <li><a href="https://www.booking.com/hotel/us/the-l-a-line.html" target="_blank">The LINE Hotel LA</a></li>
             <li><a href="https://www.booking.com/hotel/us/erwin-venice.html" target="_blank">Hotel Erwin Venice</a></li>
           </ul>
-        </li>
-        <li><strong>San Francisco:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>San Francisco</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/riu-plaza-fishermans-wharf.html" target="_blank">Hotel Riu Plaza Fisherman's Wharf</a></li>
             <li><a href="https://www.booking.com/hotel/us/hyatt-fisherman-s-wharf.html" target="_blank">Hyatt Centric Fisherman's Wharf</a></li>
             <li><a href="https://www.booking.com/hotel/us/caza.html" target="_blank">Hotel Caza</a></li>
           </ul>
-        </li>
-        <li><strong>Yosemite:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>Yosemite</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/yosemite-view-lodge.html" target="_blank">Yosemite View Lodge</a></li>
             <li><a href="https://www.yosemitecedarlodge.com/" target="_blank">Cedar Lodge</a></li>
           </ul>
-        </li>
-        <li><strong>Lone Pine:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>Lone Pine</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/dow-villa-motel.html" target="_blank">Dow Villa Motel</a></li>
             <li><a href="https://www.booking.com/hotel/us/whitney-portal-hostel-and-hotel.html" target="_blank">Whitney Portal Hostel & Hotel</a></li>
           </ul>
-        </li>
-        <li><strong>Page:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>Page</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/lake-powell-resort.html" target="_blank">Lake Powell Resort</a></li>
             <li><a href="https://www.booking.com/hotel/us/country-inn-suites-by-carlson-page.html" target="_blank">Country Inn & Suites by Carlson Page</a></li>
           </ul>
-        </li>
-        <li><strong>Las Vegas:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>Las Vegas</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/hilton-grand-vacations-club-on-the-las-vegas-strip.html" target="_blank">Hilton Grand Vacations Club</a></li>
             <li><a href="https://www.booking.com/hotel/us/the-linq-hotel-casino.html" target="_blank">The LINQ Hotel + Experience</a></li>
             <li><a href="https://www.booking.com/hotel/us/treasure-island.html" target="_blank">Treasure Island Hotel & Casino</a></li>
           </ul>
-        </li>
-        <li><strong>Death Valley:</strong>
+        </div>
+        <div class="alloggio-card">
+          <h3>Death Valley</h3>
           <ul>
             <li><a href="https://www.booking.com/hotel/us/the-ranch-at-death-valley.html" target="_blank">The Ranch at Death Valley</a></li>
             <li><a href="https://www.stovepipedeathvalley.com/" target="_blank">Stovepipe Wells Village Hotel</a></li>
           </ul>
-        </li>
-      </ul>
+        </div>
+      </div>
     </section>
     
     <!-- Costi Stimati Section -->
