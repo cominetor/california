@@ -19,7 +19,8 @@
       line-height: 1.6;
     }
     header {
-      background: #333;
+      background: url("https://img.freepik.com/free-vector/background-with-colorful-palm-silhouettes_23-2148564109.jpg?t=st=1739666949~exp=1739670549~hmac=01a0cd80d55907bcec7ac6437fb26383bbbff69d2354695640284303c588cff8&w=1380") no-repeat center center;
+      background-size: cover;
       color: #fff;
       padding: 40px 20px;
       text-align: center;
@@ -27,9 +28,11 @@
     header h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
     }
     header p {
       font-size: 1rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
     }
     nav {
       background: #444;
@@ -117,76 +120,40 @@
       padding-left: 10px;
       border-left: 1px solid #ccc;
     }
-    /* Alloggio styling - layout a card (già presente) */
-    .alloggio-cards {
+    /* Alloggio e Risorse Utili styling */
+    .alloggio-cards, .resource-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       margin-top: 15px;
     }
-    .alloggio-card {
+    .alloggio-card, .resource-card {
       background: #f9f9f9;
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .alloggio-card h3 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-      color: #444;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
-    }
-    .alloggio-card ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .alloggio-card ul li {
-      margin-bottom: 8px;
-    }
-    .alloggio-card ul li a {
-      text-decoration: none;
-      color: #444;
-      transition: color 0.3s ease;
-    }
-    .alloggio-card ul li a:hover {
-      color: #000;
-    }
-    /* Risorse Utili styling - layout a card */
-    .resource-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 15px;
-    }
-    .resource-card {
-      background: #f9f9f9;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .resource-card h3 {
+    .alloggio-card h3, .resource-card h3 {
       font-size: 1.3rem;
       color: #444;
       margin-bottom: 10px;
       border-bottom: 1px solid #ddd;
       padding-bottom: 5px;
     }
-    .resource-card ul {
+    .alloggio-card ul, .resource-card ul {
       list-style: none;
       padding-left: 0;
     }
-    .resource-card ul li {
+    .alloggio-card ul li, .resource-card ul li {
       margin-bottom: 8px;
     }
-    .resource-card ul li a {
+    .alloggio-card ul li a, .resource-card ul li a {
       text-decoration: none;
       color: #444;
       transition: color 0.3s ease;
     }
-    .resource-card ul li a:hover {
+    .alloggio-card ul li a:hover, .resource-card ul li a:hover {
       color: #000;
     }
     /* Calcolatore styling */
@@ -227,7 +194,6 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    /* Spazio verticale tra pulsanti */
     .form-row button + button {
       margin-top: 10px;
     }
@@ -441,7 +407,7 @@
       </div>
     </section>
     
-    <!-- Alloggio Section (stile a card) -->
+    <!-- Alloggio Section -->
     <section id="alloggio-section">
       <h2>Alloggio</h2>
       <p>Scopri le opzioni di hotel per ogni tappa del viaggio:</p>
@@ -584,102 +550,6 @@
       </div>
     </section>
     
-    <!-- Checklist Section -->
-    <section id="checklist-section">
-      <h2>Checklist Bagaglio</h2>
-      <p>Controlla la lista per assicurarti di non dimenticare nulla!</p>
-      
-      <div class="checklist-category">
-        <h3>🧳 Documenti</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="doc1"> <label for="doc1">Passaporto (validità di almeno 6 mesi oltre la data di rientro) 🛂</label></li>
-          <li><input type="checkbox" id="doc2"> <label for="doc2">Visto ESTA (se necessario) 📝</label></li>
-          <li><input type="checkbox" id="doc3"> <label for="doc3">Patente di guida internazionale (se noleggi un'auto) 🚗</label></li>
-          <li><input type="checkbox" id="doc4"> <label for="doc4">Biglietti aerei/di trasporto ✈️</label></li>
-          <li><input type="checkbox" id="doc5"> <label for="doc5">Conferme di prenotazione hotel/alloggi 🏨</label></li>
-          <li><input type="checkbox" id="doc6"> <label for="doc6">Assicurazione di viaggio (copertura medica) 🚑</label></li>
-          <li><input type="checkbox" id="doc7"> <label for="doc7">Fotocopie dei documenti 📄</label></li>
-          <li><input type="checkbox" id="doc8"> <label for="doc8">Numeri utili (assicurazione, banche, emergenze) 📞</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>👕 Abbigliamento</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="abbigliamento1"> <label for="abbigliamento1">Magliette leggere e traspiranti (7-10) 👕</label></li>
-          <li><input type="checkbox" id="abbigliamento2"> <label for="abbigliamento2">Pantaloncini (3-5) 🩳</label></li>
-          <li><input type="checkbox" id="abbigliamento3"> <label for="abbigliamento3">Pantaloni lunghi leggeri (2-3) 👖</label></li>
-          <li><input type="checkbox" id="abbigliamento4"> <label for="abbigliamento4">Costume da bagno (2) 👙</label></li>
-          <li><input type="checkbox" id="abbigliamento5"> <label for="abbigliamento5">Copricostume/pareo 🏖️</label></li>
-          <li><input type="checkbox" id="abbigliamento6"> <label for="abbigliamento6">Biancheria intima (10) 🩲</label></li>
-          <li><input type="checkbox" id="abbigliamento7"> <label for="abbigliamento7">Calzini (10) 🧦</label></li>
-          <li><input type="checkbox" id="abbigliamento8"> <label for="abbigliamento8">Pigiama 😴</label></li>
-          <li><input type="checkbox" id="abbigliamento9"> <label for="abbigliamento9">Felpa leggera o giacca 🧥</label></li>
-          <li><input type="checkbox" id="abbigliamento10"> <label for="abbigliamento10">Cappello o bandana 🧢</label></li>
-          <li><input type="checkbox" id="abbigliamento11"> <label for="abbigliamento11">Occhiali da sole 😎</label></li>
-          <li><input type="checkbox" id="abbigliamento12"> <label for="abbigliamento12">Scarpe comode per camminare (2 paia) 👟</label></li>
-          <li><input type="checkbox" id="abbigliamento13"> <label for="abbigliamento13">Sandali o infradito 🩴</label></li>
-          <li><input type="checkbox" id="abbigliamento14"> <label for="abbigliamento14">Scarpe da ginnastica o trekking 🥾</label></li>
-          <li><input type="checkbox" id="abbigliamento15"> <label for="abbigliamento15">Abbigliamento elegante 👗</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>🧴 Igiene personale</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="igiene1"> <label for="igiene1">Spazzolino e dentifricio 🪥</label></li>
-          <li><input type="checkbox" id="igiene2"> <label for="igiene2">Shampoo e balsamo 🧴</label></li>
-          <li><input type="checkbox" id="igiene3"> <label for="igiene3">Bagnoschiuma 🚿</label></li>
-          <li><input type="checkbox" id="igiene4"> <label for="igiene4">Deodorante 🌸</label></li>
-          <li><input type="checkbox" id="igiene5"> <label for="igiene5">Crema solare (SPF elevato) ☀️</label></li>
-          <li><input type="checkbox" id="igiene6"> <label for="igiene6">Doposole Aloe Vera</label></li>
-          <li><input type="checkbox" id="igiene7"> <label for="igiene7">Repellente per insetti 🦟</label></li>
-          <li><input type="checkbox" id="igiene8"> <label for="igiene8">Pettine o spazzola 빗</label></li>
-          <li><input type="checkbox" id="igiene9"> <label for="igiene9">Make‑up (se usi) 💄</label></li>
-          <li><input type="checkbox" id="igiene10"> <label for="igiene10">Prodotti per la rasatura 🧔</label></li>
-          <li><input type="checkbox" id="igiene11"> <label for="igiene11">Salviette umide 💦</label></li>
-          <li><input type="checkbox" id="igiene12"> <label for="igiene12">Fazzoletti di carta 🤧</label></li>
-          <li><input type="checkbox" id="igiene13"> <label for="igiene13">Gel disinfettante per le mani 🧼</label></li>
-          <li><input type="checkbox" id="igiene14"> <label for="igiene14">Kit di pronto soccorso 🩹</label></li>
-          <li><input type="checkbox" id="igiene15"> <label for="igiene15">Medicinali personali 💊</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>📱 Elettronica</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="elettronica1"> <label for="elettronica1">Cellulare e caricabatterie 📱</label></li>
-          <li><input type="checkbox" id="elettronica2"> <label for="elettronica2">Adattatore universale per prese elettriche 🔌</label></li>
-          <li><input type="checkbox" id="elettronica3"> <label for="elettronica3">Power bank 🔋</label></li>
-          <li><input type="checkbox" id="elettronica4"> <label for="elettronica4">Fotocamera e caricabatterie 📷</label></li>
-          <li><input type="checkbox" id="elettronica5"> <label for="elettronica5">Lettore di ebook o tablet 📖</label></li>
-          <li><input type="checkbox" id="elettronica6"> <label for="elettronica6">Cuffie 🎧</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>🎒 Altro</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="altro1"> <label for="altro1">Zaino o borsa a tracolla 🎒</label></li>
-          <li><input type="checkbox" id="altro2"> <label for="altro2">Borraccia o bottiglia d'acqua 💧</label></li>
-          <li><input type="checkbox" id="altro3"> <label for="altro3">Guida turistica o cartina della California 🗺️</label></li>
-          <li><input type="checkbox" id="altro4"> <label for="altro4">Libro o rivista 📚</label></li>
-          <li><input type="checkbox" id="altro5"> <label for="altro5">Kit da cucito 🧵</label></li>
-          <li><input type="checkbox" id="altro6"> <label for="altro6">Sacchetti di plastica ♻️</label></li>
-          <li><input type="checkbox" id="altro7"> <label for="altro7">Mascherina e gel disinfettante 😷</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>💡 Consigli aggiuntivi</h3>
-        <p>Controlla le previsioni del tempo prima di partire e adatta la checklist di conseguenza. 🌤️</p>
-        <p>Se visiti parchi nazionali, controlla le regole e i permessi necessari. 🏞️</p>
-        <p>Porta una piccola quantità di contanti in dollari. 💵</p>
-        <p>Informati sulle norme di sicurezza e sui comportamenti da tenere. ⚠️</p>
-      </div>
-      
-    </section>
-    
     <!-- Risorse Utili Section -->
     <section id="risorse-section">
       <h2>Risorse Utili</h2>
@@ -769,272 +639,6 @@
           <h3>Visto (ESTA)</h3>
           <p><a href="https://esta.cbp.dhs.gov/esta/" target="_blank">https://esta.cbp.dhs.gov/esta/</a></p>
         </div>
-      </div>
-    </section>
-    
-    <!-- Calcolatore Section -->
-    <section id="calcolatore-section">
-      <h2>Calcolatore dei Costi</h2>
-      <p>Inserisci i valori per ciascuna voce di spesa e calcola il costo totale personalizzato:</p>
-      <div class="calculator-container">
-        <form id="costForm">
-          <div class="form-row">
-            <label for="voli">Voli (€):</label>
-            <input type="number" id="voli" value="900" min="0">
-          </div>
-          <div class="form-row">
-            <label for="alloggio">Alloggio (totale €):</label>
-            <input type="number" id="alloggio" value="600" min="0">
-          </div>
-          <div class="form-row">
-            <label for="noleggio">Noleggio auto (€):</label>
-            <input type="number" id="noleggio" value="800" min="0">
-          </div>
-          <div class="form-row">
-            <label for="attrazioni">Attrazioni (€):</label>
-            <input type="number" id="attrazioni" value="170" min="0">
-          </div>
-          <div class="form-row">
-            <label for="cibo">Cibo (€):</label>
-            <input type="number" id="cibo" value="360" min="0">
-          </div>
-          <div class="form-row">
-            <label for="assicurazione">Assicurazione (€):</label>
-            <input type="number" id="assicurazione" value="35" min="0">
-          </div>
-          <div class="form-row">
-            <button type="button" onclick="calcolaTotale()">Calcola Totale</button>
-            <button type="button" onclick="resetForm()">Reset</button>
-          </div>
-        </form>
-        <div id="totale" class="result"></div>
-      </div>
-    </section>
-    
-    <!-- Checklist Section -->
-    <section id="checklist-section">
-      <h2>Checklist Bagaglio</h2>
-      <p>Controlla la lista per assicurarti di non dimenticare nulla!</p>
-      
-      <div class="checklist-category">
-        <h3>🧳 Documenti</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="doc1"> <label for="doc1">Passaporto (validità di almeno 6 mesi oltre la data di rientro) 🛂</label></li>
-          <li><input type="checkbox" id="doc2"> <label for="doc2">Visto ESTA (se necessario) 📝</label></li>
-          <li><input type="checkbox" id="doc3"> <label for="doc3">Patente di guida internazionale (se noleggi un'auto) 🚗</label></li>
-          <li><input type="checkbox" id="doc4"> <label for="doc4">Biglietti aerei/di trasporto ✈️</label></li>
-          <li><input type="checkbox" id="doc5"> <label for="doc5">Conferme di prenotazione hotel/alloggi 🏨</label></li>
-          <li><input type="checkbox" id="doc6"> <label for="doc6">Assicurazione di viaggio (copertura medica) 🚑</label></li>
-          <li><input type="checkbox" id="doc7"> <label for="doc7">Fotocopie dei documenti 📄</label></li>
-          <li><input type="checkbox" id="doc8"> <label for="doc8">Numeri utili (assicurazione, banche, emergenze) 📞</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>👕 Abbigliamento</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="abbigliamento1"> <label for="abbigliamento1">Magliette leggere e traspiranti (7-10) 👕</label></li>
-          <li><input type="checkbox" id="abbigliamento2"> <label for="abbigliamento2">Pantaloncini (3-5) 🩳</label></li>
-          <li><input type="checkbox" id="abbigliamento3"> <label for="abbigliamento3">Pantaloni lunghi leggeri (2-3) 👖</label></li>
-          <li><input type="checkbox" id="abbigliamento4"> <label for="abbigliamento4">Costume da bagno (2) 👙</label></li>
-          <li><input type="checkbox" id="abbigliamento5"> <label for="abbigliamento5">Copricostume/pareo 🏖️</label></li>
-          <li><input type="checkbox" id="abbigliamento6"> <label for="abbigliamento6">Biancheria intima (10) 🩲</label></li>
-          <li><input type="checkbox" id="abbigliamento7"> <label for="abbigliamento7">Calzini (10) 🧦</label></li>
-          <li><input type="checkbox" id="abbigliamento8"> <label for="abbigliamento8">Pigiama 😴</label></li>
-          <li><input type="checkbox" id="abbigliamento9"> <label for="abbigliamento9">Felpa leggera o giacca 🧥</label></li>
-          <li><input type="checkbox" id="abbigliamento10"> <label for="abbigliamento10">Cappello o bandana 🧢</label></li>
-          <li><input type="checkbox" id="abbigliamento11"> <label for="abbigliamento11">Occhiali da sole 😎</label></li>
-          <li><input type="checkbox" id="abbigliamento12"> <label for="abbigliamento12">Scarpe comode per camminare (2 paia) 👟</label></li>
-          <li><input type="checkbox" id="abbigliamento13"> <label for="abbigliamento13">Sandali o infradito 🩴</label></li>
-          <li><input type="checkbox" id="abbigliamento14"> <label for="abbigliamento14">Scarpe da ginnastica o trekking 🥾</label></li>
-          <li><input type="checkbox" id="abbigliamento15"> <label for="abbigliamento15">Abbigliamento elegante 👗</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>🧴 Igiene personale</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="igiene1"> <label for="igiene1">Spazzolino e dentifricio 🪥</label></li>
-          <li><input type="checkbox" id="igiene2"> <label for="igiene2">Shampoo e balsamo 🧴</label></li>
-          <li><input type="checkbox" id="igiene3"> <label for="igiene3">Bagnoschiuma 🚿</label></li>
-          <li><input type="checkbox" id="igiene4"> <label for="igiene4">Deodorante 🌸</label></li>
-          <li><input type="checkbox" id="igiene5"> <label for="igiene5">Crema solare (SPF elevato) ☀️</label></li>
-          <li><input type="checkbox" id="igiene6"> <label for="igiene6">Doposole Aloe Vera</label></li>
-          <li><input type="checkbox" id="igiene7"> <label for="igiene7">Repellente per insetti 🦟</label></li>
-          <li><input type="checkbox" id="igiene8"> <label for="igiene8">Pettine o spazzola 빗</label></li>
-          <li><input type="checkbox" id="igiene9"> <label for="igiene9">Make‑up (se usi) 💄</label></li>
-          <li><input type="checkbox" id="igiene10"> <label for="igiene10">Prodotti per la rasatura 🧔</label></li>
-          <li><input type="checkbox" id="igiene11"> <label for="igiene11">Salviette umide 💦</label></li>
-          <li><input type="checkbox" id="igiene12"> <label for="igiene12">Fazzoletti di carta 🤧</label></li>
-          <li><input type="checkbox" id="igiene13"> <label for="igiene13">Gel disinfettante per le mani 🧼</label></li>
-          <li><input type="checkbox" id="igiene14"> <label for="igiene14">Kit di pronto soccorso 🩹</label></li>
-          <li><input type="checkbox" id="igiene15"> <label for="igiene15">Medicinali personali 💊</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>📱 Elettronica</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="elettronica1"> <label for="elettronica1">Cellulare e caricabatterie 📱</label></li>
-          <li><input type="checkbox" id="elettronica2"> <label for="elettronica2">Adattatore universale per prese elettriche 🔌</label></li>
-          <li><input type="checkbox" id="elettronica3"> <label for="elettronica3">Power bank 🔋</label></li>
-          <li><input type="checkbox" id="elettronica4"> <label for="elettronica4">Fotocamera e caricabatterie 📷</label></li>
-          <li><input type="checkbox" id="elettronica5"> <label for="elettronica5">Lettore di ebook o tablet 📖</label></li>
-          <li><input type="checkbox" id="elettronica6"> <label for="elettronica6">Cuffie 🎧</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>🎒 Altro</h3>
-        <ul class="checklist">
-          <li><input type="checkbox" id="altro1"> <label for="altro1">Zaino o borsa a tracolla 🎒</label></li>
-          <li><input type="checkbox" id="altro2"> <label for="altro2">Borraccia o bottiglia d'acqua 💧</label></li>
-          <li><input type="checkbox" id="altro3"> <label for="altro3">Guida turistica o cartina della California 🗺️</label></li>
-          <li><input type="checkbox" id="altro4"> <label for="altro4">Libro o rivista 📚</label></li>
-          <li><input type="checkbox" id="altro5"> <label for="altro5">Kit da cucito 🧵</label></li>
-          <li><input type="checkbox" id="altro6"> <label for="altro6">Sacchetti di plastica ♻️</label></li>
-          <li><input type="checkbox" id="altro7"> <label for="altro7">Mascherina e gel disinfettante 😷</label></li>
-        </ul>
-      </div>
-      
-      <div class="checklist-category">
-        <h3>💡 Consigli aggiuntivi</h3>
-        <p>Controlla le previsioni del tempo prima di partire e adatta la checklist di conseguenza. 🌤️</p>
-        <p>Se visiti parchi nazionali, controlla le regole e i permessi necessari. 🏞️</p>
-        <p>Porta una piccola quantità di contanti in dollari. 💵</p>
-        <p>Informati sulle norme di sicurezza e sui comportamenti da tenere. ⚠️</p>
-      </div>
-      
-    </section>
-    
-    <!-- Risorse Utili Section (stile a card) -->
-    <section id="risorse-section">
-      <h2>Risorse Utili</h2>
-      <div class="resource-cards">
-        <div class="resource-card">
-          <h3>Voli</h3>
-          <ul>
-            <li><a href="https://www.volagratis.com/voli/r_milano--los-angeles" target="_blank">Volagratis</a></li>
-            <li><a href="https://www.momondo.it/volo/los-angeles" target="_blank">Momondo</a></li>
-            <li><a href="https://www.skyscanner.it/rotte/mila/lax/milano-per-los-angeles-international.html" target="_blank">Skyscanner</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Los Angeles</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/freehand-los-angeles.html" target="_blank">Freehand Los Angeles</a></li>
-            <li><a href="https://www.booking.com/hotel/us/the-l-a-line.html" target="_blank">The LINE Hotel LA</a></li>
-            <li><a href="https://www.booking.com/hotel/us/erwin-venice.html" target="_blank">Hotel Erwin Venice</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio San Francisco</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/riu-plaza-fishermans-wharf.html" target="_blank">Hotel Riu Plaza Fisherman's Wharf</a></li>
-            <li><a href="https://www.booking.com/hotel/us/hyatt-fisherman-s-wharf.html" target="_blank">Hyatt Centric Fisherman's Wharf</a></li>
-            <li><a href="https://www.booking.com/hotel/us/caza.html" target="_blank">Hotel Caza</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Yosemite</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/yosemite-view-lodge.html" target="_blank">Yosemite View Lodge</a></li>
-            <li><a href="https://www.yosemitecedarlodge.com/" target="_blank">Cedar Lodge</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Lone Pine</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/dow-villa-motel.html" target="_blank">Dow Villa Motel</a></li>
-            <li><a href="https://www.booking.com/hotel/us/whitney-portal-hostel-and-hotel.html" target="_blank">Whitney Portal Hostel & Hotel</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Page</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/lake-powell-resort.html" target="_blank">Lake Powell Resort</a></li>
-            <li><a href="https://www.booking.com/hotel/us/country-inn-suites-by-carlson-page.html" target="_blank">Country Inn & Suites by Carlson Page</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Las Vegas</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/hilton-grand-vacations-club-on-the-las-vegas-strip.html" target="_blank">Hilton Grand Vacations Club</a></li>
-            <li><a href="https://www.booking.com/hotel/us/the-linq-hotel-casino.html" target="_blank">The LINQ Hotel + Experience</a></li>
-            <li><a href="https://www.booking.com/hotel/us/treasure-island.html" target="_blank">Treasure Island Hotel & Casino</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Alloggio Death Valley</h3>
-          <ul>
-            <li><a href="https://www.booking.com/hotel/us/the-ranch-at-death-valley.html" target="_blank">The Ranch at Death Valley</a></li>
-            <li><a href="https://www.stovepipedeathvalley.com/" target="_blank">Stovepipe Wells Village Hotel</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Noleggio Auto</h3>
-          <ul>
-            <li><a href="https://www.expedia.com" target="_blank">Expedia</a></li>
-            <li><a href="https://www.hertz.com" target="_blank">Hertz</a></li>
-            <li><a href="https://www.sixt.com" target="_blank">Sixt</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Attrazioni</h3>
-          <ul>
-            <li><a href="https://www.citypass.com/san-francisco" target="_blank">San Francisco CityPASS</a></li>
-            <li><a href="https://www.alcatrazcruises.com/" target="_blank">Alcatraz Cruises</a></li>
-            <li><a href="https://www.nps.gov/yose/planyourvisit/fees.htm" target="_blank">Yosemite Entrance Fees</a></li>
-            <li><a href="https://store.usgs.gov/pass/index.html" target="_blank">America the Beautiful Pass</a></li>
-            <li><a href="https://gocity.com/las-vegas/en-us/products/explorer" target="_blank">Las Vegas Explorer Pass</a></li>
-            <li><a href="https://www.caesars.com/linq/high-roller" target="_blank">High Roller Observation Wheel</a></li>
-            <li><a href="https://www.nps.gov/deva/planyourvisit/fees.htm" target="_blank">Death Valley Entrance Fees</a></li>
-            <li><a href="https://www.nps.gov/deva/planyourvisit/scottys-castle.htm" target="_blank">Scotty's Castle</a></li>
-          </ul>
-        </div>
-        <div class="resource-card">
-          <h3>Visto (ESTA)</h3>
-          <p><a href="https://esta.cbp.dhs.gov/esta/" target="_blank">https://esta.cbp.dhs.gov/esta/</a></p>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Calcolatore Section -->
-    <section id="calcolatore-section">
-      <h2>Calcolatore dei Costi</h2>
-      <p>Inserisci i valori per ciascuna voce di spesa e calcola il costo totale personalizzato:</p>
-      <div class="calculator-container">
-        <form id="costForm">
-          <div class="form-row">
-            <label for="voli">Voli (€):</label>
-            <input type="number" id="voli" value="900" min="0">
-          </div>
-          <div class="form-row">
-            <label for="alloggio">Alloggio (totale €):</label>
-            <input type="number" id="alloggio" value="600" min="0">
-          </div>
-          <div class="form-row">
-            <label for="noleggio">Noleggio auto (€):</label>
-            <input type="number" id="noleggio" value="800" min="0">
-          </div>
-          <div class="form-row">
-            <label for="attrazioni">Attrazioni (€):</label>
-            <input type="number" id="attrazioni" value="170" min="0">
-          </div>
-          <div class="form-row">
-            <label for="cibo">Cibo (€):</label>
-            <input type="number" id="cibo" value="360" min="0">
-          </div>
-          <div class="form-row">
-            <label for="assicurazione">Assicurazione (€):</label>
-            <input type="number" id="assicurazione" value="35" min="0">
-          </div>
-          <div class="form-row">
-            <button type="button" onclick="calcolaTotale()">Calcola Totale</button>
-            <button type="button" onclick="resetForm()">Reset</button>
-          </div>
-        </form>
-        <div id="totale" class="result"></div>
       </div>
     </section>
     
@@ -1140,27 +744,24 @@
   </footer>
   
   <script>
-    // Accordion per l'itinerario: toggle dei dettagli per ogni tappa
-    const stepHeaders = document.querySelectorAll('.step-header');
-    stepHeaders.forEach(header => {
+    // Toggle dell'accordion per l'itinerario
+    document.querySelectorAll('.step-header').forEach(header => {
       header.addEventListener('click', () => {
         const content = header.nextElementSibling;
         content.style.display = content.style.display === 'block' ? 'none' : 'block';
       });
     });
     
-    // Gestione della navigazione: mostra la sezione corrispondente in base all'emoticon cliccata
-    const navLinks = document.querySelectorAll('nav ul li a');
-    navLinks.forEach(link => {
+    // Navigazione: mostra la sezione corrispondente al clic
+    document.querySelectorAll('nav ul li a').forEach(link => {
       link.addEventListener('click', function() {
         const sectionId = this.getAttribute('data-section') + '-section';
-        document.querySelectorAll('#content section').forEach(sec => {
-          sec.classList.remove('active');
-        });
+        document.querySelectorAll('#content section').forEach(sec => sec.classList.remove('active'));
         document.getElementById(sectionId).classList.add('active');
       });
     });
     
+    // Calcolatore dei costi
     function calcolaTotale() {
       const voli = parseFloat(document.getElementById('voli').value) || 0;
       const alloggio = parseFloat(document.getElementById('alloggio').value) || 0;
