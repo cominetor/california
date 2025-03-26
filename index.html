@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clienti Mascus Bauma</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <style>
+    body { background-color: #f5f5f5; }
+    .cliente-box {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .cliente-nome { font-weight: bold; font-size: 1.2em; }
+    .loading { padding: 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="my-4 text-center">Clienti Mascus Bauma</h1>
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Cerca cliente...">
+    <div id="clientiContainer"></div>
+  </div>
+
+  <script>
+    const supabaseUrl = "https://ypywsydqczhipblukehm.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    const clientiContainer = document.getElementById("clientiContainer");
+    const searchInput = document.getElementById("searchInput");
+
+    function creaBoxCliente(cliente) {
+      const div = document.createElement("div");
+      div.className = "cliente-box";
+      div.innerHTML = `
+        <div class="cliente-nome">\${cliente.nome}</div>
+        <div><strong>Tipo:</strong> \${cliente.tipo || ''}</div>
+        <div><strong>Hall:</strong> \${cliente.hall || ''}</div>
+        <div><strong>CAP:</strong> \${cliente.cap || ''}</div>
+        <div><strong>Paese:</strong> \${cliente.paese || ''}</div>
+        <div><strong>Città:</strong> \${cliente.citta || ''}</div>
+        <div><strong>Note:</strong> \${cliente.note || ''}</div>
+      `;
+      return div;
+    }
+
+    async function caricaClienti() {
+      clientiContainer.innerHTML = '<div class="loading">Caricamento...</div>';
+      let { data, error } = await supabase.from("clienti").select("*").order("nome", { ascending: true });
+      if (error) {
+        clientiContainer.innerHTML = "<div class='alert alert-danger'>Errore nel caricamento: " + error.message + "</div>";
+        return;
+      }
+      mostraClienti(data);
+
+      searchInput.addEventListener("input", () => {
+        const filtro = searchInput.value.toLowerCase();
+        const filtrati = data.filter(c => c.nome.toLowerCase().includes(filtro));
+        mostraClienti(filtrati);
+      });
+    }
+
+    function mostraClienti(lista) {
+      clientiContainer.innerHTML = "";
+      if (lista.length === 0) {
+        clientiContainer.innerHTML = "<p>Nessun cliente trovato.</p>";
+        return;
+      }
+      lista.forEach(cliente => {
+        clientiContainer.appendChild(creaBoxCliente(cliente));
+      });
+    }
+
+    caricaClienti();
+  </script>
+</body>
+</html>
