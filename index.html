@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elenco Clienti Supabase - Migliorato</title>
+  <title>Elenco Clienti Supabase - Debug Foto</title>
   <!-- Carica Supabase JS (una sola volta) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -153,7 +153,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Recupera i clienti dalla tabella "clienti"
+      // Funzione per recuperare i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -172,7 +172,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti e nasconde il messaggio di caricamento
+      // Funzione per visualizzare la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -192,7 +192,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Mostra i dettagli del cliente in un modal
+      // Funzione per mostrare i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -287,12 +287,18 @@
         
         // Variabile per gestire il file in drag & drop
         let droppedFile = null;
+        
+        // Log file selection (click su drop zone)
         fotoLabel.addEventListener('click', () => {
+          console.log("Cliccato sulla drop zone per selezionare il file.");
           fotoInput.click();
         });
+        
+        // Quando il file viene selezionato tramite input
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
             droppedFile = null;
+            console.log("File selezionato tramite input:", fotoInput.files[0]);
             const reader = new FileReader();
             reader.onload = (e) => {
               fotoPreview.src = e.target.result;
@@ -300,6 +306,8 @@
             reader.readAsDataURL(fotoInput.files[0]);
           }
         });
+        
+        // Gestione drag & drop
         fotoLabel.addEventListener('dragover', (e) => {
           e.preventDefault();
           fotoLabel.style.backgroundColor = '#f3f4f6';
@@ -313,6 +321,7 @@
           fotoLabel.style.backgroundColor = '';
           if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             droppedFile = e.dataTransfer.files[0];
+            console.log("File droppato:", droppedFile);
             const reader = new FileReader();
             reader.onload = (ev) => {
               fotoPreview.src = ev.target.result;
@@ -341,12 +350,13 @@
             try {
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
-              console.log("Uploading file:", fileName);
+              console.log("Inizio upload del file:", fileName);
               
-              const { error: uploadError } = await supabaseClient
+              const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
+              console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
               
               // Ottieni l'URL pubblico (getPublicUrl è sincrono)
@@ -355,8 +365,8 @@
                 .from('fotoclienti')
                 .getPublicUrl(fileName);
               if (urlError) throw urlError;
-              
               console.log("URL pubblico ottenuto:", publicURL);
+              
               // Aggiorna immediatamente la preview con l'URL ottenuto
               fotoPreview.src = publicURL;
               updatedData.foto_url = publicURL;
