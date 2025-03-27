@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elenco Clienti Supabase - Foto Upload Debug</title>
+  <title>Elenco Clienti Supabase - Foto Upload</title>
   <!-- Carica Supabase JS (una sola volta) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -136,6 +136,8 @@
   
   <script>
     (function() {
+      console.log("Script caricato");
+      
       // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
@@ -153,7 +155,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Recupera i clienti dalla tabella "clienti"
+      // Funzione per recuperare i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -172,7 +174,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti
+      // Funzione per visualizzare la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -192,7 +194,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Mostra i dettagli del cliente in un modal
+      // Funzione per mostrare i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -263,7 +265,7 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Nascondi l'input spostandolo fuori dallo schermo (compatibile con Safari)
+        // Nascondi l'input spostandolo fuori dallo schermo
         fotoInput.style.position = 'absolute';
         fotoInput.style.left = '-9999px';
         fotoLabel.appendChild(fotoInput);
@@ -369,7 +371,7 @@
               console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
               
-              // Usa il percorso completo restituito (uploadData.fullPath)
+              // Usa il percorso completo restituito dall'upload
               console.log("Percorso file caricato:", uploadData.fullPath);
               const { publicURL, error: urlError } = supabaseClient
                 .storage
@@ -421,6 +423,7 @@
         displayClientList(filtered);
       });
       
+      // Avvio dell'app: recupera i clienti (chiamato all'interno dell'IIFE)
       fetchClients();
     })();
   </script>
