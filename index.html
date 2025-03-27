@@ -153,7 +153,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Funzione per recuperare i clienti dalla tabella "clienti"
+      // Recupera i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -172,7 +172,7 @@
         }
       }
       
-      // Funzione per visualizzare la lista dei clienti
+      // Visualizza la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -192,7 +192,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Funzione per mostrare i dettagli del cliente in un modal
+      // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -288,7 +288,7 @@
         // Variabile per gestire il file in drag & drop
         let droppedFile = null;
         
-        // Log file selection (click su drop zone)
+        // Listener per il click sulla drop zone
         fotoLabel.addEventListener('click', () => {
           console.log("Cliccato sulla drop zone per selezionare il file.");
           fotoInput.click();
@@ -301,7 +301,11 @@
             console.log("File selezionato tramite input:", fotoInput.files[0]);
             const reader = new FileReader();
             reader.onload = (e) => {
+              console.log("FileReader onload triggered, result:", e.target.result);
               fotoPreview.src = e.target.result;
+            };
+            reader.onerror = (err) => {
+              console.error("FileReader error:", err);
             };
             reader.readAsDataURL(fotoInput.files[0]);
           }
@@ -324,7 +328,11 @@
             console.log("File droppato:", droppedFile);
             const reader = new FileReader();
             reader.onload = (ev) => {
+              console.log("FileReader onload (drag & drop) triggered, result:", ev.target.result);
               fotoPreview.src = ev.target.result;
+            };
+            reader.onerror = (err) => {
+              console.error("FileReader error (drag & drop):", err);
             };
             reader.readAsDataURL(droppedFile);
           }
