@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Elenco Clienti Supabase</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elenco Clienti Supabase - Popup</title>
   <style>
-    /* Stili base per una UI pulita e responsive */
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    h1, h2 {
+    h1 {
       color: #333;
     }
+
+    /* --- Lista Clienti --- */
     #clientList li {
       margin: 5px 0;
       padding: 5px;
       border-bottom: 1px solid #ccc;
+      cursor: pointer;
     }
     #clientList li:hover {
       background-color: #f0f0f0;
     }
-    label {
+
+    /* --- Modal Overlay --- */
+    #clientDetailContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none; /* nascosto di default */
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999; /* in primo piano */
+    }
+
+    /* --- Box Dettagli (al centro del modal) --- */
+    #clientDetail {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      width: 600px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    /* --- Bottone di chiusura (x) --- */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 18px;
       font-weight: bold;
     }
+
+    /* Stile base per input e textarea */
     input[type="text"], textarea {
       margin-bottom: 10px;
       width: 300px;
@@ -34,17 +69,19 @@
       margin-top: 10px;
       cursor: pointer;
     }
-    /* Stile per il drop zone della foto */
+    /* Drop-zone per foto */
     .drop-zone {
       border: 2px dashed #ccc;
       padding: 10px;
       display: inline-block;
       cursor: pointer;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
   <h1>Elenco Clienti</h1>
+
   <!-- Campo di ricerca per filtrare i clienti -->
   <input type="text" id="searchInput" placeholder="Cerca clienti..." />
 
@@ -54,23 +91,20 @@
     <ul id="clientList"></ul>
   </div>
   
-  <!-- Contenitore per il dettaglio del cliente selezionato -->
-  <div id="clientDetailContainer" style="display: none;">
-    <h2>Dettagli Cliente</h2>
+  <!-- Modal: Contenitore che fa da overlay scuro -->
+  <div id="clientDetailContainer">
+    <!-- Box dei dettagli, che comparirà al centro -->
     <div id="clientDetail"></div>
   </div>
 
-  <!-- Includo Supabase tramite CDN -->
+  <!-- Supabase via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     (function() {
       // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
-      
-      // Estraiamo la funzione createClient dal global supabase importato dalla CDN
       const { createClient } = window.supabase;
-      // Creiamo un client locale con un nome diverso (supabaseClient)
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
       // Variabili globali
@@ -116,7 +150,6 @@
         clienti.forEach(client => {
           const li = document.createElement('li');
           li.textContent = client.nome;
-          li.style.cursor = 'pointer';
           li.addEventListener('click', () => {
             selectedClient = client;
             showClientDetail(client);
@@ -127,246 +160,21 @@
       }
 
       /**
-       * Mostra i dettagli del cliente selezionato e crea un form per la modifica.
+       * Mostra i dettagli del cliente selezionato in un pop-up (modal).
        * Permette di aggiornare note, visitato e foto.
        * @param {Object} client - Oggetto cliente.
        */
       function showClientDetail(client) {
-        clientDetailContainer.style.display = 'block';
+        // Svuoto il contenitore
         clientDetailEl.innerHTML = '';
 
-        // Creazione del form dei dettagli cliente
-        const form = document.createElement('form');
-        form.id = 'clientForm';
-
-        // Nome (sola lettura)
-        const nomeLabel = document.createElement('label');
-        nomeLabel.textContent = 'Nome: ';
-        const nomeSpan = document.createElement('span');
-        nomeSpan.textContent = client.nome;
-        nomeLabel.appendChild(nomeSpan);
-        form.appendChild(nomeLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Note (modificabile)
-        const noteLabel = document.createElement('label');
-        noteLabel.textContent = 'Note: ';
-        const noteTextarea = document.createElement('textarea');
-        noteTextarea.value = client.note || '';
-        noteTextarea.rows = 4;
-        noteTextarea.cols = 50;
-        noteLabel.appendChild(noteTextarea);
-        form.appendChild(noteLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Tipo (sola lettura)
-        const tipoLabel = document.createElement('label');
-        tipoLabel.textContent = 'Tipo: ';
-        const tipoSpan = document.createElement('span');
-        tipoSpan.textContent = client.tipo || '';
-        tipoLabel.appendChild(tipoSpan);
-        form.appendChild(tipoLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Hall (sola lettura)
-        const hallLabel = document.createElement('label');
-        hallLabel.textContent = 'Hall: ';
-        const hallSpan = document.createElement('span');
-        hallSpan.textContent = client.hall || '';
-        hallLabel.appendChild(hallSpan);
-        form.appendChild(hallLabel);
-        form.appendChild(document.createElement('br'));
-
-        // CAP (sola lettura)
-        const capLabel = document.createElement('label');
-        capLabel.textContent = 'CAP: ';
-        const capSpan = document.createElement('span');
-        capSpan.textContent = client.cap || '';
-        capLabel.appendChild(capSpan);
-        form.appendChild(capLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Paese (sola lettura)
-        const paeseLabel = document.createElement('label');
-        paeseLabel.textContent = 'Paese: ';
-        const paeseSpan = document.createElement('span');
-        paeseSpan.textContent = client.paese || '';
-        paeseLabel.appendChild(paeseSpan);
-        form.appendChild(paeseLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Città (sola lettura)
-        const cittaLabel = document.createElement('label');
-        cittaLabel.textContent = 'Città: ';
-        const cittaSpan = document.createElement('span');
-        cittaSpan.textContent = client.citta || '';
-        cittaLabel.appendChild(cittaSpan);
-        form.appendChild(cittaLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Visitato (toggle modificabile)
-        const visitatoLabel = document.createElement('label');
-        visitatoLabel.textContent = 'Visitato: ';
-        const visitatoCheckbox = document.createElement('input');
-        visitatoCheckbox.type = 'checkbox';
-        visitatoCheckbox.checked = client.visitato;
-        visitatoLabel.appendChild(visitatoCheckbox);
-        form.appendChild(visitatoLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Sezione per la foto: input file + drop zone
-        const fotoLabel = document.createElement('label');
-        fotoLabel.textContent = 'Foto: ';
-        // Aggiungo una classe per il drop zone
-        fotoLabel.classList.add('drop-zone');
-
-        // Input file nascosto
-        const fotoInput = document.createElement('input');
-        fotoInput.type = 'file';
-        fotoInput.accept = 'image/*';
-        // Rendo l'input invisibile ma usabile tramite il drop zone
-        fotoInput.style.display = 'none';
-        fotoLabel.appendChild(fotoInput);
-        form.appendChild(fotoLabel);
-        form.appendChild(document.createElement('br'));
-
-        // Anteprima foto
-        const fotoPreview = document.createElement('img');
-        fotoPreview.style.maxWidth = '200px';
-        fotoPreview.style.display = 'block';
-        fotoPreview.style.marginTop = '10px';
-        if (client.foto_url) {
-          fotoPreview.src = client.foto_url;
-        }
-        form.appendChild(fotoPreview);
-        form.appendChild(document.createElement('br'));
-
-        // Bottone per salvare le modifiche
-        const saveButton = document.createElement('button');
-        saveButton.type = 'button';
-        saveButton.textContent = 'Salva';
-        form.appendChild(saveButton);
-
-        clientDetailEl.appendChild(form);
-
-        // Variabile per salvare il file ottenuto da drag & drop
-        let droppedFile = null;
-
-        // Se si clicca sulla drop zone si attiva l'input file
-        fotoLabel.addEventListener('click', function() {
-          fotoInput.click();
+        // Bottone di chiusura (la X in alto a destra)
+        const closeBtn = document.createElement('span');
+        closeBtn.textContent = '×';
+        closeBtn.classList.add('close-btn');
+        closeBtn.addEventListener('click', () => {
+          clientDetailContainer.style.display = 'none';
         });
+        clientDetailEl.appendChild(closeBtn);
 
-        // Aggiornamento anteprima se si seleziona un file
-        fotoInput.addEventListener('change', function() {
-          if (fotoInput.files && fotoInput.files[0]) {
-            // Se un file viene selezionato manualmente, resetto droppedFile
-            droppedFile = null;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              fotoPreview.src = e.target.result;
-            };
-            reader.readAsDataURL(fotoInput.files[0]);
-          }
-        });
-
-        // Gestione eventi drag & drop sul drop zone
-        fotoLabel.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          fotoLabel.style.backgroundColor = '#e0e0e0';
-        });
-        fotoLabel.addEventListener('dragleave', function(e) {
-          e.preventDefault();
-          fotoLabel.style.backgroundColor = '';
-        });
-        fotoLabel.addEventListener('drop', function(e) {
-          e.preventDefault();
-          fotoLabel.style.backgroundColor = '';
-          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            droppedFile = e.dataTransfer.files[0];
-            // Mostro l'anteprima della foto dropata
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              fotoPreview.src = e.target.result;
-            };
-            reader.readAsDataURL(droppedFile);
-          }
-        });
-
-        // Gestione salvataggio dei dati
-        saveButton.addEventListener('click', async function() {
-          // Prepara l'oggetto con i dati aggiornati
-          const updatedData = {
-            note: noteTextarea.value,
-            visitato: visitatoCheckbox.checked
-          };
-
-          // Controlla se è stato selezionato un file (tramite input o drag&drop)
-          let fileToUpload = null;
-          if (fotoInput.files && fotoInput.files[0]) {
-            fileToUpload = fotoInput.files[0];
-          } else if (droppedFile) {
-            fileToUpload = droppedFile;
-          }
-
-          // Se è stato selezionato un nuovo file, esegue l'upload su Supabase Storage
-          if (fileToUpload) {
-            try {
-              // Genera un nome file unico
-              const fileExt = fileToUpload.name.split('.').pop();
-              const fileName = client.id + '_' + Date.now() + '.' + fileExt;
-              const { error: uploadError } = await supabaseClient
-                .storage
-                .from('fotoclienti')
-                .upload(fileName, fileToUpload);
-              if (uploadError) throw uploadError;
-
-              // Ottieni la URL pubblica della foto
-              const { publicURL, error: urlError } = supabaseClient
-                .storage
-                .from('fotoclienti')
-                .getPublicUrl(fileName);
-              if (urlError) throw urlError;
-              updatedData.foto_url = publicURL;
-              // Resetta droppedFile dopo l'upload
-              droppedFile = null;
-            } catch (err) {
-              console.error('Errore nel caricamento della foto:', err);
-              alert('Errore nel caricamento della foto.');
-              return;
-            }
-          }
-
-          // Aggiorna il record del cliente su Supabase
-          try {
-            const { error } = await supabaseClient
-              .from('clienti')
-              .update(updatedData)
-              .eq('id', client.id);
-            if (error) throw error;
-            alert('Cliente aggiornato con successo.');
-            // Aggiorna l’oggetto locale e la lista se necessario
-            Object.assign(client, updatedData);
-            displayClientList(clients);
-          } catch (err) {
-            console.error('Errore nell\'aggiornamento del cliente:', err);
-            alert('Errore nell\'aggiornamento del cliente.');
-          }
-        });
-      }
-
-      // Filtro per la ricerca dei clienti
-      searchInput.addEventListener('input', function() {
-        const query = searchInput.value.toLowerCase();
-        const filtered = clients.filter(function(client) {
-          return client.nome.toLowerCase().includes(query);
-        });
-        displayClientList(filtered);
-      });
-
-      // Avvio dell'app
-      fetchClients();
-    })();
-  </script>
-</body>
-</html>
+        // Titolo
