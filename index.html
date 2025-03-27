@@ -144,6 +144,9 @@
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
       
+      // Espone supabaseClient globalmente per poterlo usare nella Console
+      window.supabaseClient = supabaseClient;
+      
       // Variabili globali
       let clients = [];
       let selectedClient = null;
@@ -371,7 +374,6 @@
               console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
               
-              // Usa il percorso relativo (uploadData.path) invece del fullPath
               console.log("Percorso file caricato:", uploadData.path);
               const { publicURL, error: urlError } = supabaseClient
                 .storage
