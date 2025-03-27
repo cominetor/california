@@ -371,12 +371,12 @@
               console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
               
-              // Usa il percorso completo restituito dall'upload
-              console.log("Percorso file caricato:", uploadData.fullPath);
+              // Usa il percorso relativo (uploadData.path) invece del fullPath
+              console.log("Percorso file caricato:", uploadData.path);
               const { publicURL, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
-                .getPublicUrl(uploadData.fullPath);
+                .getPublicUrl(uploadData.path);
               if (urlError) throw urlError;
               console.log("URL pubblico ottenuto:", publicURL);
               
@@ -423,7 +423,7 @@
         displayClientList(filtered);
       });
       
-      // Avvio dell'app: recupera i clienti (chiamato all'interno dell'IIFE)
+      // Avvio dell'app: recupera i clienti
       fetchClients();
     })();
   </script>
