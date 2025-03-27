@@ -263,7 +263,9 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        fotoInput.style.display = 'none';
+        // Nascondi l'input spostandolo fuori dallo schermo (invece di display: none)
+        fotoInput.style.position = 'absolute';
+        fotoInput.style.left = '-9999px';
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
