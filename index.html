@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elenco Clienti Supabase - Debug Foto</title>
+  <title>Elenco Clienti Supabase - Foto Upload Debug</title>
   <!-- Carica Supabase JS (una sola volta) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -263,7 +263,7 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Nascondi l'input spostandolo fuori dallo schermo (invece di display: none)
+        // Per Safari: invece di display:none, nascondi spostandolo fuori dallo schermo
         fotoInput.style.position = 'absolute';
         fotoInput.style.left = '-9999px';
         fotoLabel.appendChild(fotoInput);
@@ -380,6 +380,9 @@
               // Aggiorna immediatamente la preview con l'URL ottenuto
               fotoPreview.src = publicURL;
               updatedData.foto_url = publicURL;
+              
+              // Resetta l'input file per permettere un nuovo upload
+              fotoInput.value = "";
               droppedFile = null;
             } catch (err) {
               console.error('Errore nel caricamento della foto:', err);
@@ -389,6 +392,7 @@
           }
           
           try {
+            console.log("Aggiornamento cliente con i dati:", updatedData);
             const { error } = await supabaseClient
               .from('clienti')
               .update(updatedData)
@@ -396,6 +400,7 @@
             if (error) throw error;
             alert('Cliente aggiornato con successo.');
             Object.assign(client, updatedData);
+            console.log("Cliente aggiornato:", client);
             displayClientList(clients);
             clientDetailContainer.style.display = 'none';
           } catch (err) {
