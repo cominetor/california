@@ -108,7 +108,7 @@
       background-color: #f9fafb;
       cursor: pointer;
       transition: background-color 0.2s;
-      position: relative; /* Wrapper per l'input file */
+      position: relative;
     }
     .drop-zone:hover { background-color: #f3f4f6; }
     img {
@@ -120,7 +120,7 @@
       font-style: italic;
       margin-top: 1rem;
     }
-    /* Nuovo stile per l'input file per Safari */
+    /* Classe per nascondere l'input file in Chrome */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -167,7 +167,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Recupera i clienti dalla tabella "clienti"
+      // Funzione per recuperare i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -186,7 +186,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti
+      // Funzione per visualizzare la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -206,7 +206,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Mostra i dettagli del cliente in un modal
+      // Funzione per mostrare i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -274,22 +274,23 @@
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Foto: ';
         fotoLabel.classList.add('drop-zone');
-        fotoLabel.style.position = 'relative'; // Necessario per posizionare l'input file al suo interno
-        
-        // Crea un wrapper per l'input file
-        const inputWrapper = document.createElement('div');
-        inputWrapper.style.position = 'absolute';
-        inputWrapper.style.top = '0';
-        inputWrapper.style.left = '0';
-        inputWrapper.style.width = '100%';
-        inputWrapper.style.height = '100%';
-        
+        fotoLabel.style.position = 'relative'; // necessario per posizionare l'input file al suo interno
+        // Crea l'input file
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        fotoInput.classList.add('hidden-file-input');
-        inputWrapper.appendChild(fotoInput);
-        fotoLabel.appendChild(inputWrapper);
+        // Rileva se l'utente sta usando Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (!isSafari) {
+          // Per Chrome e altri, nascondi l'input con la classe
+          fotoInput.classList.add('hidden-file-input');
+        } else {
+          // Per Safari, non nasconderlo completamente (o rendilo visibile parzialmente)
+          fotoInput.style.opacity = '1';
+          fotoInput.style.position = 'relative';
+          fotoInput.style.display = 'block';
+        }
+        fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
         
