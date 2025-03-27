@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elenco Clienti Supabase - Migliorato</title>
-  <!-- Carico Supabase JS (una sola volta) -->
+  <!-- Carica Supabase JS (una sola volta) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -14,11 +14,7 @@
       --text: #111827;
       --border: #e5e7eb;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg);
@@ -26,12 +22,7 @@
       margin: 0;
       padding: 2rem;
     }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
+    h1 { font-size: 2rem; margin-bottom: 1rem; }
     input[type="text"] {
       padding: 0.5rem;
       width: 100%;
@@ -40,7 +31,6 @@
       border: 1px solid var(--border);
       border-radius: 6px;
     }
-
     #clientList li {
       padding: 0.75rem;
       border: 1px solid var(--border);
@@ -50,12 +40,10 @@
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
     }
-
     #clientList li:hover {
       background-color: #f3f4f6;
       transform: scale(1.01);
     }
-
     /* Modal Overlay */
     #clientDetailContainer {
       position: fixed;
@@ -69,7 +57,6 @@
       align-items: center;
       z-index: 999;
     }
-
     /* Modal Content */
     #clientDetail {
       background-color: white;
@@ -80,7 +67,6 @@
       position: relative;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-
     .close-btn {
       position: absolute;
       top: 1rem;
@@ -89,7 +75,6 @@
       color: var(--text);
       cursor: pointer;
     }
-
     textarea, input[type="file"] {
       width: 100%;
       margin-top: 0.5rem;
@@ -97,13 +82,11 @@
       border-radius: 6px;
       border: 1px solid var(--border);
     }
-
     label {
       display: block;
       margin-top: 1rem;
       font-weight: 600;
     }
-
     button {
       margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
@@ -115,11 +98,7 @@
       font-weight: 600;
       transition: background-color 0.2s;
     }
-
-    button:hover {
-      background-color: #4338ca;
-    }
-
+    button:hover { background-color: #4338ca; }
     .drop-zone {
       margin-top: 0.5rem;
       padding: 1rem;
@@ -130,17 +109,12 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
-
-    .drop-zone:hover {
-      background-color: #f3f4f6;
-    }
-
+    .drop-zone:hover { background-color: #f3f4f6; }
     img {
       margin-top: 1rem;
       max-width: 100%;
       border-radius: 8px;
     }
-
     #loadingMessage {
       font-style: italic;
       margin-top: 1rem;
@@ -150,16 +124,16 @@
 <body>
   <h1>📋 Elenco Clienti</h1>
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
-
+  
   <div id="clientListContainer">
     <p id="loadingMessage">⏳ Caricamento...</p>
     <ul id="clientList"></ul>
   </div>
-
+  
   <div id="clientDetailContainer">
     <div id="clientDetail"></div>
   </div>
-
+  
   <script>
     (function() {
       // CONFIGURAZIONE SUPABASE
@@ -167,18 +141,18 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+      
       // Variabili globali
       let clients = [];
       let selectedClient = null;
-
+      
       // Elementi DOM
       const loadingMessage = document.getElementById('loadingMessage');
       const clientListEl = document.getElementById('clientList');
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
-
+      
       // Recupera i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
@@ -197,7 +171,7 @@
           loadingMessage.style.display = 'block';
         }
       }
-
+      
       // Visualizza la lista dei clienti e nasconde il messaggio di caricamento
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
@@ -217,11 +191,11 @@
         });
         loadingMessage.style.display = 'none';
       }
-
+      
       // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
-
+        
         // Bottone di chiusura
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
@@ -230,16 +204,16 @@
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
-
+        
         // Titolo
         const title = document.createElement('h2');
         title.textContent = 'Dettagli Cliente';
         clientDetailEl.appendChild(title);
-
+        
         // Creazione del form per i dettagli
         const form = document.createElement('form');
         form.id = 'clientForm';
-
+        
         // Nome (sola lettura)
         const nomeLabel = document.createElement('label');
         nomeLabel.textContent = 'Nome: ';
@@ -248,7 +222,7 @@
         nomeLabel.appendChild(nomeSpan);
         form.appendChild(nomeLabel);
         form.appendChild(document.createElement('br'));
-
+        
         // Note (modificabile)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
@@ -259,7 +233,7 @@
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
         form.appendChild(document.createElement('br'));
-
+        
         // Altri campi in sola lettura (Tipo, Hall, CAP, Paese, Città)
         const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
         fields.forEach(field => {
@@ -271,7 +245,7 @@
           form.appendChild(label);
           form.appendChild(document.createElement('br'));
         });
-
+        
         // Visitato (toggle modificabile)
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
@@ -281,7 +255,7 @@
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
         form.appendChild(document.createElement('br'));
-
+        
         // Sezione per la foto: input file + drop zone
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Foto: ';
@@ -293,7 +267,7 @@
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
-
+        
         // Anteprima foto
         const fotoPreview = document.createElement('img');
         fotoPreview.style.display = 'block';
@@ -302,15 +276,15 @@
         }
         form.appendChild(fotoPreview);
         form.appendChild(document.createElement('br'));
-
+        
         // Bottone per salvare le modifiche
         const saveButton = document.createElement('button');
         saveButton.type = 'button';
         saveButton.textContent = 'Salva';
         form.appendChild(saveButton);
-
+        
         clientDetailEl.appendChild(form);
-
+        
         // Variabile per gestire il file in drag & drop
         let droppedFile = null;
         fotoLabel.addEventListener('click', () => {
@@ -346,35 +320,45 @@
             reader.readAsDataURL(droppedFile);
           }
         });
-
+        
         // Logica per salvare le modifiche (incluso upload foto)
         saveButton.addEventListener('click', async () => {
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
           };
-
+          
           let fileToUpload = null;
           if (fotoInput.files && fotoInput.files[0]) {
             fileToUpload = fotoInput.files[0];
           } else if (droppedFile) {
             fileToUpload = droppedFile;
           }
-
+          
+          console.log("File da caricare:", fileToUpload);
+          
           if (fileToUpload) {
             try {
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
+              console.log("Uploading file:", fileName);
+              
               const { error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
               if (uploadError) throw uploadError;
+              
+              // Ottieni l'URL pubblico (getPublicUrl è sincrono)
               const { publicURL, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(fileName);
               if (urlError) throw urlError;
+              
+              console.log("URL pubblico ottenuto:", publicURL);
+              // Aggiorna immediatamente la preview con l'URL ottenuto
+              fotoPreview.src = publicURL;
               updatedData.foto_url = publicURL;
               droppedFile = null;
             } catch (err) {
@@ -383,7 +367,7 @@
               return;
             }
           }
-
+          
           try {
             const { error } = await supabaseClient
               .from('clienti')
@@ -399,11 +383,11 @@
             alert("Errore nell'aggiornamento del cliente.");
           }
         });
-
+        
         // Mostra il modal
         clientDetailContainer.style.display = 'flex';
       }
-
+      
       // Filtro per la ricerca dei clienti
       searchInput.addEventListener('input', function() {
         const query = searchInput.value.toLowerCase();
@@ -412,7 +396,7 @@
         );
         displayClientList(filtered);
       });
-
+      
       // Avvio dell'app: recupera i clienti
       fetchClients();
     })();
