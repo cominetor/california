@@ -120,7 +120,7 @@
       font-style: italic;
       margin-top: 1rem;
     }
-    /* Nascondi l'input file per Chrome */
+    /* Per browser diversi: in Chrome nascondi l'input, in Safari lascialo visibile */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -154,7 +154,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient; // Espone globalmente per test
+      window.supabaseClient = supabaseClient; // Espone globalmente
       
       // Variabili globali
       let clients = [];
@@ -206,7 +206,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Funzione per mostrare i dettagli del cliente in un modal
+      // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -248,7 +248,7 @@
         form.appendChild(noteLabel);
         form.appendChild(document.createElement('br'));
         
-        // Altri campi in sola lettura (Tipo, Hall, CAP, Paese, Città)
+        // Altri campi (Tipo, Hall, CAP, Paese, Città)
         const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
         fields.forEach(field => {
           const label = document.createElement('label');
@@ -274,20 +274,22 @@
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Foto: ';
         fotoLabel.classList.add('drop-zone');
-        fotoLabel.style.position = 'relative'; // necessario per posizionare l'input file
+        fotoLabel.style.position = 'relative';
+        
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        
-        // Rileva se l'utente sta usando Safari
+        // Rileva se l'utente usa Safari
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (isSafari) {
-          // In Safari, rendi l'input quasi visibile per garantire il trigger dell'evento change
-          fotoInput.style.opacity = '0.01'; 
+          // Per Safari, non nascondere completamente: rendi l'input visibile ma piccolo
+          fotoInput.style.opacity = '1';
+          fotoInput.style.width = '100%';
+          fotoInput.style.height = '100%';
           fotoInput.style.position = 'relative';
           fotoInput.style.display = 'block';
         } else {
-          // In altri browser, nascondi l'input file
+          // In Chrome e altri, nascondi con la classe
           fotoInput.classList.add('hidden-file-input');
         }
         
@@ -318,27 +320,38 @@
         // Listener per il click sulla drop zone
         fotoLabel.addEventListener('click', () => {
           console.log("Cliccato sulla drop zone per selezionare il file.");
-          if (!fotoInput.value) {
-            fotoInput.click();
+          // Forza il click sull'input, indipendentemente dal suo stato
+          fotoInput.click();
+        });
+        
+        // Aggiungi listener per entrambi gli eventi "change" e "input"
+        fotoInput.addEventListener('change', () => {
+          if (fotoInput.files && fotoInput.files[0]) {
+            console.log("Evento change: file selezionato:", fotoInput.files[0]);
+            processFile(fotoInput.files[0]);
+          }
+        });
+        fotoInput.addEventListener('input', () => {
+          if (fotoInput.files && fotoInput.files[0]) {
+            console.log("Evento input: file selezionato:", fotoInput.files[0]);
+            processFile(fotoInput.files[0]);
           }
         });
         
-        // Quando il file viene selezionato tramite input
-        fotoInput.addEventListener('change', () => {
-          if (fotoInput.files && fotoInput.files[0]) {
-            droppedFile = null;
-            console.log("File selezionato tramite input:", fotoInput.files[0]);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              console.log("FileReader onload triggered, result:", e.target.result);
-              fotoPreview.src = e.target.result;
-            };
-            reader.onerror = (err) => {
-              console.error("FileReader error:", err);
-            };
-            reader.readAsDataURL(fotoInput.files[0]);
-          }
-        });
+        function processFile(file) {
+          // Evita di elaborare più volte lo stesso file
+          if (!file) return;
+          droppedFile = null;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            console.log("FileReader onload triggered, result:", e.target.result);
+            fotoPreview.src = e.target.result;
+          };
+          reader.onerror = (err) => {
+            console.error("FileReader error:", err);
+          };
+          reader.readAsDataURL(file);
+        }
         
         // Gestione drag & drop
         fotoLabel.addEventListener('dragover', (e) => {
@@ -355,15 +368,7 @@
           if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             droppedFile = e.dataTransfer.files[0];
             console.log("File droppato:", droppedFile);
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-              console.log("FileReader onload (drag & drop) triggered, result:", ev.target.result);
-              fotoPreview.src = ev.target.result;
-            };
-            reader.onerror = (err) => {
-              console.error("FileReader error (drag & drop):", err);
-            };
-            reader.readAsDataURL(droppedFile);
+            processFile(droppedFile);
           }
         });
         
