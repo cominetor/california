@@ -32,6 +32,7 @@
     button {
       padding: 5px 10px;
       margin-top: 10px;
+      cursor: pointer;
     }
     /* Stile per il drop zone della foto */
     .drop-zone {
@@ -62,12 +63,15 @@
   <!-- Includo Supabase tramite CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Uso un IIFE per isolare il codice
     (function() {
       // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
-      const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      
+      // Estraiamo la funzione createClient dal global supabase importato dalla CDN
+      const { createClient } = window.supabase;
+      // Creiamo un client locale con un nome diverso (supabaseClient)
+      const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
       // Variabili globali
       let clients = [];
@@ -85,7 +89,7 @@
        */
       async function fetchClients() {
         try {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('clienti')
             .select('*')
             .order('nome', { ascending: true });
@@ -311,14 +315,14 @@
               // Genera un nome file unico
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
-              const { error: uploadError } = await supabase
+              const { error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
               if (uploadError) throw uploadError;
 
               // Ottieni la URL pubblica della foto
-              const { publicURL, error: urlError } = supabase
+              const { publicURL, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(fileName);
@@ -335,7 +339,7 @@
 
           // Aggiorna il record del cliente su Supabase
           try {
-            const { error } = await supabase
+            const { error } = await supabaseClient
               .from('clienti')
               .update(updatedData)
               .eq('id', client.id);
