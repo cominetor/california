@@ -120,7 +120,7 @@
       font-style: italic;
       margin-top: 1rem;
     }
-    /* Classe per nascondere l'input file in Chrome */
+    /* Nascondi l'input file per Chrome */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -154,7 +154,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient; // Espone globalmente
+      window.supabaseClient = supabaseClient; // Espone globalmente per test
       
       // Variabili globali
       let clients = [];
@@ -167,7 +167,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Funzione per recuperare i clienti dalla tabella "clienti"
+      // Funzione per recuperare i clienti
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -279,17 +279,20 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Controlla il browser: in Safari, non nascondere l'input (così l'evento change si triggera)
+        
+        // Rileva se l'utente usa Safari
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (!isSafari) {
+          // In Chrome, nascondi l'input file
           fotoInput.classList.add('hidden-file-input');
         } else {
-          // In Safari, mostra l'input normalmente
+          // In Safari, non nasconderlo: l'utente deve cliccare direttamente sull'input
           fotoInput.style.opacity = '1';
           fotoInput.style.position = 'relative';
           fotoInput.style.display = 'block';
         }
         
+        // Aggiungi l'input file all'etichetta (l'utente potrà cliccare direttamente sull'input in Safari)
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
@@ -311,15 +314,17 @@
         
         clientDetailEl.appendChild(form);
         
-        // Variabile per gestire il file in drag & drop
+        // Variabile per gestire il file (per drag & drop se necessario)
         let droppedFile = null;
         
-        // Listener per il click sulla drop zone
-        fotoLabel.addEventListener('click', () => {
-          console.log("Cliccato sulla drop zone per selezionare il file.");
-          // Forza il click sempre
-          fotoInput.click();
-        });
+        // Listener per il click sulla drop zone (solo per Chrome)
+        if (!isSafari) {
+          fotoLabel.addEventListener('click', () => {
+            console.log("Cliccato sulla drop zone per selezionare il file.");
+            // Forza il click sull'input file
+            fotoInput.click();
+          });
+        }
         
         // Evento change per l'input file
         fotoInput.addEventListener('change', () => {
@@ -329,6 +334,7 @@
           }
         });
         
+        // Funzione per processare il file con FileReader
         function processFile(file) {
           if (!file) return;
           droppedFile = null;
@@ -343,7 +349,7 @@
           reader.readAsDataURL(file);
         }
         
-        // Gestione drag & drop
+        // Gestione drag & drop (facoltativa)
         fotoLabel.addEventListener('dragover', (e) => {
           e.preventDefault();
           fotoLabel.style.backgroundColor = '#f3f4f6';
