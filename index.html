@@ -143,8 +143,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      
-      // Espone supabaseClient globalmente per poterlo usare nella Console
+      // Espone supabaseClient globalmente per poterlo testare dalla Console
       window.supabaseClient = supabaseClient;
       
       // Variabili globali
@@ -375,15 +374,17 @@
               if (uploadError) throw uploadError;
               
               console.log("Percorso file caricato:", uploadData.path);
-              const { publicURL, error: urlError } = supabaseClient
+              // Usa uploadData.path per ottenere l'URL pubblico
+              const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(uploadData.path);
               if (urlError) throw urlError;
-              console.log("URL pubblico ottenuto:", publicURL);
+              const publicUrl = urlData.publicUrl;
+              console.log("URL pubblico ottenuto:", publicUrl);
               
-              fotoPreview.src = publicURL;
-              updatedData.foto_url = publicURL;
+              fotoPreview.src = publicUrl;
+              updatedData.foto_url = publicUrl;
               
               // Resetta l'input file per permettere nuovi upload
               fotoInput.value = "";
