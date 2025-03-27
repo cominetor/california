@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elenco Clienti Supabase - Foto Upload (Debug Safari)</title>
+  <title>Elenco Clienti Supabase - Foto Upload</title>
   <!-- Carica Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -279,16 +279,15 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Rileva se l'utente usa Safari
+        // Controlla il browser: in Safari, non nascondere l'input (così l'evento change si triggera)
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isSafari) {
-          // Per Safari, rendi l'input visibile per assicurarti che l'evento change venga triggerato
+        if (!isSafari) {
+          fotoInput.classList.add('hidden-file-input');
+        } else {
+          // In Safari, mostra l'input normalmente
           fotoInput.style.opacity = '1';
           fotoInput.style.position = 'relative';
           fotoInput.style.display = 'block';
-        } else {
-          // In Chrome e altri, nascondi l'input file
-          fotoInput.classList.add('hidden-file-input');
         }
         
         fotoLabel.appendChild(fotoInput);
@@ -330,7 +329,6 @@
           }
         });
         
-        // Funzione per processare il file (FileReader)
         function processFile(file) {
           if (!file) return;
           droppedFile = null;
@@ -345,7 +343,7 @@
           reader.readAsDataURL(file);
         }
         
-        // Gestione drag & drop (facoltativa)
+        // Gestione drag & drop
         fotoLabel.addEventListener('dragover', (e) => {
           e.preventDefault();
           fotoLabel.style.backgroundColor = '#f3f4f6';
