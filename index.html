@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elenco Clienti Supabase - Foto Upload</title>
-  <!-- Carica Supabase JS (una sola volta) -->
+  <!-- Carica Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -51,7 +51,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0,0,0,0.6);
       display: none;
       justify-content: center;
       align-items: center;
@@ -108,7 +108,7 @@
       background-color: #f9fafb;
       cursor: pointer;
       transition: background-color 0.2s;
-      position: relative; /* Per posizionare l'input file al suo interno */
+      position: relative; /* Wrapper per l'input file */
     }
     .drop-zone:hover { background-color: #f3f4f6; }
     img {
@@ -120,7 +120,7 @@
       font-style: italic;
       margin-top: 1rem;
     }
-    /* Classe per nascondere l'input file in modo compatibile */
+    /* Nuovo stile per l'input file per Safari */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -128,7 +128,6 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 2;
       cursor: pointer;
     }
   </style>
@@ -155,7 +154,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient; // Espone globalmente per test in console
+      window.supabaseClient = supabaseClient; // Espone globalmente per test in Console
       
       // Variabili globali
       let clients = [];
@@ -168,7 +167,7 @@
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Funzione per recuperare i clienti dalla tabella "clienti"
+      // Recupera i clienti dalla tabella "clienti"
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -187,7 +186,7 @@
         }
       }
       
-      // Funzione per visualizzare la lista dei clienti
+      // Visualizza la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -207,7 +206,7 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Funzione per mostrare i dettagli del cliente in un modal
+      // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
@@ -275,14 +274,22 @@
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Foto: ';
         fotoLabel.classList.add('drop-zone');
-        // Imposta il contenitore della drop zone come relative
-        fotoLabel.style.position = 'relative';
+        fotoLabel.style.position = 'relative'; // Necessario per posizionare l'input file al suo interno
+        
+        // Crea un wrapper per l'input file
+        const inputWrapper = document.createElement('div');
+        inputWrapper.style.position = 'absolute';
+        inputWrapper.style.top = '0';
+        inputWrapper.style.left = '0';
+        inputWrapper.style.width = '100%';
+        inputWrapper.style.height = '100%';
+        
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Nascondi l'input usando la classe hidden-file-input
         fotoInput.classList.add('hidden-file-input');
-        fotoLabel.appendChild(fotoInput);
+        inputWrapper.appendChild(fotoInput);
+        fotoLabel.appendChild(inputWrapper);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
         
@@ -309,7 +316,7 @@
         // Listener per il click sulla drop zone
         fotoLabel.addEventListener('click', () => {
           console.log("Cliccato sulla drop zone per selezionare il file.");
-          // Se l'input non contiene già un file, apri la finestra
+          // Se l'input è vuoto, apri la finestra
           if (!fotoInput.value) {
             fotoInput.click();
           }
@@ -404,8 +411,8 @@
               fotoInput.value = "";
               droppedFile = null;
             } catch (err) {
-              console.error('Errore nel caricamento della foto:', err);
-              alert('Errore nel caricamento della foto.');
+              console.error("Errore nel caricamento della foto:", err);
+              alert("Errore nel caricamento della foto.");
               return;
             }
           }
@@ -417,22 +424,22 @@
               .update(updatedData)
               .eq('id', client.id);
             if (error) throw error;
-            alert('Cliente aggiornato con successo.');
+            alert("Cliente aggiornato con successo.");
             Object.assign(client, updatedData);
             console.log("Cliente aggiornato:", client);
             displayClientList(clients);
-            clientDetailContainer.style.display = 'none';
+            clientDetailContainer.style.display = "none";
           } catch (err) {
             console.error("Errore nell'aggiornamento del cliente:", err);
             alert("Errore nell'aggiornamento del cliente.");
           }
         });
         
-        clientDetailContainer.style.display = 'flex';
+        clientDetailContainer.style.display = "flex";
       }
       
       // Filtro per la ricerca dei clienti
-      searchInput.addEventListener('input', function() {
+      searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
           client.nome.toLowerCase().includes(query)
