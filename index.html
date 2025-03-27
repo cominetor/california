@@ -1,84 +1,368 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clienti Mascus Bauma</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elenco Clienti Supabase</title>
   <style>
+    /* Stili base per una UI pulita e responsive */
     body {
-      background-color: #f8f9fa;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
-    .cliente {
-      border: 1px solid #dee2e6;
-      border-radius: 5px;
-      padding: 10px;
+    h1, h2 {
+      color: #333;
+    }
+    #clientList li {
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid #ccc;
+    }
+    #clientList li:hover {
+      background-color: #f0f0f0;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"], textarea {
       margin-bottom: 10px;
-      background-color: white;
-      cursor: pointer;
+      width: 300px;
+      padding: 5px;
     }
-    .cliente:hover {
-      background-color: #f1f1f1;
+    button {
+      padding: 5px 10px;
+      margin-top: 10px;
+    }
+    /* Stile per il drop zone della foto */
+    .drop-zone {
+      border: 2px dashed #ccc;
+      padding: 10px;
+      display: inline-block;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2 class="text-center my-4">Clienti Mascus Bauma</h2>
-    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Cerca cliente..." />
-    <div id="loading">Caricamento...</div>
-    <div id="clientiList" class="list-group"></div>
+  <h1>Elenco Clienti</h1>
+  <!-- Campo di ricerca per filtrare i clienti -->
+  <input type="text" id="searchInput" placeholder="Cerca clienti..." />
+
+  <!-- Contenitore per la lista dei clienti -->
+  <div id="clientListContainer">
+    <p id="loadingMessage">Caricamento...</p>
+    <ul id="clientList"></ul>
+  </div>
+  
+  <!-- Contenitore per il dettaglio del cliente selezionato -->
+  <div id="clientDetailContainer" style="display: none;">
+    <h2>Dettagli Cliente</h2>
+    <div id="clientDetail"></div>
   </div>
 
+  <!-- Includo Supabase tramite CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    const SUPABASE_URL = "https://ypywsydqczhipblukehm.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Uso un IIFE per isolare il codice
+    (function() {
+      // CONFIGURAZIONE SUPABASE
+      const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
+      const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function fetchClienti() {
-      const { data, error } = await supabase
-        .from('clienti')
-        .select('*')
-        .order('nome', { ascending: true });
+      // Variabili globali
+      let clients = [];
+      let selectedClient = null;
 
-      const clientiList = document.getElementById("clientiList");
-      const loading = document.getElementById("loading");
+      // Elementi DOM
+      const loadingMessage = document.getElementById('loadingMessage');
+      const clientListEl = document.getElementById('clientList');
+      const clientDetailContainer = document.getElementById('clientDetailContainer');
+      const clientDetailEl = document.getElementById('clientDetail');
+      const searchInput = document.getElementById('searchInput');
 
-      if (error) {
-        loading.innerText = "Errore nel caricamento dei dati.";
-        console.error(error);
-        return;
+      /**
+       * Recupera i clienti dalla tabella "clienti" ordinati per nome.
+       */
+      async function fetchClients() {
+        try {
+          const { data, error } = await supabase
+            .from('clienti')
+            .select('*')
+            .order('nome', { ascending: true });
+          if (error) throw error;
+          clients = data;
+          displayClientList(clients);
+        } catch (err) {
+          console.error('Errore durante il recupero dei clienti:', err);
+          loadingMessage.textContent = 'Errore nel caricamento dei dati.';
+        }
       }
 
-      if (data.length === 0) {
-        loading.innerText = "Nessun cliente trovato.";
-        return;
-      }
-
-      loading.style.display = "none";
-
-      data.forEach(cliente => {
-        const el = document.createElement("div");
-        el.className = "cliente";
-        el.innerHTML = `<strong>${cliente.nome}</strong><br/>${cliente.tipo || ""} - ${cliente.hall || ""}<br/>${cliente.cap || ""}, ${cliente.citta || ""}, ${cliente.paese || ""}`;
-        clientiList.appendChild(el);
-      });
-
-      // Cerca dinamica
-      document.getElementById("searchInput").addEventListener("input", function () {
-        const query = this.value.toLowerCase();
-        const clienti = document.querySelectorAll(".cliente");
-        clienti.forEach(cliente => {
-          const text = cliente.textContent.toLowerCase();
-          cliente.style.display = text.includes(query) ? "block" : "none";
+      /**
+       * Visualizza la lista dei clienti.
+       * @param {Array} clienti - Array di oggetti cliente.
+       */
+      function displayClientList(clienti) {
+        clientListEl.innerHTML = '';
+        if (!clienti || clienti.length === 0) {
+          clientListEl.innerHTML = '<li>Nessun cliente trovato.</li>';
+          loadingMessage.style.display = 'none';
+          return;
+        }
+        clienti.forEach(client => {
+          const li = document.createElement('li');
+          li.textContent = client.nome;
+          li.style.cursor = 'pointer';
+          li.addEventListener('click', () => {
+            selectedClient = client;
+            showClientDetail(client);
+          });
+          clientListEl.appendChild(li);
         });
-      });
-    }
+        loadingMessage.style.display = 'none';
+      }
 
-    fetchClienti();
+      /**
+       * Mostra i dettagli del cliente selezionato e crea un form per la modifica.
+       * Permette di aggiornare note, visitato e foto.
+       * @param {Object} client - Oggetto cliente.
+       */
+      function showClientDetail(client) {
+        clientDetailContainer.style.display = 'block';
+        clientDetailEl.innerHTML = '';
+
+        // Creazione del form dei dettagli cliente
+        const form = document.createElement('form');
+        form.id = 'clientForm';
+
+        // Nome (sola lettura)
+        const nomeLabel = document.createElement('label');
+        nomeLabel.textContent = 'Nome: ';
+        const nomeSpan = document.createElement('span');
+        nomeSpan.textContent = client.nome;
+        nomeLabel.appendChild(nomeSpan);
+        form.appendChild(nomeLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Note (modificabile)
+        const noteLabel = document.createElement('label');
+        noteLabel.textContent = 'Note: ';
+        const noteTextarea = document.createElement('textarea');
+        noteTextarea.value = client.note || '';
+        noteTextarea.rows = 4;
+        noteTextarea.cols = 50;
+        noteLabel.appendChild(noteTextarea);
+        form.appendChild(noteLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Tipo (sola lettura)
+        const tipoLabel = document.createElement('label');
+        tipoLabel.textContent = 'Tipo: ';
+        const tipoSpan = document.createElement('span');
+        tipoSpan.textContent = client.tipo || '';
+        tipoLabel.appendChild(tipoSpan);
+        form.appendChild(tipoLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Hall (sola lettura)
+        const hallLabel = document.createElement('label');
+        hallLabel.textContent = 'Hall: ';
+        const hallSpan = document.createElement('span');
+        hallSpan.textContent = client.hall || '';
+        hallLabel.appendChild(hallSpan);
+        form.appendChild(hallLabel);
+        form.appendChild(document.createElement('br'));
+
+        // CAP (sola lettura)
+        const capLabel = document.createElement('label');
+        capLabel.textContent = 'CAP: ';
+        const capSpan = document.createElement('span');
+        capSpan.textContent = client.cap || '';
+        capLabel.appendChild(capSpan);
+        form.appendChild(capLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Paese (sola lettura)
+        const paeseLabel = document.createElement('label');
+        paeseLabel.textContent = 'Paese: ';
+        const paeseSpan = document.createElement('span');
+        paeseSpan.textContent = client.paese || '';
+        paeseLabel.appendChild(paeseSpan);
+        form.appendChild(paeseLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Città (sola lettura)
+        const cittaLabel = document.createElement('label');
+        cittaLabel.textContent = 'Città: ';
+        const cittaSpan = document.createElement('span');
+        cittaSpan.textContent = client.citta || '';
+        cittaLabel.appendChild(cittaSpan);
+        form.appendChild(cittaLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Visitato (toggle modificabile)
+        const visitatoLabel = document.createElement('label');
+        visitatoLabel.textContent = 'Visitato: ';
+        const visitatoCheckbox = document.createElement('input');
+        visitatoCheckbox.type = 'checkbox';
+        visitatoCheckbox.checked = client.visitato;
+        visitatoLabel.appendChild(visitatoCheckbox);
+        form.appendChild(visitatoLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Sezione per la foto: input file + drop zone
+        const fotoLabel = document.createElement('label');
+        fotoLabel.textContent = 'Foto: ';
+        // Aggiungo una classe per il drop zone
+        fotoLabel.classList.add('drop-zone');
+
+        // Input file nascosto
+        const fotoInput = document.createElement('input');
+        fotoInput.type = 'file';
+        fotoInput.accept = 'image/*';
+        // Rendo l'input invisibile ma usabile tramite il drop zone
+        fotoInput.style.display = 'none';
+        fotoLabel.appendChild(fotoInput);
+        form.appendChild(fotoLabel);
+        form.appendChild(document.createElement('br'));
+
+        // Anteprima foto
+        const fotoPreview = document.createElement('img');
+        fotoPreview.style.maxWidth = '200px';
+        fotoPreview.style.display = 'block';
+        fotoPreview.style.marginTop = '10px';
+        if (client.foto_url) {
+          fotoPreview.src = client.foto_url;
+        }
+        form.appendChild(fotoPreview);
+        form.appendChild(document.createElement('br'));
+
+        // Bottone per salvare le modifiche
+        const saveButton = document.createElement('button');
+        saveButton.type = 'button';
+        saveButton.textContent = 'Salva';
+        form.appendChild(saveButton);
+
+        clientDetailEl.appendChild(form);
+
+        // Variabile per salvare il file ottenuto da drag & drop
+        let droppedFile = null;
+
+        // Se si clicca sulla drop zone si attiva l'input file
+        fotoLabel.addEventListener('click', function() {
+          fotoInput.click();
+        });
+
+        // Aggiornamento anteprima se si seleziona un file
+        fotoInput.addEventListener('change', function() {
+          if (fotoInput.files && fotoInput.files[0]) {
+            // Se un file viene selezionato manualmente, resetto droppedFile
+            droppedFile = null;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              fotoPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(fotoInput.files[0]);
+          }
+        });
+
+        // Gestione eventi drag & drop sul drop zone
+        fotoLabel.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          fotoLabel.style.backgroundColor = '#e0e0e0';
+        });
+        fotoLabel.addEventListener('dragleave', function(e) {
+          e.preventDefault();
+          fotoLabel.style.backgroundColor = '';
+        });
+        fotoLabel.addEventListener('drop', function(e) {
+          e.preventDefault();
+          fotoLabel.style.backgroundColor = '';
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            droppedFile = e.dataTransfer.files[0];
+            // Mostro l'anteprima della foto dropata
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              fotoPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(droppedFile);
+          }
+        });
+
+        // Gestione salvataggio dei dati
+        saveButton.addEventListener('click', async function() {
+          // Prepara l'oggetto con i dati aggiornati
+          const updatedData = {
+            note: noteTextarea.value,
+            visitato: visitatoCheckbox.checked
+          };
+
+          // Controlla se è stato selezionato un file (tramite input o drag&drop)
+          let fileToUpload = null;
+          if (fotoInput.files && fotoInput.files[0]) {
+            fileToUpload = fotoInput.files[0];
+          } else if (droppedFile) {
+            fileToUpload = droppedFile;
+          }
+
+          // Se è stato selezionato un nuovo file, esegue l'upload su Supabase Storage
+          if (fileToUpload) {
+            try {
+              // Genera un nome file unico
+              const fileExt = fileToUpload.name.split('.').pop();
+              const fileName = client.id + '_' + Date.now() + '.' + fileExt;
+              const { error: uploadError } = await supabase
+                .storage
+                .from('fotoclienti')
+                .upload(fileName, fileToUpload);
+              if (uploadError) throw uploadError;
+
+              // Ottieni la URL pubblica della foto
+              const { publicURL, error: urlError } = supabase
+                .storage
+                .from('fotoclienti')
+                .getPublicUrl(fileName);
+              if (urlError) throw urlError;
+              updatedData.foto_url = publicURL;
+              // Resetta droppedFile dopo l'upload
+              droppedFile = null;
+            } catch (err) {
+              console.error('Errore nel caricamento della foto:', err);
+              alert('Errore nel caricamento della foto.');
+              return;
+            }
+          }
+
+          // Aggiorna il record del cliente su Supabase
+          try {
+            const { error } = await supabase
+              .from('clienti')
+              .update(updatedData)
+              .eq('id', client.id);
+            if (error) throw error;
+            alert('Cliente aggiornato con successo.');
+            // Aggiorna l’oggetto locale e la lista se necessario
+            Object.assign(client, updatedData);
+            displayClientList(clients);
+          } catch (err) {
+            console.error('Errore nell\'aggiornamento del cliente:', err);
+            alert('Errore nell\'aggiornamento del cliente.');
+          }
+        });
+      }
+
+      // Filtro per la ricerca dei clienti
+      searchInput.addEventListener('input', function() {
+        const query = searchInput.value.toLowerCase();
+        const filtered = clients.filter(function(client) {
+          return client.nome.toLowerCase().includes(query);
+        });
+        displayClientList(filtered);
+      });
+
+      // Avvio dell'app
+      fetchClients();
+    })();
   </script>
 </body>
 </html>
