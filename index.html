@@ -108,6 +108,7 @@
       background-color: #f9fafb;
       cursor: pointer;
       transition: background-color 0.2s;
+      position: relative; /* Per posizionare l'input file al suo interno */
     }
     .drop-zone:hover { background-color: #f3f4f6; }
     img {
@@ -118,6 +119,17 @@
     #loadingMessage {
       font-style: italic;
       margin-top: 1rem;
+    }
+    /* Classe per nascondere l'input file in modo compatibile */
+    .hidden-file-input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -143,8 +155,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      // Espone supabaseClient globalmente per poterlo testare dalla Console
-      window.supabaseClient = supabaseClient;
+      window.supabaseClient = supabaseClient; // Espone globalmente per test in console
       
       // Variabili globali
       let clients = [];
@@ -264,12 +275,13 @@
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Foto: ';
         fotoLabel.classList.add('drop-zone');
+        // Imposta il contenitore della drop zone come relative
+        fotoLabel.style.position = 'relative';
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Nascondi l'input spostandolo fuori dallo schermo
-        fotoInput.style.position = 'absolute';
-        fotoInput.style.left = '-9999px';
+        // Nascondi l'input usando la classe hidden-file-input
+        fotoInput.classList.add('hidden-file-input');
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         form.appendChild(document.createElement('br'));
@@ -297,7 +309,10 @@
         // Listener per il click sulla drop zone
         fotoLabel.addEventListener('click', () => {
           console.log("Cliccato sulla drop zone per selezionare il file.");
-          fotoInput.click();
+          // Se l'input non contiene già un file, apri la finestra
+          if (!fotoInput.value) {
+            fotoInput.click();
+          }
         });
         
         // Quando il file viene selezionato tramite input
@@ -374,7 +389,6 @@
               if (uploadError) throw uploadError;
               
               console.log("Percorso file caricato:", uploadData.path);
-              // Usa uploadData.path per ottenere l'URL pubblico
               const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
