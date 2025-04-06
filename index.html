@@ -18,6 +18,7 @@
   <style>
     :root {
       --primary: #1976D2;       /* Blu moderno */
+      --visited: #4CAF50;       /* Verde per visitati */
       --bg: #F5F5F5;            /* Sfondo chiaro */
       --text: #212121;          /* Testo scuro */
       --border: #E0E0E0;        /* Bordo leggero */
@@ -32,11 +33,11 @@
       padding: 1rem;
       font-size: var(--font-base);
     }
-    /* Logo al posto del titolo */
+    /* Logo ingrandito */
     .logo {
       display: block;
       margin: 0 auto 1rem;
-      max-width: 180px;
+      max-width: 300px;
       width: 100%;
       height: auto;
     }
@@ -55,7 +56,7 @@
       max-width: 600px;
       margin: 0 auto;
     }
-    /* Lista clienti in stile "card" */
+    /* Lista clienti in stile card */
     #clientList {
       list-style: none;
       padding: 0;
@@ -64,19 +65,22 @@
     #clientList li {
       background-color: #ffffff;
       padding: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
       margin-bottom: 1rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     #clientList li:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    /* Aggiungo un bordo sinistro per dare colore (blu per non visitati, verde per visitati) */
+    #clientList li:not(:first-child) {
+      /* il bordo viene applicato dinamicamente via JS */
     }
     #clientList li .client-name {
       font-weight: 500;
@@ -117,7 +121,7 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 2rem;
+      font-size: 2rem;  /* Più grande per facilitare il tocco */
       color: var(--text);
       cursor: pointer;
     }
@@ -172,6 +176,7 @@
       cursor: pointer;
       transition: background-color 0.3s, border-color 0.3s;
       font-size: 1rem;
+      position: relative;
     }
     .drop-zone:hover { 
       background-color: #f0f0f0;
@@ -197,7 +202,7 @@
       left: 0;
       cursor: pointer;
     }
-    /* Responsive adjustments */
+    /* Responsive */
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
@@ -217,7 +222,7 @@
   </style>
 </head>
 <body>
-  <!-- Logo al posto del titolo -->
+  <!-- Logo -->
   <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
   
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
@@ -234,23 +239,18 @@
   <script>
     (function() {
       console.log("Script caricato");
-      
-      // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
       window.supabaseClient = supabaseClient;
-      
       let clients = [];
       let selectedClient = null;
-      
       const loadingMessage = document.getElementById('loadingMessage');
       const clientListEl = document.getElementById('clientList');
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
-      
       async function fetchClients() {
         try {
           console.log("Recupero clienti...");
@@ -268,7 +268,6 @@
           loadingMessage.style.display = 'block';
         }
       }
-      
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -278,13 +277,13 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          // Sfondi neutri per le card, eventualmente in base al flag "visitato"
-          li.style.backgroundColor = client.visitato ? '#E8F5E9' : '#FFFFFF';
-          
+          // Imposta un bordo sinistro: blu per non visitati, verde per visitati
+          li.style.borderLeft = client.visitato 
+            ? "5px solid var(--visited)" 
+            : "5px solid var(--primary)";
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
-          
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
           if(client.foto_url) {
@@ -299,7 +298,6 @@
             notesSpan.textContent = '📝';
             statusDiv.appendChild(notesSpan);
           }
-          
           li.appendChild(nameSpan);
           li.appendChild(statusDiv);
           li.addEventListener('click', () => {
@@ -310,10 +308,8 @@
         });
         loadingMessage.style.display = 'none';
       }
-      
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
-        
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
@@ -323,11 +319,9 @@
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
-        
         const title = document.createElement('h2');
         title.textContent = client.nome;
         clientDetailEl.appendChild(title);
-        
         if(client.tipo) {
           const tipoEl = document.createElement('p');
           tipoEl.textContent = client.tipo;
@@ -335,10 +329,8 @@
           tipoEl.style.marginTop = '0.5rem';
           clientDetailEl.appendChild(tipoEl);
         }
-        
         const form = document.createElement('form');
         form.id = 'clientForm';
-        
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
@@ -347,7 +339,6 @@
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
-        
         ['hall', 'citta'].forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
@@ -356,7 +347,6 @@
           label.appendChild(span);
           form.appendChild(label);
         });
-        
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
         const visitatoCheckbox = document.createElement('input');
@@ -364,12 +354,10 @@
         visitatoCheckbox.checked = client.visitato;
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
-        
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
-        
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
@@ -383,14 +371,12 @@
         }
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
-        
         const fotoPreview = document.createElement('img');
         fotoPreview.style.display = 'block';
         if (client.foto_url) {
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
-        
         let deleteButton;
         if (client.foto_url) {
           deleteButton = document.createElement('button');
@@ -400,9 +386,7 @@
           deleteButton.style.marginTop = '0.5rem';
           form.appendChild(deleteButton);
         }
-        
         clientDetailEl.appendChild(form);
-        
         let droppedFile = null;
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
@@ -410,7 +394,6 @@
             processFile(fotoInput.files[0]);
           }
         });
-        
         function processFile(file) {
           if (!file) return;
           droppedFile = null;
@@ -424,27 +407,23 @@
           };
           reader.readAsDataURL(file);
         }
-        
         if (!isSafari) {
           fotoLabel.addEventListener('click', () => {
             console.log("Cliccato sulla drop zone.");
             fotoInput.click();
           });
         }
-        
         const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
           };
-          
           let fileToUpload = null;
           if (fotoInput.files && fotoInput.files[0]) {
             fileToUpload = fotoInput.files[0];
           } else if (droppedFile) {
             fileToUpload = droppedFile;
           }
-          
           if (fileToUpload) {
             try {
               const fileExt = fileToUpload.name.split('.').pop();
@@ -468,7 +447,6 @@
               return;
             }
           }
-          
           try {
             const { error } = await supabaseClient
               .from('clienti')
@@ -481,7 +459,6 @@
             console.error("Errore nell'aggiornamento del cliente:", err);
           }
         };
-        
         if (deleteButton) {
           deleteButton.addEventListener('click', async () => {
             if (!client.foto_url) return;
@@ -507,10 +484,8 @@
             }
           });
         }
-        
         clientDetailContainer.style.display = "flex";
       }
-      
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
@@ -518,7 +493,6 @@
         );
         displayClientList(filtered);
       });
-      
       fetchClients();
     })();
   </script>
