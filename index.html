@@ -78,9 +78,15 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
-    /* Aggiungo un bordo sinistro per dare colore (blu per non visitati, verde per visitati) */
-    #clientList li:not(:first-child) {
-      /* il bordo viene applicato dinamicamente via JS */
+    /* Bordo sinistro per evidenziare lo stato: blu per non visitati, verde per visitati */
+    #clientList li {
+      border-left: 5px solid;
+    }
+    #clientList li[visitato="true"] {
+      border-color: var(--visited);
+    }
+    #clientList li[visitato="false"] {
+      border-color: var(--primary);
     }
     #clientList li .client-name {
       font-weight: 500;
@@ -165,7 +171,7 @@
     button:hover { 
       background-color: #115293;
     }
-    /* Drop zone per caricamento foto in stile moderno */
+    /* Drop zone per caricamento foto personalizzato */
     .drop-zone {
       margin-top: 0.5rem;
       padding: 1rem;
@@ -182,6 +188,17 @@
       background-color: #f0f0f0;
       border-color: var(--primary);
     }
+    /* Nascondo il file input sempre, anche su Safari */
+    .hidden-file-input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
     img {
       margin-top: 1rem;
       max-width: 100%;
@@ -192,15 +209,6 @@
       font-style: italic;
       margin-top: 1rem;
       text-align: center;
-    }
-    .hidden-file-input {
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      cursor: pointer;
     }
     /* Responsive */
     @media (max-width: 600px) {
@@ -251,6 +259,7 @@
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
+      
       async function fetchClients() {
         try {
           console.log("Recupero clienti...");
@@ -268,6 +277,7 @@
           loadingMessage.style.display = 'block';
         }
       }
+      
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -277,13 +287,12 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          // Imposta un bordo sinistro: blu per non visitati, verde per visitati
-          li.style.borderLeft = client.visitato 
-            ? "5px solid var(--visited)" 
-            : "5px solid var(--primary)";
+          li.setAttribute("visitato", client.visitato ? "true" : "false");
+          
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
+          
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
           if(client.foto_url) {
@@ -298,6 +307,7 @@
             notesSpan.textContent = '📝';
             statusDiv.appendChild(notesSpan);
           }
+          
           li.appendChild(nameSpan);
           li.appendChild(statusDiv);
           li.addEventListener('click', () => {
@@ -308,6 +318,7 @@
         });
         loadingMessage.style.display = 'none';
       }
+      
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         const closeBtn = document.createElement('span');
@@ -319,9 +330,11 @@
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
+        
         const title = document.createElement('h2');
         title.textContent = client.nome;
         clientDetailEl.appendChild(title);
+        
         if(client.tipo) {
           const tipoEl = document.createElement('p');
           tipoEl.textContent = client.tipo;
@@ -329,8 +342,10 @@
           tipoEl.style.marginTop = '0.5rem';
           clientDetailEl.appendChild(tipoEl);
         }
+        
         const form = document.createElement('form');
         form.id = 'clientForm';
+        
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
@@ -339,6 +354,7 @@
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
+        
         ['hall', 'citta'].forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
@@ -347,6 +363,7 @@
           label.appendChild(span);
           form.appendChild(label);
         });
+        
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
         const visitatoCheckbox = document.createElement('input');
@@ -354,29 +371,28 @@
         visitatoCheckbox.checked = client.visitato;
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
+        
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
+        
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (!isSafari) {
-          fotoInput.classList.add('hidden-file-input');
-        } else {
-          fotoInput.style.opacity = '1';
-          fotoInput.style.position = 'relative';
-          fotoInput.style.display = 'block';
-        }
+        // Sempre nascondo il file input con la classe custom
+        fotoInput.classList.add('hidden-file-input');
+        
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
+        
         const fotoPreview = document.createElement('img');
         fotoPreview.style.display = 'block';
         if (client.foto_url) {
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
+        
         let deleteButton;
         if (client.foto_url) {
           deleteButton = document.createElement('button');
@@ -386,7 +402,9 @@
           deleteButton.style.marginTop = '0.5rem';
           form.appendChild(deleteButton);
         }
+        
         clientDetailEl.appendChild(form);
+        
         let droppedFile = null;
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
@@ -394,6 +412,7 @@
             processFile(fotoInput.files[0]);
           }
         });
+        
         function processFile(file) {
           if (!file) return;
           droppedFile = null;
@@ -407,12 +426,12 @@
           };
           reader.readAsDataURL(file);
         }
-        if (!isSafari) {
-          fotoLabel.addEventListener('click', () => {
-            console.log("Cliccato sulla drop zone.");
-            fotoInput.click();
-          });
-        }
+        
+        fotoLabel.addEventListener('click', () => {
+          console.log("Cliccato sulla drop zone.");
+          fotoInput.click();
+        });
+        
         const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
@@ -459,6 +478,7 @@
             console.error("Errore nell'aggiornamento del cliente:", err);
           }
         };
+        
         if (deleteButton) {
           deleteButton.addEventListener('click', async () => {
             if (!client.foto_url) return;
@@ -486,6 +506,7 @@
         }
         clientDetailContainer.style.display = "flex";
       }
+      
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
@@ -493,6 +514,7 @@
         );
         displayClientList(filtered);
       });
+      
       fetchClients();
     })();
   </script>
