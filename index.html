@@ -111,7 +111,7 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 1.5rem;
+      font-size: 2rem; /* Più grande per facilitare il tocco */
       color: var(--text);
       cursor: pointer;
     }
@@ -148,15 +148,14 @@
       margin-top: 0.5rem;
       padding: 1rem;
       border: 2px dashed var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       text-align: center;
-      background-color: #f9fafb;
+      background-color: #e0e0e0;
       cursor: pointer;
-      transition: background-color 0.2s;
-      position: relative;
+      transition: background-color 0.3s;
       font-size: 1rem;
     }
-    .drop-zone:hover { background-color: #f3f4f6; }
+    .drop-zone:hover { background-color: #d0d0d0; }
     img {
       margin-top: 1rem;
       max-width: 100%;
@@ -305,46 +304,49 @@
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura (esegue l'auto-save prima di chiudere)
+        // Bottone di chiusura (con auto-save)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
+        // Ingrandisco il pulsante chiusura
+        closeBtn.style.fontSize = '2rem';
         closeBtn.addEventListener('click', async () => {
           await autoSave();
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
         
-        // Titolo
+        // Titolo: nome del cliente
         const title = document.createElement('h2');
-        title.textContent = 'Dettagli Cliente';
+        title.textContent = client.nome;
         clientDetailEl.appendChild(title);
+        
+        // Mostra il "tipo" subito sotto il nome, senza etichetta
+        if(client.tipo) {
+          const tipoEl = document.createElement('p');
+          tipoEl.textContent = client.tipo;
+          tipoEl.style.fontSize = '1.2rem';
+          tipoEl.style.marginTop = '0.5rem';
+          clientDetailEl.appendChild(tipoEl);
+        }
         
         // Form per i dettagli
         const form = document.createElement('form');
         form.id = 'clientForm';
         
-        // Nome (sola lettura)
-        const nomeLabel = document.createElement('label');
-        nomeLabel.textContent = 'Nome: ';
-        const nomeSpan = document.createElement('span');
-        nomeSpan.textContent = client.nome;
-        nomeLabel.appendChild(nomeSpan);
-        form.appendChild(nomeLabel);
-        
-        // Note (modificabile)
+        // Campo Note (modificabile) con altezza ridotta (3 righe)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
         noteTextarea.value = client.note || '';
-        noteTextarea.rows = 4;
+        noteTextarea.rows = 3; // 1/3 in meno rispetto a 4
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
         
-        // Altri campi (Tipo, Hall, CAP, Paese, Città)
-        const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
-        fields.forEach(field => {
+        // Altri campi: mostro solo "hall" e "città"
+        const otherFields = ['hall', 'citta'];
+        otherFields.forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
           const span = document.createElement('span');
@@ -362,9 +364,10 @@
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
         
-        // Sezione per la foto: input file + drop zone
+        // Sezione per la foto: drop zone aggiornata
         const fotoLabel = document.createElement('label');
-        fotoLabel.textContent = 'Foto: ';
+        // Imposto il testo del pulsante più accattivante
+        fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
         
