@@ -6,8 +6,7 @@
   <title>Elenco Clienti Supabase - Mobile</title>
   <!-- Carica Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <!-- Google Fonts: Roboto per un look moderno -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   
   <!-- Meta tag per full screen su iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,85 +16,73 @@
   
   <style>
     :root {
-      --primary: #1976D2;       /* Blu moderno */
-      --visited: #4CAF50;       /* Verde per visitati */
-      --bg: #F5F5F5;            /* Sfondo chiaro */
-      --text: #212121;          /* Testo scuro */
-      --border: #E0E0E0;        /* Bordo leggero */
+      --primary: #4f46e5;
+      --bg: #f9fafb;
+      --text: #111827;
+      --border: #e5e7eb;
       --font-base: 16px;
     }
     * { box-sizing: border-box; }
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Inter', sans-serif;
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
       padding: 1rem;
       font-size: var(--font-base);
     }
-    /* Logo ingrandito */
+    /* Il logo sostituisce il titolo */
     .logo {
       display: block;
       margin: 0 auto 1rem;
-      max-width: 300px;
+      max-width: 200px;
       width: 100%;
       height: auto;
     }
     input[type="text"] {
-      padding: 0.75rem;
+      padding: 0.5rem;
       width: 100%;
       max-width: 400px;
       margin: 0 auto 1rem;
       display: block;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      background-color: #ffffff;
-      font-size: 1rem;
+      border-radius: 6px;
     }
     #clientListContainer, #clientDetailContainer {
       max-width: 600px;
       margin: 0 auto;
     }
-    /* Lista clienti in stile card */
+    /* Rimuovo i puntini dalla lista */
     #clientList {
       list-style: none;
-      padding: 0;
-      margin: 0;
+      padding-left: 0;
     }
     #clientList li {
-      background-color: #ffffff;
-      padding: 1rem;
-      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: white;
+      margin-bottom: 0.5rem;
       cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+      font-size: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.15s, box-shadow 0.15s;
     }
-    #clientList li:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    /* Bordo sinistro per evidenziare lo stato: blu per non visitati, verde per visitati */
-    #clientList li {
-      border-left: 5px solid;
-    }
-    #clientList li[visitato="true"] {
-      border-color: var(--visited);
-    }
-    #clientList li[visitato="false"] {
-      border-color: var(--primary);
-    }
+    /* Aumenta il nome del cliente */
     #clientList li .client-name {
-      font-weight: 500;
-      font-size: 1.1rem;
+      font-weight: bold;
     }
+    /* Contenitore per le icone di stato */
     #clientList li .status-icons {
       display: flex;
       gap: 0.5rem;
       font-size: 1rem;
+    }
+    #clientList li:hover {
+      background-color: #f3f4f6;
+      transform: scale(1.01);
     }
     /* Modal Overlay */
     #clientDetailContainer {
@@ -104,54 +91,46 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.6);
+      background-color: rgba(0,0,0,0.8);
       display: none;
       justify-content: center;
       align-items: center;
       padding: 1rem;
       z-index: 999;
     }
-    /* Scheda cliente (modal) */
+    /* Modal Content */
     #clientDetail {
-      background-color: #ffffff;
-      padding: 1.5rem;
-      border-radius: 12px;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 1rem;
       width: 100%;
       max-width: 600px;
       position: relative;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       overflow-y: auto;
       max-height: 90vh;
+      margin: 0 1rem;
     }
     .close-btn {
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 2rem;  /* Più grande per facilitare il tocco */
+      font-size: 1.5rem;
       color: var(--text);
       cursor: pointer;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      font-weight: 500;
-    }
-    p {
-      margin: 0.5rem 0;
     }
     textarea, input[type="file"] {
       width: 100%;
       margin-top: 0.5rem;
-      padding: 0.75rem;
-      border-radius: 8px;
+      padding: 0.5rem;
+      border-radius: 6px;
       border: 1px solid var(--border);
       font-size: 1rem;
-      background-color: #ffffff;
     }
     label {
       display: block;
       margin-top: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1rem;
       margin-bottom: 0.5rem;
     }
@@ -159,36 +138,41 @@
       margin-top: 1rem;
       padding: 0.75rem;
       background-color: var(--primary);
-      color: #ffffff;
+      color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1rem;
       transition: background-color 0.2s;
       width: 100%;
     }
-    button:hover { 
-      background-color: #115293;
-    }
-    /* Drop zone per caricamento foto personalizzato */
+    button:hover { background-color: #4338ca; }
     .drop-zone {
       margin-top: 0.5rem;
       padding: 1rem;
       border: 2px dashed var(--border);
-      border-radius: 12px;
+      border-radius: 6px;
       text-align: center;
-      background-color: #fafafa;
+      background-color: #f9fafb;
       cursor: pointer;
-      transition: background-color 0.3s, border-color 0.3s;
-      font-size: 1rem;
+      transition: background-color 0.2s;
       position: relative;
+      font-size: 1rem;
     }
-    .drop-zone:hover { 
-      background-color: #f0f0f0;
-      border-color: var(--primary);
+    .drop-zone:hover { background-color: #f3f4f6; }
+    img {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 8px;
+      display: block;
     }
-    /* Nascondo il file input sempre, anche su Safari */
+    #loadingMessage {
+      font-style: italic;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    /* Classe per nascondere l'input file in Chrome */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -197,31 +181,19 @@
       top: 0;
       left: 0;
       cursor: pointer;
-      z-index: 2;
     }
-    img {
-      margin-top: 1rem;
-      max-width: 100%;
-      border-radius: 12px;
-      display: block;
-    }
-    #loadingMessage {
-      font-style: italic;
-      margin-top: 1rem;
-      text-align: center;
-    }
-    /* Responsive */
+    /* Media query per smartphone */
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
-        font-size: 16px;
+        font-size: 14px;
       }
       #clientList li {
         font-size: 1.2rem;
         padding: 1rem;
       }
       button, label, input[type="text"], textarea {
-        font-size: 16px;
+        font-size: 14px;
       }
       #clientDetail {
         padding: 1.5rem;
@@ -230,7 +202,7 @@
   </style>
 </head>
 <body>
-  <!-- Logo -->
+  <!-- Sostituisco il titolo con il logo -->
   <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
   
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
@@ -247,22 +219,29 @@
   <script>
     (function() {
       console.log("Script caricato");
+      
+      // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient;
+      window.supabaseClient = supabaseClient; // Espone globalmente per test
+      
+      // Variabili globali
       let clients = [];
       let selectedClient = null;
+      
+      // Elementi DOM
       const loadingMessage = document.getElementById('loadingMessage');
       const clientListEl = document.getElementById('clientList');
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
+      // Recupera i clienti
       async function fetchClients() {
         try {
-          console.log("Recupero clienti...");
+          console.log("Inizio recupero clienti...");
           const { data, error } = await supabaseClient
             .from('clienti')
             .select('*')
@@ -272,12 +251,13 @@
           clients = data;
           displayClientList(clients);
         } catch (err) {
-          console.error("Errore nel recupero dei clienti:", err);
+          console.error("Errore durante il recupero dei clienti:", err);
           loadingMessage.textContent = 'Errore nel caricamento dei dati.';
           loadingMessage.style.display = 'block';
         }
       }
       
+      // Visualizza la lista dei clienti
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -287,20 +267,27 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          li.setAttribute("visitato", client.visitato ? "true" : "false");
+          // Imposta lo sfondo in base al flag "visitato"
+          li.style.backgroundColor = client.visitato ? '#dff2c2' : '#f0c6b1';
           
+          // Nome del cliente
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
           
+          // Contenitore per eventuali icone di stato
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
+          
+          // Aggiunge l'icona "foto" solo se presente
           if(client.foto_url) {
             const photoSpan = document.createElement('span');
             photoSpan.title = "Foto presente";
             photoSpan.textContent = '📷';
             statusDiv.appendChild(photoSpan);
           }
+          
+          // Aggiunge l'icona "note" solo se sono state salvate
           if(client.note && client.note.trim() !== '') {
             const notesSpan = document.createElement('span');
             notesSpan.title = "Note presenti";
@@ -310,6 +297,7 @@
           
           li.appendChild(nameSpan);
           li.appendChild(statusDiv);
+          
           li.addEventListener('click', () => {
             selectedClient = client;
             showClientDetail(client);
@@ -319,51 +307,62 @@
         loadingMessage.style.display = 'none';
       }
       
+      // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
+        
+        // Bottone di chiusura (esegue l'auto-save prima di chiudere)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
-        closeBtn.style.fontSize = '2rem';
         closeBtn.addEventListener('click', async () => {
           await autoSave();
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
         
+        // Titolo: nome del cliente
         const title = document.createElement('h2');
-        title.textContent = client.nome;
+        title.textContent = 'Dettagli Cliente';
         clientDetailEl.appendChild(title);
         
-        if(client.tipo) {
-          const tipoEl = document.createElement('p');
-          tipoEl.textContent = client.tipo;
-          tipoEl.style.fontSize = '1.2rem';
-          tipoEl.style.marginTop = '0.5rem';
-          clientDetailEl.appendChild(tipoEl);
-        }
-        
+        // Form per i dettagli
         const form = document.createElement('form');
         form.id = 'clientForm';
         
+        // Nome (sola lettura)
+        const nomeLabel = document.createElement('label');
+        nomeLabel.textContent = 'Nome: ';
+        const nomeSpan = document.createElement('span');
+        nomeSpan.textContent = client.nome;
+        nomeLabel.appendChild(nomeSpan);
+        form.appendChild(nomeLabel);
+        form.appendChild(document.createElement('br'));
+        
+        // Note (modificabile)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
         noteTextarea.value = client.note || '';
-        noteTextarea.rows = 3;
+        noteTextarea.rows = 4;
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
+        form.appendChild(document.createElement('br'));
         
-        ['hall', 'citta'].forEach(field => {
+        // Altri campi (Tipo, Hall, CAP, Paese, Città)
+        const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
+        fields.forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
           const span = document.createElement('span');
           span.textContent = client[field] || '';
           label.appendChild(span);
           form.appendChild(label);
+          form.appendChild(document.createElement('br'));
         });
         
+        // Visitato (toggle)
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
         const visitatoCheckbox = document.createElement('input');
@@ -371,44 +370,66 @@
         visitatoCheckbox.checked = client.visitato;
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
+        form.appendChild(document.createElement('br'));
         
+        // Sezione per la foto: input file + drop zone
         const fotoLabel = document.createElement('label');
-        fotoLabel.textContent = 'Carica Foto';
+        fotoLabel.textContent = 'Foto: ';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
         
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Sempre nascondo il file input con la classe custom
-        fotoInput.classList.add('hidden-file-input');
+        // Rileva se l'utente usa Safari; in Safari lasciamo l'input visibile per forzare l'evento change
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (!isSafari) {
+          fotoInput.classList.add('hidden-file-input');
+        } else {
+          fotoInput.style.opacity = '1';
+          fotoInput.style.position = 'relative';
+          fotoInput.style.display = 'block';
+        }
         
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
+        form.appendChild(document.createElement('br'));
         
+        // Anteprima foto
         const fotoPreview = document.createElement('img');
         fotoPreview.style.display = 'block';
         if (client.foto_url) {
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
+        form.appendChild(document.createElement('br'));
         
+        // Bottone per salvare le modifiche
+        const saveButton = document.createElement('button');
+        saveButton.type = 'button';
+        saveButton.textContent = 'Salva';
+        form.appendChild(saveButton);
+        
+        // Bottone per eliminare la foto (se presente)
         let deleteButton;
         if (client.foto_url) {
           deleteButton = document.createElement('button');
           deleteButton.type = 'button';
           deleteButton.textContent = 'Elimina Foto';
-          deleteButton.style.backgroundColor = '#D32F2F';
+          deleteButton.style.backgroundColor = '#dc2626';
           deleteButton.style.marginTop = '0.5rem';
           form.appendChild(deleteButton);
         }
         
         clientDetailEl.appendChild(form);
         
+        // Variabile per file (per eventuali drag & drop in futuro)
         let droppedFile = null;
+        
+        // Evento change per l'input file
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
-            console.log("File selezionato:", fotoInput.files[0]);
+            console.log("Evento change: file selezionato:", fotoInput.files[0]);
             processFile(fotoInput.files[0]);
           }
         });
@@ -418,95 +439,128 @@
           droppedFile = null;
           const reader = new FileReader();
           reader.onload = (e) => {
-            console.log("File letto:", e.target.result);
+            console.log("FileReader onload, result:", e.target.result);
             fotoPreview.src = e.target.result;
           };
           reader.onerror = (err) => {
-            console.error("Errore nel leggere il file:", err);
+            console.error("FileReader error:", err);
           };
           reader.readAsDataURL(file);
         }
         
-        fotoLabel.addEventListener('click', () => {
-          console.log("Cliccato sulla drop zone.");
-          fotoInput.click();
-        });
+        // In Safari non forziamo il click sulla drop zone, l'utente può cliccare direttamente sull'input
+        if (!isSafari) {
+          fotoLabel.addEventListener('click', () => {
+            console.log("Cliccato sulla drop zone per selezionare il file.");
+            fotoInput.click();
+          });
+        }
         
-        const autoSave = async () => {
+        // Logica per salvare le modifiche (incluso upload foto)
+        saveButton.addEventListener('click', async () => {
+          console.log("Bottone Salva cliccato.");
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
           };
+          
           let fileToUpload = null;
           if (fotoInput.files && fotoInput.files[0]) {
             fileToUpload = fotoInput.files[0];
           } else if (droppedFile) {
             fileToUpload = droppedFile;
           }
+          
+          console.log("File da caricare:", fileToUpload);
+          
           if (fileToUpload) {
             try {
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
+              console.log("Inizio upload del file:", fileName);
+              
               const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
+              console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
+              
+              console.log("Percorso file caricato:", uploadData.path);
               const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(uploadData.path);
               if (urlError) throw urlError;
-              updatedData.foto_url = urlData.publicUrl;
-              fotoPreview.src = updatedData.foto_url;
+              const publicUrl = urlData.publicUrl;
+              console.log("URL pubblico ottenuto:", publicUrl);
+              
+              fotoPreview.src = publicUrl;
+              updatedData.foto_url = publicUrl;
+              
+              // Resetta l'input file
               fotoInput.value = "";
               droppedFile = null;
             } catch (err) {
               console.error("Errore nel caricamento della foto:", err);
+              alert("Errore nel caricamento della foto.");
               return;
             }
           }
+          
           try {
+            console.log("Aggiornamento cliente con i dati:", updatedData);
             const { error } = await supabaseClient
               .from('clienti')
               .update(updatedData)
               .eq('id', client.id);
             if (error) throw error;
+            alert("Cliente aggiornato con successo.");
             Object.assign(client, updatedData);
+            console.log("Cliente aggiornato:", client);
             displayClientList(clients);
+            clientDetailContainer.style.display = "none";
           } catch (err) {
             console.error("Errore nell'aggiornamento del cliente:", err);
+            alert("Errore nell'aggiornamento del cliente.");
           }
-        };
+        });
         
+        // Logica per eliminare la foto
         if (deleteButton) {
           deleteButton.addEventListener('click', async () => {
             if (!client.foto_url) return;
             if (!confirm("Sei sicuro di voler eliminare la foto?")) return;
+            // Estrai il nome del file dall'URL (assumendo che sia l'ultima parte)
             const parts = client.foto_url.split('/');
             const fileName = parts[parts.length - 1];
             try {
+              // Elimina il file dallo storage
               const { error: deleteError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .remove([fileName]);
               if (deleteError) throw deleteError;
+              // Aggiorna il record del cliente
               const { error: updateError } = await supabaseClient
                 .from('clienti')
                 .update({ foto_url: null })
                 .eq('id', client.id);
               if (updateError) throw updateError;
-              console.log("Foto eliminata con successo.");
+              alert("Foto eliminata con successo.");
               fotoPreview.src = "";
               client.foto_url = null;
             } catch (err) {
               console.error("Errore nell'eliminazione della foto:", err);
+              alert("Errore nell'eliminazione della foto.");
             }
           });
         }
+        
         clientDetailContainer.style.display = "flex";
       }
       
+      // Filtro per la ricerca
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
