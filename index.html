@@ -31,10 +31,12 @@
       padding: 1rem;
       font-size: var(--font-base);
     }
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
+    /* Il logo sostituisce il titolo */
+    .logo {
+      display: block;
+      margin: 0 auto 1rem;
+      max-width: 100%;
+      height: auto;
     }
     input[type="text"] {
       padding: 0.5rem;
@@ -111,7 +113,7 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 2rem; /* Più grande per facilitare il tocco */
+      font-size: 2rem; /* Ingrandito per facilitare il tocco */
       color: var(--text);
       cursor: pointer;
     }
@@ -197,7 +199,9 @@
   </style>
 </head>
 <body>
-  <h1>📋 Elenco Clienti</h1>
+  <!-- Sostituisco il titolo con il logo -->
+  <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
+  
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
   
   <div id="clientListContainer">
@@ -339,7 +343,7 @@
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
         noteTextarea.value = client.note || '';
-        noteTextarea.rows = 3; // 1/3 in meno rispetto a 4
+        noteTextarea.rows = 3;
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
@@ -366,7 +370,6 @@
         
         // Sezione per la foto: drop zone aggiornata
         const fotoLabel = document.createElement('label');
-        // Imposto il testo del pulsante più accattivante
         fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
@@ -374,7 +377,6 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Rileva se l'utente usa Safari; in Safari l'input rimane visibile per forzare l'evento change
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (!isSafari) {
           fotoInput.classList.add('hidden-file-input');
@@ -433,7 +435,6 @@
           reader.readAsDataURL(file);
         }
         
-        // In Safari, l'utente può cliccare direttamente sull'input
         if (!isSafari) {
           fotoLabel.addEventListener('click', () => {
             console.log("Cliccato sulla drop zone per selezionare il file.");
@@ -441,7 +442,6 @@
           });
         }
         
-        // Funzione di auto-save, eseguita alla chiusura della scheda (senza notifiche)
         const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
@@ -492,22 +492,18 @@
           }
         };
         
-        // Logica per eliminare la foto
         if (deleteButton) {
           deleteButton.addEventListener('click', async () => {
             if (!client.foto_url) return;
             if (!confirm("Sei sicuro di voler eliminare la foto?")) return;
-            // Estrai il nome del file dall'URL (assumendo che sia l'ultima parte)
             const parts = client.foto_url.split('/');
             const fileName = parts[parts.length - 1];
             try {
-              // Elimina il file dallo storage
               const { error: deleteError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .remove([fileName]);
               if (deleteError) throw deleteError;
-              // Aggiorna il record del cliente
               const { error: updateError } = await supabaseClient
                 .from('clienti')
                 .update({ foto_url: null })
@@ -525,7 +521,6 @@
         clientDetailContainer.style.display = "flex";
       }
       
-      // Filtro per la ricerca
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
