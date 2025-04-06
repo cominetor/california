@@ -16,10 +16,10 @@
   
   <style>
     :root {
-      --primary: #4f46e5;
-      --bg: #f9fafb;
-      --text: #111827;
-      --border: #e5e7eb;
+      --primary: #0056b3;       /* Blu professionale */
+      --bg: #f7f7f7;            /* Grigio molto chiaro */
+      --text: #333333;          /* Testo scuro */
+      --border: #dddddd;        /* Bordo grigio chiaro */
       --font-base: 16px;
     }
     * { box-sizing: border-box; }
@@ -31,44 +31,48 @@
       padding: 1rem;
       font-size: var(--font-base);
     }
-    /* Il logo sostituisce il titolo */
+    /* Logo al posto del titolo */
     .logo {
       display: block;
       margin: 0 auto 1rem;
-      max-width: 100%;
+      max-width: 200px;
+      width: 100%;
       height: auto;
     }
     input[type="text"] {
-      padding: 0.5rem;
+      padding: 0.75rem;
       width: 100%;
       max-width: 400px;
       margin: 0 auto 1rem;
       display: block;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
+      background-color: #ffffff;
     }
     #clientListContainer, #clientDetailContainer {
       max-width: 600px;
       margin: 0 auto;
     }
-    /* Rimuovo i puntini dalla lista */
+    /* Lista clienti senza bullet */
     #clientList {
       list-style: none;
       padding-left: 0;
     }
     #clientList li {
-      padding: 0.75rem;
+      padding: 1rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
       font-size: 1.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      /* Ombreggiatura leggera per un effetto "card" */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /* Aumenta il nome del cliente */
+    /* Nome cliente in grassetto */
     #clientList li .client-name {
       font-weight: bold;
     }
@@ -79,7 +83,6 @@
       font-size: 1rem;
     }
     #clientList li:hover {
-      background-color: #f3f4f6;
       transform: scale(1.01);
     }
     /* Modal Overlay */
@@ -89,22 +92,22 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.8);
+      background-color: rgba(0,0,0,0.5);
       display: none;
       justify-content: center;
       align-items: center;
       padding: 1rem;
       z-index: 999;
     }
-    /* Modal Content */
+    /* Scheda cliente (modal) */
     #clientDetail {
-      background-color: white;
-      padding: 1rem;
-      border-radius: 1rem;
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 8px;
       width: 100%;
       max-width: 600px;
       position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       overflow-y: auto;
       max-height: 90vh;
       margin: 0 1rem;
@@ -113,17 +116,18 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 2rem; /* Ingrandito per facilitare il tocco */
+      font-size: 2rem;
       color: var(--text);
       cursor: pointer;
     }
     textarea, input[type="file"] {
       width: 100%;
       margin-top: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 6px;
+      padding: 0.75rem;
+      border-radius: 8px;
       border: 1px solid var(--border);
       font-size: 1rem;
+      background-color: #ffffff;
     }
     label {
       display: block;
@@ -136,7 +140,7 @@
       margin-top: 1rem;
       padding: 0.75rem;
       background-color: var(--primary);
-      color: white;
+      color: #ffffff;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -145,19 +149,22 @@
       transition: background-color 0.2s;
       width: 100%;
     }
-    button:hover { background-color: #4338ca; }
+    button:hover { 
+      background-color: #004099;
+    }
+    /* Drop zone per il caricamento foto */
     .drop-zone {
       margin-top: 0.5rem;
       padding: 1rem;
       border: 2px dashed var(--border);
       border-radius: 8px;
       text-align: center;
-      background-color: #e0e0e0;
+      background-color: #ffffff;
       cursor: pointer;
       transition: background-color 0.3s;
       font-size: 1rem;
     }
-    .drop-zone:hover { background-color: #d0d0d0; }
+    .drop-zone:hover { background-color: #f0f0f0; }
     img {
       margin-top: 1rem;
       max-width: 100%;
@@ -169,7 +176,6 @@
       margin-top: 1rem;
       text-align: center;
     }
-    /* Classe per nascondere l'input file in Chrome */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -199,7 +205,7 @@
   </style>
 </head>
 <body>
-  <!-- Sostituisco il titolo con il logo -->
+  <!-- Logo al posto del titolo -->
   <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
   
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
@@ -222,7 +228,7 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient; // Espone globalmente per test
+      window.supabaseClient = supabaseClient;
       
       // Variabili globali
       let clients = [];
@@ -264,8 +270,8 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          // Imposta lo sfondo in base al flag "visitato"
-          li.style.backgroundColor = client.visitato ? '#dff2c2' : '#f0c6b1';
+          // Sfondo in base allo stato: se visitato (light green) altrimenti (bianco sporco)
+          li.style.backgroundColor = client.visitato ? '#d4edda' : '#f8f9fa';
           
           // Nome del cliente
           const nameSpan = document.createElement('span');
@@ -276,15 +282,12 @@
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
           
-          // Aggiunge l'icona "foto" solo se presente
           if(client.foto_url) {
             const photoSpan = document.createElement('span');
             photoSpan.title = "Foto presente";
             photoSpan.textContent = '📷';
             statusDiv.appendChild(photoSpan);
           }
-          
-          // Aggiunge l'icona "note" solo se sono state salvate
           if(client.note && client.note.trim() !== '') {
             const notesSpan = document.createElement('span');
             notesSpan.title = "Note presenti";
@@ -308,11 +311,10 @@
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura (con auto-save)
+        // Bottone di chiusura (auto-save)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
-        // Ingrandisco il pulsante chiusura
         closeBtn.style.fontSize = '2rem';
         closeBtn.addEventListener('click', async () => {
           await autoSave();
@@ -325,7 +327,7 @@
         title.textContent = client.nome;
         clientDetailEl.appendChild(title);
         
-        // Mostra il "tipo" subito sotto il nome, senza etichetta
+        // Sotto il nome, mostra il valore di "tipo" (se presente)
         if(client.tipo) {
           const tipoEl = document.createElement('p');
           tipoEl.textContent = client.tipo;
@@ -338,7 +340,7 @@
         const form = document.createElement('form');
         form.id = 'clientForm';
         
-        // Campo Note (modificabile) con altezza ridotta (3 righe)
+        // Campo note con altezza ridotta (3 righe)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
@@ -348,9 +350,8 @@
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
         
-        // Altri campi: mostro solo "hall" e "città"
-        const otherFields = ['hall', 'citta'];
-        otherFields.forEach(field => {
+        // Altri campi: mostra solo "hall" e "città"
+        ['hall', 'citta'].forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
           const span = document.createElement('span');
@@ -359,7 +360,7 @@
           form.appendChild(label);
         });
         
-        // Visitato (toggle)
+        // Toggle per "visitato"
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
         const visitatoCheckbox = document.createElement('input');
@@ -368,7 +369,7 @@
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
         
-        // Sezione per la foto: drop zone aggiornata
+        // Sezione per il caricamento foto: drop zone
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
@@ -397,7 +398,7 @@
         }
         form.appendChild(fotoPreview);
         
-        // Bottone per eliminare la foto (se presente)
+        // Pulsante per eliminare la foto (se presente)
         let deleteButton;
         if (client.foto_url) {
           deleteButton = document.createElement('button');
@@ -410,13 +411,10 @@
         
         clientDetailEl.appendChild(form);
         
-        // Variabile per file (per eventuali drag & drop in futuro)
         let droppedFile = null;
-        
-        // Evento change per l'input file
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
-            console.log("Evento change: file selezionato:", fotoInput.files[0]);
+            console.log("File selezionato:", fotoInput.files[0]);
             processFile(fotoInput.files[0]);
           }
         });
@@ -426,18 +424,18 @@
           droppedFile = null;
           const reader = new FileReader();
           reader.onload = (e) => {
-            console.log("FileReader onload, result:", e.target.result);
+            console.log("File letto:", e.target.result);
             fotoPreview.src = e.target.result;
           };
           reader.onerror = (err) => {
-            console.error("FileReader error:", err);
+            console.error("Errore nel leggere il file:", err);
           };
           reader.readAsDataURL(file);
         }
         
         if (!isSafari) {
           fotoLabel.addEventListener('click', () => {
-            console.log("Cliccato sulla drop zone per selezionare il file.");
+            console.log("Cliccato sulla drop zone.");
             fotoInput.click();
           });
         }
