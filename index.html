@@ -35,8 +35,7 @@
     .logo {
       display: block;
       margin: 0 auto 1rem;
-      max-width: 200px;
-      width: 100%;
+      max-width: 100%;
       height: auto;
     }
     input[type="text"] {
@@ -61,11 +60,10 @@
       padding: 0.75rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      background-color: white;
       margin-bottom: 0.5rem;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
-      font-size: 1rem;
+      font-size: 1.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -115,7 +113,7 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 1.5rem;
+      font-size: 2rem; /* Ingrandito per facilitare il tocco */
       color: var(--text);
       cursor: pointer;
     }
@@ -152,15 +150,14 @@
       margin-top: 0.5rem;
       padding: 1rem;
       border: 2px dashed var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       text-align: center;
-      background-color: #f9fafb;
+      background-color: #e0e0e0;
       cursor: pointer;
-      transition: background-color 0.2s;
-      position: relative;
+      transition: background-color 0.3s;
       font-size: 1rem;
     }
-    .drop-zone:hover { background-color: #f3f4f6; }
+    .drop-zone:hover { background-color: #d0d0d0; }
     img {
       margin-top: 1rem;
       max-width: 100%;
@@ -186,14 +183,14 @@
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
-        font-size: 14px;
+        font-size: 16px;
       }
       #clientList li {
         font-size: 1.2rem;
         padding: 1rem;
       }
       button, label, input[type="text"], textarea {
-        font-size: 14px;
+        font-size: 16px;
       }
       #clientDetail {
         padding: 1.5rem;
@@ -257,7 +254,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti
+      // Visualizza la lista dei clienti con le modifiche richieste
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -311,10 +308,12 @@
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura (esegue l'auto-save prima di chiudere)
+        // Bottone di chiusura (con auto-save)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
+        // Ingrandisco il pulsante chiusura
+        closeBtn.style.fontSize = '2rem';
         closeBtn.addEventListener('click', async () => {
           await autoSave();
           clientDetailContainer.style.display = 'none';
@@ -323,43 +322,41 @@
         
         // Titolo: nome del cliente
         const title = document.createElement('h2');
-        title.textContent = 'Dettagli Cliente';
+        title.textContent = client.nome;
         clientDetailEl.appendChild(title);
+        
+        // Mostra il "tipo" subito sotto il nome, senza etichetta
+        if(client.tipo) {
+          const tipoEl = document.createElement('p');
+          tipoEl.textContent = client.tipo;
+          tipoEl.style.fontSize = '1.2rem';
+          tipoEl.style.marginTop = '0.5rem';
+          clientDetailEl.appendChild(tipoEl);
+        }
         
         // Form per i dettagli
         const form = document.createElement('form');
         form.id = 'clientForm';
         
-        // Nome (sola lettura)
-        const nomeLabel = document.createElement('label');
-        nomeLabel.textContent = 'Nome: ';
-        const nomeSpan = document.createElement('span');
-        nomeSpan.textContent = client.nome;
-        nomeLabel.appendChild(nomeSpan);
-        form.appendChild(nomeLabel);
-        form.appendChild(document.createElement('br'));
-        
-        // Note (modificabile)
+        // Campo Note (modificabile) con altezza ridotta (3 righe)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
         noteTextarea.value = client.note || '';
-        noteTextarea.rows = 4;
+        noteTextarea.rows = 3;
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
-        form.appendChild(document.createElement('br'));
         
-        // Altri campi (Tipo, Hall, CAP, Paese, Città)
-        const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
-        fields.forEach(field => {
+        // Altri campi: mostro solo "hall" e "città"
+        const otherFields = ['hall', 'citta'];
+        otherFields.forEach(field => {
           const label = document.createElement('label');
           label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
           const span = document.createElement('span');
           span.textContent = client[field] || '';
           label.appendChild(span);
           form.appendChild(label);
-          form.appendChild(document.createElement('br'));
         });
         
         // Visitato (toggle)
@@ -370,18 +367,16 @@
         visitatoCheckbox.checked = client.visitato;
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
-        form.appendChild(document.createElement('br'));
         
-        // Sezione per la foto: input file + drop zone
+        // Sezione per la foto: drop zone aggiornata
         const fotoLabel = document.createElement('label');
-        fotoLabel.textContent = 'Foto: ';
+        fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
         fotoLabel.style.position = 'relative';
         
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Rileva se l'utente usa Safari; in Safari lasciamo l'input visibile per forzare l'evento change
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (!isSafari) {
           fotoInput.classList.add('hidden-file-input');
@@ -393,7 +388,6 @@
         
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
-        form.appendChild(document.createElement('br'));
         
         // Anteprima foto
         const fotoPreview = document.createElement('img');
@@ -402,13 +396,6 @@
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
-        form.appendChild(document.createElement('br'));
-        
-        // Bottone per salvare le modifiche
-        const saveButton = document.createElement('button');
-        saveButton.type = 'button';
-        saveButton.textContent = 'Salva';
-        form.appendChild(saveButton);
         
         // Bottone per eliminare la foto (se presente)
         let deleteButton;
@@ -448,7 +435,6 @@
           reader.readAsDataURL(file);
         }
         
-        // In Safari non forziamo il click sulla drop zone, l'utente può cliccare direttamente sull'input
         if (!isSafari) {
           fotoLabel.addEventListener('click', () => {
             console.log("Cliccato sulla drop zone per selezionare il file.");
@@ -456,9 +442,7 @@
           });
         }
         
-        // Logica per salvare le modifiche (incluso upload foto)
-        saveButton.addEventListener('click', async () => {
-          console.log("Bottone Salva cliccato.");
+        const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
@@ -471,88 +455,65 @@
             fileToUpload = droppedFile;
           }
           
-          console.log("File da caricare:", fileToUpload);
-          
           if (fileToUpload) {
             try {
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
-              console.log("Inizio upload del file:", fileName);
-              
               const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
-              console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
-              
-              console.log("Percorso file caricato:", uploadData.path);
               const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(uploadData.path);
               if (urlError) throw urlError;
-              const publicUrl = urlData.publicUrl;
-              console.log("URL pubblico ottenuto:", publicUrl);
-              
-              fotoPreview.src = publicUrl;
-              updatedData.foto_url = publicUrl;
-              
-              // Resetta l'input file
+              updatedData.foto_url = urlData.publicUrl;
+              fotoPreview.src = updatedData.foto_url;
               fotoInput.value = "";
               droppedFile = null;
             } catch (err) {
               console.error("Errore nel caricamento della foto:", err);
-              alert("Errore nel caricamento della foto.");
               return;
             }
           }
           
           try {
-            console.log("Aggiornamento cliente con i dati:", updatedData);
             const { error } = await supabaseClient
               .from('clienti')
               .update(updatedData)
               .eq('id', client.id);
             if (error) throw error;
-            alert("Cliente aggiornato con successo.");
             Object.assign(client, updatedData);
-            console.log("Cliente aggiornato:", client);
             displayClientList(clients);
-            clientDetailContainer.style.display = "none";
           } catch (err) {
             console.error("Errore nell'aggiornamento del cliente:", err);
-            alert("Errore nell'aggiornamento del cliente.");
           }
-        });
+        };
         
-        // Logica per eliminare la foto
         if (deleteButton) {
           deleteButton.addEventListener('click', async () => {
             if (!client.foto_url) return;
             if (!confirm("Sei sicuro di voler eliminare la foto?")) return;
-            // Estrai il nome del file dall'URL (assumendo che sia l'ultima parte)
             const parts = client.foto_url.split('/');
             const fileName = parts[parts.length - 1];
             try {
-              // Elimina il file dallo storage
               const { error: deleteError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .remove([fileName]);
               if (deleteError) throw deleteError;
-              // Aggiorna il record del cliente
               const { error: updateError } = await supabaseClient
                 .from('clienti')
                 .update({ foto_url: null })
                 .eq('id', client.id);
               if (updateError) throw updateError;
-              alert("Foto eliminata con successo.");
+              console.log("Foto eliminata con successo.");
               fotoPreview.src = "";
               client.foto_url = null;
             } catch (err) {
               console.error("Errore nell'eliminazione della foto:", err);
-              alert("Errore nell'eliminazione della foto.");
             }
           });
         }
@@ -560,7 +521,6 @@
         clientDetailContainer.style.display = "flex";
       }
       
-      // Filtro per la ricerca
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
