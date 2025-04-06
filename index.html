@@ -51,7 +51,6 @@
       padding: 0.75rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      background-color: white;
       margin-bottom: 0.5rem;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
@@ -245,7 +244,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti con gli indicatori di stato
+      // Visualizza la lista dei clienti con le modifiche richieste
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -255,33 +254,33 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
+          // Imposta lo sfondo in base al flag "visitato"
+          li.style.backgroundColor = client.visitato ? '#dff2c2' : '#f0c6b1';
           
           // Nome del cliente
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
           
-          // Contenitore per le icone di stato
+          // Contenitore per eventuali icone di stato
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
           
-          // Stato "visitato"
-          const visitedSpan = document.createElement('span');
-          visitedSpan.title = "Visitato";
-          visitedSpan.textContent = client.visitato ? '✅' : '❌';
-          statusDiv.appendChild(visitedSpan);
+          // Aggiunge l'icona "foto" solo se presente
+          if(client.foto_url) {
+            const photoSpan = document.createElement('span');
+            photoSpan.title = "Foto presente";
+            photoSpan.textContent = '📷';
+            statusDiv.appendChild(photoSpan);
+          }
           
-          // Stato "foto" (se esiste la foto viene mostrato 📷, altrimenti ❌)
-          const photoSpan = document.createElement('span');
-          photoSpan.title = "Foto";
-          photoSpan.textContent = client.foto_url ? '📷' : '❌';
-          statusDiv.appendChild(photoSpan);
-          
-          // Stato "note" (se ci sono note salvate, viene mostrato 📝, altrimenti ❌)
-          const notesSpan = document.createElement('span');
-          notesSpan.title = "Note";
-          notesSpan.textContent = client.note && client.note.trim() !== '' ? '📝' : '❌';
-          statusDiv.appendChild(notesSpan);
+          // Aggiunge l'icona "note" solo se sono state salvate
+          if(client.note && client.note.trim() !== '') {
+            const notesSpan = document.createElement('span');
+            notesSpan.title = "Note presenti";
+            notesSpan.textContent = '📝';
+            statusDiv.appendChild(notesSpan);
+          }
           
           li.appendChild(nameSpan);
           li.appendChild(statusDiv);
@@ -299,7 +298,7 @@
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura (ora esegue l'auto-save prima di chiudere)
+        // Bottone di chiusura (esegue l'auto-save prima di chiudere)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
@@ -365,7 +364,7 @@
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
-        // Rileva se l'utente usa Safari; in Safari lasciamo l'input visibile per forzare l'evento change
+        // Rileva se l'utente usa Safari; in Safari l'input rimane visibile per forzare l'evento change
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (!isSafari) {
           fotoInput.classList.add('hidden-file-input');
@@ -424,7 +423,7 @@
           reader.readAsDataURL(file);
         }
         
-        // In Safari non forziamo il click sulla drop zone, l'utente può cliccare direttamente sull'input
+        // In Safari, l'utente può cliccare direttamente sull'input
         if (!isSafari) {
           fotoLabel.addEventListener('click', () => {
             console.log("Cliccato sulla drop zone per selezionare il file.");
@@ -432,7 +431,7 @@
           });
         }
         
-        // Funzione di auto-save, eseguita al momento della chiusura della scheda (senza notifiche)
+        // Funzione di auto-save, eseguita alla chiusura della scheda (senza notifiche)
         const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
