@@ -16,10 +16,16 @@
   
   <style>
     :root {
-      --primary: #4f46e5;
-      --bg: #f9fafb;
-      --text: #111827;
-      --border: #e5e7eb;
+      --primary: #9b59b6;
+      --bg: #121212;
+      --text: #e0e0e0;
+      --border: #333333;
+      --input-bg: #2a2a2a;
+      --visited-bg: rgba(46, 125, 50, 0.2);
+      --not-visited-bg: rgba(244, 67, 54, 0.2);
+      --modal-bg: #1e1e1e;
+      --hover-bg: #2a2a2a;
+      --transition-speed: 0.2s;
       --font-base: 16px;
     }
     * { box-sizing: border-box; }
@@ -31,7 +37,6 @@
       padding: 1rem;
       font-size: var(--font-base);
     }
-    /* Il logo sostituisce il titolo */
     .logo {
       display: block;
       margin: 0 auto 1rem;
@@ -46,12 +51,13 @@
       display: block;
       border: 1px solid var(--border);
       border-radius: 6px;
+      background-color: var(--input-bg);
+      color: var(--text);
     }
     #clientListContainer, #clientDetailContainer {
       max-width: 600px;
       margin: 0 auto;
     }
-    /* Rimuovo i puntini dalla lista */
     #clientList {
       list-style: none;
       padding-left: 0;
@@ -62,25 +68,23 @@
       border-radius: 8px;
       margin-bottom: 0.5rem;
       cursor: pointer;
-      transition: background-color 0.2s, transform 0.2s;
+      transition: filter var(--transition-speed), transform var(--transition-speed);
       font-size: 1.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    /* Aumenta il nome del cliente */
+    #clientList li:hover {
+      filter: brightness(1.1);
+      transform: scale(1.01);
+    }
     #clientList li .client-name {
       font-weight: bold;
     }
-    /* Contenitore per le icone di stato */
     #clientList li .status-icons {
       display: flex;
       gap: 0.5rem;
       font-size: 1rem;
-    }
-    #clientList li:hover {
-      background-color: #f3f4f6;
-      transform: scale(1.01);
     }
     /* Modal Overlay */
     #clientDetailContainer {
@@ -98,13 +102,14 @@
     }
     /* Modal Content */
     #clientDetail {
-      background-color: white;
+      background-color: var(--modal-bg);
+      color: var(--text);
       padding: 1rem;
       border-radius: 1rem;
       width: 100%;
       max-width: 600px;
       position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       overflow-y: auto;
       max-height: 90vh;
       margin: 0 1rem;
@@ -113,7 +118,7 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      font-size: 2rem; /* Ingrandito per facilitare il tocco */
+      font-size: 2rem;
       color: var(--text);
       cursor: pointer;
     }
@@ -124,6 +129,8 @@
       border-radius: 6px;
       border: 1px solid var(--border);
       font-size: 1rem;
+      background-color: var(--input-bg);
+      color: var(--text);
     }
     label {
       display: block;
@@ -142,22 +149,22 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 1rem;
-      transition: background-color 0.2s;
+      transition: background-color var(--transition-speed);
       width: 100%;
     }
-    button:hover { background-color: #4338ca; }
+    button:hover { background-color: #8e44ad; }
     .drop-zone {
       margin-top: 0.5rem;
       padding: 1rem;
       border: 2px dashed var(--border);
       border-radius: 8px;
       text-align: center;
-      background-color: #e0e0e0;
+      background-color: var(--input-bg);
       cursor: pointer;
       transition: background-color 0.3s;
       font-size: 1rem;
     }
-    .drop-zone:hover { background-color: #d0d0d0; }
+    .drop-zone:hover { background-color: var(--hover-bg); }
     img {
       margin-top: 1rem;
       max-width: 100%;
@@ -169,7 +176,6 @@
       margin-top: 1rem;
       text-align: center;
     }
-    /* Classe per nascondere l'input file in Chrome */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -179,7 +185,6 @@
       left: 0;
       cursor: pointer;
     }
-    /* Media query per smartphone */
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
@@ -199,7 +204,6 @@
   </style>
 </head>
 <body>
-  <!-- Sostituisco il titolo con il logo -->
   <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
   
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
@@ -222,20 +226,17 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient; // Espone globalmente per test
+      window.supabaseClient = supabaseClient;
       
-      // Variabili globali
       let clients = [];
       let selectedClient = null;
       
-      // Elementi DOM
       const loadingMessage = document.getElementById('loadingMessage');
       const clientListEl = document.getElementById('clientList');
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
       
-      // Recupera i clienti
       async function fetchClients() {
         try {
           console.log("Inizio recupero clienti...");
@@ -254,7 +255,6 @@
         }
       }
       
-      // Visualizza la lista dei clienti con le modifiche richieste
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -264,27 +264,21 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          // Imposta lo sfondo in base al flag "visitato"
-          li.style.backgroundColor = client.visitato ? '#dff2c2' : '#f0c6b1';
+          li.style.backgroundColor = client.visitato ? 'var(--visited-bg)' : 'var(--not-visited-bg)';
           
-          // Nome del cliente
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
           
-          // Contenitore per eventuali icone di stato
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
           
-          // Aggiunge l'icona "foto" solo se presente
           if(client.foto_url) {
             const photoSpan = document.createElement('span');
             photoSpan.title = "Foto presente";
             photoSpan.textContent = '📷';
             statusDiv.appendChild(photoSpan);
           }
-          
-          // Aggiunge l'icona "note" solo se sono state salvate
           if(client.note && client.note.trim() !== '') {
             const notesSpan = document.createElement('span');
             notesSpan.title = "Note presenti";
@@ -304,15 +298,12 @@
         loadingMessage.style.display = 'none';
       }
       
-      // Mostra i dettagli del cliente in un modal
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura (con auto-save)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
-        // Ingrandisco il pulsante chiusura
         closeBtn.style.fontSize = '2rem';
         closeBtn.addEventListener('click', async () => {
           await autoSave();
@@ -320,12 +311,10 @@
         });
         clientDetailEl.appendChild(closeBtn);
         
-        // Titolo: nome del cliente
         const title = document.createElement('h2');
         title.textContent = client.nome;
         clientDetailEl.appendChild(title);
         
-        // Mostra il "tipo" subito sotto il nome, senza etichetta
         if(client.tipo) {
           const tipoEl = document.createElement('p');
           tipoEl.textContent = client.tipo;
@@ -334,11 +323,9 @@
           clientDetailEl.appendChild(tipoEl);
         }
         
-        // Form per i dettagli
         const form = document.createElement('form');
         form.id = 'clientForm';
         
-        // Campo Note (modificabile) con altezza ridotta (3 righe)
         const noteLabel = document.createElement('label');
         noteLabel.textContent = 'Note: ';
         const noteTextarea = document.createElement('textarea');
@@ -348,7 +335,6 @@
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
         
-        // Altri campi: mostro solo "hall" e "città"
         const otherFields = ['hall', 'citta'];
         otherFields.forEach(field => {
           const label = document.createElement('label');
@@ -359,7 +345,6 @@
           form.appendChild(label);
         });
         
-        // Visitato (toggle)
         const visitatoLabel = document.createElement('label');
         visitatoLabel.textContent = 'Visitato: ';
         const visitatoCheckbox = document.createElement('input');
@@ -368,7 +353,6 @@
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
         
-        // Sezione per la foto: drop zone aggiornata
         const fotoLabel = document.createElement('label');
         fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
@@ -389,7 +373,6 @@
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
         
-        // Anteprima foto
         const fotoPreview = document.createElement('img');
         fotoPreview.style.display = 'block';
         if (client.foto_url) {
@@ -397,7 +380,6 @@
         }
         form.appendChild(fotoPreview);
         
-        // Bottone per eliminare la foto (se presente)
         let deleteButton;
         if (client.foto_url) {
           deleteButton = document.createElement('button');
@@ -410,10 +392,8 @@
         
         clientDetailEl.appendChild(form);
         
-        // Variabile per file (per eventuali drag & drop in futuro)
         let droppedFile = null;
         
-        // Evento change per l'input file
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
             console.log("Evento change: file selezionato:", fotoInput.files[0]);
