@@ -55,10 +55,20 @@
       margin-bottom: 0.5rem;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
-      font-size: 1rem;
+      font-size: 1.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    /* Aumenta il nome del cliente */
+    #clientList li .client-name {
+      font-weight: bold;
+    }
+    /* Contenitore per le icone di stato */
+    #clientList li .status-icons {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 1rem;
     }
     #clientList li:hover {
       background-color: #f3f4f6;
@@ -89,6 +99,7 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       overflow-y: auto;
       max-height: 90vh;
+      margin: 0 1rem;
     }
     .close-btn {
       position: absolute;
@@ -111,6 +122,7 @@
       margin-top: 1rem;
       font-weight: 600;
       font-size: 1rem;
+      margin-bottom: 0.5rem;
     }
     button {
       margin-top: 1rem;
@@ -164,10 +176,17 @@
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
-        font-size: 14px;
+        font-size: 16px;
+      }
+      #clientList li {
+        font-size: 1.2rem;
+        padding: 1rem;
       }
       button, label, input[type="text"], textarea {
-        font-size: 14px;
+        font-size: 16px;
+      }
+      #clientDetail {
+        padding: 1.5rem;
       }
     }
   </style>
@@ -226,7 +245,7 @@
         }
       }
       
-      // Visualizza la lista dei clienti
+      // Visualizza la lista dei clienti con gli indicatori di stato
       function displayClientList(clienti) {
         clientListEl.innerHTML = '';
         if (!clienti || clienti.length === 0) {
@@ -237,15 +256,35 @@
         clienti.forEach(client => {
           const li = document.createElement('li');
           
+          // Nome del cliente
           const nameSpan = document.createElement('span');
+          nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
           
+          // Contenitore per le icone di stato
+          const statusDiv = document.createElement('div');
+          statusDiv.classList.add('status-icons');
+          
+          // Stato "visitato"
           const visitedSpan = document.createElement('span');
-          // Mostra "✅" se visitato, "❌" se non visitato
+          visitedSpan.title = "Visitato";
           visitedSpan.textContent = client.visitato ? '✅' : '❌';
+          statusDiv.appendChild(visitedSpan);
+          
+          // Stato "foto" (se esiste la foto viene mostrato 📷, altrimenti ❌)
+          const photoSpan = document.createElement('span');
+          photoSpan.title = "Foto";
+          photoSpan.textContent = client.foto_url ? '📷' : '❌';
+          statusDiv.appendChild(photoSpan);
+          
+          // Stato "note" (se ci sono note salvate, viene mostrato 📝, altrimenti ❌)
+          const notesSpan = document.createElement('span');
+          notesSpan.title = "Note";
+          notesSpan.textContent = client.note && client.note.trim() !== '' ? '📝' : '❌';
+          statusDiv.appendChild(notesSpan);
           
           li.appendChild(nameSpan);
-          li.appendChild(visitedSpan);
+          li.appendChild(statusDiv);
           
           li.addEventListener('click', () => {
             selectedClient = client;
@@ -260,11 +299,12 @@
       function showClientDetail(client) {
         clientDetailEl.innerHTML = '';
         
-        // Bottone di chiusura
+        // Bottone di chiusura (ora esegue l'auto-save prima di chiudere)
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
-        closeBtn.addEventListener('click', () => {
+        closeBtn.addEventListener('click', async () => {
+          await autoSave();
           clientDetailContainer.style.display = 'none';
         });
         clientDetailEl.appendChild(closeBtn);
@@ -285,7 +325,6 @@
         nomeSpan.textContent = client.nome;
         nomeLabel.appendChild(nomeSpan);
         form.appendChild(nomeLabel);
-        form.appendChild(document.createElement('br'));
         
         // Note (modificabile)
         const noteLabel = document.createElement('label');
@@ -296,7 +335,6 @@
         noteTextarea.cols = 50;
         noteLabel.appendChild(noteTextarea);
         form.appendChild(noteLabel);
-        form.appendChild(document.createElement('br'));
         
         // Altri campi (Tipo, Hall, CAP, Paese, Città)
         const fields = ['tipo', 'hall', 'cap', 'paese', 'citta'];
@@ -307,7 +345,6 @@
           span.textContent = client[field] || '';
           label.appendChild(span);
           form.appendChild(label);
-          form.appendChild(document.createElement('br'));
         });
         
         // Visitato (toggle)
@@ -318,7 +355,6 @@
         visitatoCheckbox.checked = client.visitato;
         visitatoLabel.appendChild(visitatoCheckbox);
         form.appendChild(visitatoLabel);
-        form.appendChild(document.createElement('br'));
         
         // Sezione per la foto: input file + drop zone
         const fotoLabel = document.createElement('label');
@@ -341,7 +377,6 @@
         
         fotoLabel.appendChild(fotoInput);
         form.appendChild(fotoLabel);
-        form.appendChild(document.createElement('br'));
         
         // Anteprima foto
         const fotoPreview = document.createElement('img');
@@ -350,13 +385,6 @@
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
-        form.appendChild(document.createElement('br'));
-        
-        // Bottone per salvare le modifiche
-        const saveButton = document.createElement('button');
-        saveButton.type = 'button';
-        saveButton.textContent = 'Salva';
-        form.appendChild(saveButton);
         
         // Bottone per eliminare la foto (se presente)
         let deleteButton;
@@ -371,7 +399,7 @@
         
         clientDetailEl.appendChild(form);
         
-        // Variabile per file (per drag & drop in futuro)
+        // Variabile per file (per eventuali drag & drop in futuro)
         let droppedFile = null;
         
         // Evento change per l'input file
@@ -404,9 +432,8 @@
           });
         }
         
-        // Logica per salvare le modifiche (incluso upload foto)
-        saveButton.addEventListener('click', async () => {
-          console.log("Bottone Salva cliccato.");
+        // Funzione di auto-save, eseguita al momento della chiusura della scheda (senza notifiche)
+        const autoSave = async () => {
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
@@ -419,60 +446,42 @@
             fileToUpload = droppedFile;
           }
           
-          console.log("File da caricare:", fileToUpload);
-          
           if (fileToUpload) {
             try {
               const fileExt = fileToUpload.name.split('.').pop();
               const fileName = client.id + '_' + Date.now() + '.' + fileExt;
-              console.log("Inizio upload del file:", fileName);
-              
               const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
                 .upload(fileName, fileToUpload);
-              console.log("Risultato upload:", uploadData, uploadError);
               if (uploadError) throw uploadError;
-              
-              console.log("Percorso file caricato:", uploadData.path);
               const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
                 .getPublicUrl(uploadData.path);
               if (urlError) throw urlError;
-              const publicUrl = urlData.publicUrl;
-              console.log("URL pubblico ottenuto:", publicUrl);
-              
-              fotoPreview.src = publicUrl;
-              updatedData.foto_url = publicUrl;
-              
-              // Resetta l'input file
+              updatedData.foto_url = urlData.publicUrl;
+              fotoPreview.src = updatedData.foto_url;
               fotoInput.value = "";
               droppedFile = null;
             } catch (err) {
               console.error("Errore nel caricamento della foto:", err);
-              alert("Errore nel caricamento della foto.");
               return;
             }
           }
           
           try {
-            console.log("Aggiornamento cliente con i dati:", updatedData);
             const { error } = await supabaseClient
               .from('clienti')
               .update(updatedData)
               .eq('id', client.id);
             if (error) throw error;
-            alert("Cliente aggiornato con successo.");
             Object.assign(client, updatedData);
-            console.log("Cliente aggiornato:", client);
             displayClientList(clients);
-            clientDetailContainer.style.display = "none";
           } catch (err) {
             console.error("Errore nell'aggiornamento del cliente:", err);
-            alert("Errore nell'aggiornamento del cliente.");
           }
-        });
+        };
         
         // Logica per eliminare la foto
         if (deleteButton) {
@@ -495,12 +504,11 @@
                 .update({ foto_url: null })
                 .eq('id', client.id);
               if (updateError) throw updateError;
-              alert("Foto eliminata con successo.");
+              console.log("Foto eliminata con successo.");
               fotoPreview.src = "";
               client.foto_url = null;
             } catch (err) {
               console.error("Errore nell'eliminazione della foto:", err);
-              alert("Errore nell'eliminazione della foto.");
             }
           });
         }
