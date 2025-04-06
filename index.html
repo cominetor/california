@@ -42,6 +42,11 @@
       max-width: 600px;
       margin: 0 auto;
     }
+    /* Rimuovo i puntini dalla lista */
+    #clientList {
+      list-style: none;
+      padding-left: 0;
+    }
     #clientList li {
       padding: 0.75rem;
       border: 1px solid var(--border);
@@ -51,6 +56,9 @@
       cursor: pointer;
       transition: background-color 0.2s, transform 0.2s;
       font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     #clientList li:hover {
       background-color: #f3f4f6;
@@ -228,7 +236,17 @@
         }
         clienti.forEach(client => {
           const li = document.createElement('li');
-          li.textContent = client.nome;
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = client.nome;
+          
+          const visitedSpan = document.createElement('span');
+          // Mostra "✅" se visitato, "❌" se non visitato
+          visitedSpan.textContent = client.visitato ? '✅' : '❌';
+          
+          li.appendChild(nameSpan);
+          li.appendChild(visitedSpan);
+          
           li.addEventListener('click', () => {
             selectedClient = client;
             showClientDetail(client);
