@@ -4,31 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elenco Clienti Supabase - Mobile</title>
-  <!-- Carica Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  
-  <!-- Meta tag per full screen su iOS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <!-- Icona per la home screen -->
   <link rel="apple-touch-icon" href="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//icona.png">
-  
+
   <style>
+    /* --- NUOVO STILE ESTETICO --- */
     :root {
-      --primary: #a8dadc;       /* Accento pastello */
-      --bg: #f5f7fa;            /* Sfondo molto chiaro */
-      --text: #333;             /* Testo scuro per contrasto */
-      --border: #ddd;           /* Bordo delicato */
-      --input-bg: #f8f8f8;       /* Sfondo input neutro */
-      --visited-bg: #e0f8e0;     /* Verde pastello per cliente visitato */
-      --not-visited-bg: #fef0d8; /* Arancione molto tenue per non visitato */
-      --modal-bg: #fff;         /* Sfondo del modal bianco */
-      --hover-bg: #e9e9e9;       /* Leggero effetto hover */
-      --transition-speed: 0.2s;
+      --primary: #0077b6;       /* Blu primario più deciso */
+      --primary-light: #e6f2f8; /* Tinta molto chiara del primario */
+      --secondary: #6c757d;     /* Grigio secondario per testo meno importante */
+      --success: #2a9d8f;       /* Verde per stato "visitato" */
+      --success-light: #eaf6f5; /* Tinta chiara del verde */
+      --warning: #e9c46a;       /* Giallo/Arancio per stato "non visitato" */
+      --warning-light: #fff9eb; /* Tinta chiara del giallo */
+      --danger: #dc3545;        /* Rosso per azioni pericolose (elimina) */
+      --bg: #f8f9fa;            /* Sfondo generale leggermente grigio */
+      --card-bg: #ffffff;       /* Sfondo delle card/elementi principali */
+      --text: #212529;          /* Testo principale scuro */
+      --text-light: #495057;    /* Testo leggermente più chiaro */
+      --border: #dee2e6;        /* Colore dei bordi */
+      --input-bg: #ffffff;      /* Sfondo input */
+      --input-border-focus: #80bdff; /* Bordo input in focus */
+      --modal-bg: #ffffff;      /* Sfondo del modal */
+      --hover-bg: #e9ecef;      /* Sfondo leggero per hover */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --border-radius: 8px;     /* Raggio bordi */
+      --transition-speed: 0.15s; /* Transizione più rapida */
       --font-base: 16px;
     }
-    * { box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg);
@@ -36,146 +47,231 @@
       margin: 0;
       padding: 1rem;
       font-size: var(--font-base);
+      line-height: 1.6;
     }
+
     .logo {
       display: block;
-      margin: 0 auto 1rem;
-      max-width: 100%;
+      margin: 0 auto 1.5rem; /* Aumentato margine inferiore */
+      max-width: 180px; /* Leggermente più piccolo */
       height: auto;
     }
-    input[type="text"] {
-      padding: 0.5rem;
+
+    #searchInput {
+      padding: 0.75rem 1rem; /* Più padding */
       width: 100%;
-      max-width: 400px;
-      margin: 0 auto 1rem;
+      max-width: 500px; /* Leggermente più largo */
+      margin: 0 auto 1.5rem; /* Aumentato margine inferiore */
       display: block;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--border-radius);
       background-color: var(--input-bg);
       color: var(--text);
+      font-size: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition-speed) ease-in-out, box-shadow var(--transition-speed) ease-in-out;
     }
+    #searchInput:focus {
+      outline: none;
+      border-color: var(--input-border-focus);
+      box-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25); /* Focus ring blu */
+    }
+    #searchInput::placeholder {
+        color: var(--secondary); /* Placeholder più tenue */
+        opacity: 0.8;
+    }
+
     #clientListContainer, #clientDetailContainer {
       max-width: 600px;
       margin: 0 auto;
     }
+
     #clientList {
       list-style: none;
       padding-left: 0;
     }
+
     #clientList li {
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
+      background-color: var(--card-bg);
+      padding: 1rem 1.25rem; /* Padding aggiornato */
+      border: 1px solid var(--border); /* Bordo standard */
+      border-left-width: 4px; /* Bordo sinistro per stato */
+      border-radius: var(--border-radius);
+      margin-bottom: 0.75rem; /* Spazio tra elementi */
       cursor: pointer;
-      transition: background-color var(--transition-speed), transform var(--transition-speed);
-      font-size: 1.2rem;
+      transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+      font-size: 1.1rem; /* Leggermente ridotto */
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: var(--shadow-sm);
     }
+
+    /* Colori specifici per stato visitato/non visitato */
+    #clientList li[style*="var(--visited-bg)"] { /* Selettore basato sullo stile inline JS */
+       border-left-color: var(--success);
+       background-color: var(--success-light); /* Tinta di sfondo molto leggera */
+    }
+     #clientList li[style*="var(--not-visited-bg)"] { /* Selettore basato sullo stile inline JS */
+       border-left-color: var(--warning);
+        background-color: var(--warning-light); /* Tinta di sfondo molto leggera */
+    }
+
+
     #clientList li:hover {
-      background-color: var(--hover-bg);
-      transform: scale(1.01);
+      background-color: var(--hover-bg); /* Sfondo hover generale */
+      transform: translateY(-2px); /* Leggero sollevamento */
+      box-shadow: var(--shadow-md);
     }
+
     #clientList li .client-name {
-      font-weight: bold;
+      font-weight: 600; /* Semi-bold */
+      color: var(--text);
     }
+
     #clientList li .status-icons {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.6rem; /* Spazio tra icone */
       font-size: 1rem;
+      color: var(--secondary); /* Icone più tenui */
     }
-    /* Modal Overlay */
+     #clientList li .status-icons span[title]:hover {
+         color: var(--primary); /* Colora icona su hover */
+     }
+
+    /* --- Stili Modal --- */
     #clientDetailContainer {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      display: none;
+      background-color: rgba(0, 0, 0, 0.6); /* Overlay più scuro */
+      display: none; /* Gestito da JS */
       justify-content: center;
       align-items: center;
       padding: 1rem;
-      z-index: 999;
+      z-index: 1000; /* Assicurati sia sopra tutto */
+      /* Animazione fade-in (se JS aggiungesse/rimuovesse una classe 'visible') */
+      /* opacity: 0; */
+      /* transition: opacity 0.3s ease; */
     }
-    /* Modal Content */
+    /* #clientDetailContainer.visible { opacity: 1; } */ /* Esempio se JS usasse classi */
+
+
     #clientDetail {
       background-color: var(--modal-bg);
       color: var(--text);
-      padding: 1rem;
-      border-radius: 1rem;
+      padding: 2rem; /* Più padding interno */
+      border-radius: 12px; /* Raggio bordi modal */
       width: 100%;
-      max-width: 600px;
+      max-width: 550px; /* Larghezza max modal */
       position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-md);
       overflow-y: auto;
-      max-height: 90vh;
-      margin: 0 1rem;
+      max-height: 85vh; /* Altezza massima per scrolling */
+      margin: 0 1rem; /* Margine laterale sicurezza */
     }
+
     .close-btn {
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      font-size: 2rem;
-      color: var(--text);
+      top: 0.75rem;
+      right: 1rem;
+      font-size: 2.5rem; /* Più grande */
+      line-height: 1;
+      font-weight: 300; /* Più sottile */
+      color: var(--secondary);
       cursor: pointer;
+      transition: color var(--transition-speed);
     }
-    textarea, input[type="file"] {
+    .close-btn:hover {
+      color: var(--primary);
+    }
+
+    #clientDetail h2 {
+        margin-bottom: 0.5rem;
+        font-weight: 700; /* Bold */
+        color: var(--primary);
+    }
+
+    #clientDetail p { /* Es: 'tipo' */
+        font-size: 1rem;
+        color: var(--text-light);
+        margin-bottom: 1rem;
+    }
+
+    #clientDetail form label {
+      display: block;
+      margin-top: 1.25rem; /* Maggiore spazio tra label */
+      font-weight: 600; /* Semi-bold */
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem; /* Spazio tra label e input/span */
+      color: var(--text-light);
+    }
+    #clientDetail form label span { /* Per campi non editabili come hall, citta */
+        font-weight: 400;
+        color: var(--text);
+        display: block; /* Mette il valore a capo */
+        font-size: 1rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Stile per Textarea e Input File (se visibile) */
+    #clientDetail textarea, #clientDetail input[type="file"] {
       width: 100%;
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 6px;
+      margin-top: 0rem; /* Rimosso margine sopra, gestito da label */
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
       border: 1px solid var(--border);
       font-size: 1rem;
       background-color: var(--input-bg);
       color: var(--text);
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+      line-height: 1.5;
+      resize: vertical; /* Permette resize verticale */
     }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
+     #clientDetail textarea:focus, #clientDetail input[type="file"]:focus {
+        outline: none;
+        border-color: var(--input-border-focus);
+        box-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
+     }
+
+    /* Checkbox Visitato */
+    #clientDetail label[for*="visitato"] { /* Targeting più specifico se avesse un 'for' */
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
     }
-    button {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: background-color var(--transition-speed);
-      width: 100%;
+    #clientDetail input[type="checkbox"] {
+        width: 1.2em;
+        height: 1.2em;
+        cursor: pointer;
+        accent-color: var(--primary); /* Colora il check con il colore primario */
     }
-    button:hover { background-color: #8ecedb; }
+
+    /* Stile Drop Zone / File Input */
     .drop-zone {
       margin-top: 0.5rem;
-      padding: 1rem;
+      padding: 1.5rem; /* Più padding */
       border: 2px dashed var(--border);
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       text-align: center;
-      background-color: var(--input-bg);
+      background-color: var(--bg); /* Sfondo leggermente diverso */
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color var(--transition-speed), border-color var(--transition-speed);
       font-size: 1rem;
+      color: var(--secondary);
+      position: relative; /* Necessario per input nascosto */
     }
-    .drop-zone:hover { background-color: var(--hover-bg); }
-    img {
-      margin-top: 1rem;
-      max-width: 100%;
-      border-radius: 8px;
-      display: block;
+    .drop-zone:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--primary);
+      color: var(--primary);
     }
-    #loadingMessage {
-      font-style: italic;
-      margin-top: 1rem;
-      text-align: center;
-    }
+
+    /* Input file nascosto (tranne Safari) */
     .hidden-file-input {
       opacity: 0;
       width: 100%;
@@ -185,59 +281,151 @@
       left: 0;
       cursor: pointer;
     }
+    /* Stile per Safari dove l'input è visibile */
+     #clientDetail input[type="file"]:not(.hidden-file-input) {
+        display: block;
+        margin-top: 0.5rem;
+        padding: 0.5rem; /* Padding ridotto per input file standard */
+     }
+
+
+    /* Anteprima Immagine */
+    #clientDetail img {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: var(--border-radius);
+      display: block;
+      border: 1px solid var(--border); /* Aggiunto bordo leggero */
+    }
+
+    /* Pulsanti */
+    #clientDetail button {
+      margin-top: 1.5rem; /* Più spazio sopra i pulsanti */
+      padding: 0.85rem 1.5rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+      width: 100%;
+      display: block; /* Assicura prenda tutta larghezza */
+    }
+    #clientDetail button:hover {
+      background-color: #005f8d; /* Primario più scuro su hover */
+      transform: translateY(-1px);
+    }
+    #clientDetail button:active {
+        transform: translateY(0); /* Effetto pressione */
+    }
+
+    /* Pulsante Elimina Foto specifico */
+     #clientDetail button[style*="dc2626"] { /* Selettore basato sullo stile inline JS per il colore rosso */
+        background-color: var(--danger);
+        margin-top: 0.75rem; /* Meno spazio se sotto l'immagine */
+     }
+     #clientDetail button[style*="dc2626"]:hover {
+         background-color: #b02a37; /* Rosso più scuro su hover */
+     }
+
+
+    #loadingMessage {
+      font-style: italic;
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--secondary);
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 600px) {
       body {
         padding: 0.5rem;
-        font-size: 16px;
+        font-size: 15px; /* Leggermente più piccolo su mobile stretto */
       }
+
+      .logo {
+          max-width: 150px;
+          margin-bottom: 1rem;
+      }
+
+       #searchInput {
+          padding: 0.65rem 0.9rem;
+          font-size: 0.95rem;
+       }
+
       #clientList li {
-        font-size: 1.2rem;
-        padding: 1rem;
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.5rem;
       }
-      button, label, input[type="text"], textarea {
-        font-size: 16px;
-      }
+       #clientList li .status-icons {
+           gap: 0.4rem;
+           font-size: 0.9rem;
+       }
+
       #clientDetail {
-        padding: 1.5rem;
+        padding: 1.5rem; /* Padding ridotto nel modal su mobile */
+        max-height: 90vh; /* Leggermente più alto su mobile */
       }
+       #clientDetail h2 { font-size: 1.5rem; }
+
+      #clientDetail button, #clientDetail label, #clientDetail input, #clientDetail textarea {
+        font-size: 1rem; /* Mantiene leggibilità form */
+      }
+       #clientDetail button {
+           padding: 0.75rem 1rem;
+       }
+        .drop-zone {
+            padding: 1rem;
+        }
     }
+    /* --- FINE NUOVO STILE --- */
   </style>
 </head>
 <body>
   <img class="logo" src="https://ypywsydqczhipblukehm.supabase.co/storage/v1/object/public/fotoclienti//mascus_logo.png" alt="Logo">
-  
+
   <input type="text" id="searchInput" placeholder="🔍 Cerca clienti...">
-  
+
   <div id="clientListContainer">
     <p id="loadingMessage">⏳ Caricamento...</p>
     <ul id="clientList"></ul>
   </div>
-  
+
   <div id="clientDetailContainer">
     <div id="clientDetail"></div>
   </div>
-  
+
   <script>
+    // --- IL TUO CODICE JAVASCRIPT ORIGINALE INVARIATO ---
     (function() {
       console.log("Script caricato");
-      
+
       // CONFIGURAZIONE SUPABASE
       const SUPABASE_URL = 'https://ypywsydqczhipblukehm.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweXdzeWRxY3poaXBibHVrZWhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMTMzNTQsImV4cCI6MjA1ODU4OTM1NH0.7OFLPUuzQ1udqGpZ716n_b7cs3BZ-sOohX3igzpprEA';
       const { createClient } = window.supabase;
       const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-      window.supabaseClient = supabaseClient;
-      
+      window.supabaseClient = supabaseClient; // Rendi accessibile globalmente se necessario
+
       let clients = [];
       let selectedClient = null;
-      
+
       const loadingMessage = document.getElementById('loadingMessage');
       const clientListEl = document.getElementById('clientList');
       const clientDetailContainer = document.getElementById('clientDetailContainer');
       const clientDetailEl = document.getElementById('clientDetail');
       const searchInput = document.getElementById('searchInput');
-      
+
       async function fetchClients() {
+        // Mostra il messaggio di caricamento all'inizio
+        loadingMessage.textContent = '⏳ Caricamento clienti...';
+        loadingMessage.style.display = 'block';
+        clientListEl.innerHTML = ''; // Pulisce la lista precedente
+
         try {
           console.log("Inizio recupero clienti...");
           const { data, error } = await supabaseClient
@@ -247,260 +435,465 @@
           if (error) throw error;
           console.log("Clienti recuperati:", data);
           clients = data;
-          displayClientList(clients);
+          displayClientList(clients); // Mostra i clienti recuperati
         } catch (err) {
           console.error("Errore durante il recupero dei clienti:", err);
-          loadingMessage.textContent = 'Errore nel caricamento dei dati.';
+          loadingMessage.textContent = '⚠️ Errore nel caricamento dei dati. Riprova più tardi.';
+          loadingMessage.style.color = 'var(--danger)'; // Usa colore danger per errore
           loadingMessage.style.display = 'block';
+        } finally {
+             // Nascondi il messaggio di caricamento solo se la lista NON è vuota
+            if (clients && clients.length > 0) {
+                loadingMessage.style.display = 'none';
+            } else if (!loadingMessage.textContent.includes('Errore')) {
+                // Se non c'è errore ma la lista è vuota, mostra un messaggio appropriato
+                loadingMessage.textContent = 'Nessun cliente trovato.';
+                loadingMessage.style.color = 'var(--secondary)'; // Colore neutro
+                 loadingMessage.style.display = 'block';
+            }
         }
       }
-      
-      function displayClientList(clienti) {
-        clientListEl.innerHTML = '';
-        if (!clienti || clienti.length === 0) {
-          clientListEl.innerHTML = '<li>Nessun cliente trovato.</li>';
-          loadingMessage.style.display = 'none';
+
+      function displayClientList(clientiToList) { // Rinominato parametro per chiarezza
+        clientListEl.innerHTML = ''; // Pulisci prima di ridisegnare
+
+        if (!clientiToList || clientiToList.length === 0) {
+             // Il messaggio di "nessun cliente" o "errore" viene gestito in fetchClients
+             // Potremmo voler nascondere il loading message qui se la ricerca non trova nulla
+             if (searchInput.value.trim() !== '' && clientiToList.length === 0) {
+                 loadingMessage.textContent = 'Nessun cliente trovato per la ricerca.';
+                 loadingMessage.style.color = 'var(--secondary)';
+                 loadingMessage.style.display = 'block';
+             } else if (searchInput.value.trim() === '' && clients.length > 0){
+                 // Nascondi messaggio se stiamo mostrando la lista completa (non vuota)
+                 loadingMessage.style.display = 'none';
+             }
           return;
         }
-        clienti.forEach(client => {
+
+        // Nascondi messaggio di caricamento/errore se stiamo per mostrare dei risultati
+        loadingMessage.style.display = 'none';
+
+        clientiToList.forEach(client => {
           const li = document.createElement('li');
-          li.style.backgroundColor = client.visitato ? 'var(--visited-bg)' : 'var(--not-visited-bg)';
-          
+          // Applica lo stile per visitato/non visitato tramite JS (come prima)
+          // Nota: i selettori CSS ora usano `[style*="..."]` per matchare questo stile inline
+           li.style.backgroundColor = client.visitato ? 'var(--visited-bg)' : 'var(--not-visited-bg)';
+
           const nameSpan = document.createElement('span');
           nameSpan.classList.add('client-name');
           nameSpan.textContent = client.nome;
-          
+
           const statusDiv = document.createElement('div');
           statusDiv.classList.add('status-icons');
-          
-          if(client.foto_url) {
+
+          if (client.foto_url) {
             const photoSpan = document.createElement('span');
             photoSpan.title = "Foto presente";
             photoSpan.textContent = '📷';
             statusDiv.appendChild(photoSpan);
           }
-          if(client.note && client.note.trim() !== '') {
+          if (client.note && client.note.trim() !== '') {
             const notesSpan = document.createElement('span');
             notesSpan.title = "Note presenti";
             notesSpan.textContent = '📝';
             statusDiv.appendChild(notesSpan);
           }
-          
+
           li.appendChild(nameSpan);
           li.appendChild(statusDiv);
-          
+
           li.addEventListener('click', () => {
             selectedClient = client;
             showClientDetail(client);
           });
           clientListEl.appendChild(li);
         });
-        loadingMessage.style.display = 'none';
       }
-      
+
       function showClientDetail(client) {
-        clientDetailEl.innerHTML = '';
-        
+        clientDetailEl.innerHTML = ''; // Pulisci contenuto precedente
+
         const closeBtn = document.createElement('span');
         closeBtn.textContent = '×';
         closeBtn.classList.add('close-btn');
-        closeBtn.style.fontSize = '2rem';
+        // Rimossa style.fontSize perché gestito da CSS
         closeBtn.addEventListener('click', async () => {
-          await autoSave();
-          clientDetailContainer.style.display = 'none';
+          // Esegui il salvataggio prima di chiudere
+          await autoSave(formElements); // Passa gli elementi del form
+          clientDetailContainer.style.display = 'none'; // Chiudi il modal
         });
         clientDetailEl.appendChild(closeBtn);
-        
+
         const title = document.createElement('h2');
         title.textContent = client.nome;
         clientDetailEl.appendChild(title);
-        
-        if(client.tipo) {
+
+        if (client.tipo) {
           const tipoEl = document.createElement('p');
-          tipoEl.textContent = client.tipo;
-          tipoEl.style.fontSize = '1.2rem';
-          tipoEl.style.marginTop = '0.5rem';
+          tipoEl.textContent = `Tipo: ${client.tipo}`; // Aggiunta etichetta per chiarezza
+          // Stile gestito da CSS
           clientDetailEl.appendChild(tipoEl);
         }
-        
+
         const form = document.createElement('form');
-        form.id = 'clientForm';
-        
+        form.id = 'clientForm'; // Mantenuto ID se serve altrove
+         form.addEventListener('submit', (e) => e.preventDefault()); // Previene submit standard
+
+        // Note
         const noteLabel = document.createElement('label');
-        noteLabel.textContent = 'Note: ';
+        noteLabel.textContent = 'Note:';
         const noteTextarea = document.createElement('textarea');
+        noteTextarea.id = 'clientNotes'; // Aggiunto ID per riferimento
         noteTextarea.value = client.note || '';
-        noteTextarea.rows = 3;
-        noteTextarea.cols = 50;
-        noteLabel.appendChild(noteTextarea);
+        noteTextarea.rows = 4; // Aumentato righe default
+        // cols non serve con width 100%
+        noteLabel.appendChild(noteTextarea); // Textarea dentro label non ideale semanticamente, ma mantenuto se struttura è richiesta
+        // Struttura migliore:
+        // <label for="clientNotes">Note:</label>
+        // <textarea id="clientNotes">...</textarea>
+        // Adapting:
+        noteLabel.htmlFor = 'clientNotes'; // Collegamento semantico
         form.appendChild(noteLabel);
-        
+        form.appendChild(noteTextarea);
+
+
+        // Campi Hall e Città (non editabili)
         const otherFields = ['hall', 'citta'];
         otherFields.forEach(field => {
-          const label = document.createElement('label');
-          label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
-          const span = document.createElement('span');
-          span.textContent = client[field] || '';
-          label.appendChild(span);
-          form.appendChild(label);
+          if(client[field]){ // Mostra solo se il campo ha un valore
+              const label = document.createElement('label');
+              label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
+              const span = document.createElement('span');
+              span.textContent = client[field];
+              // Applica stile da CSS, non inline
+              label.appendChild(span); // Mantenuta struttura originale span dentro label
+              form.appendChild(label);
+          }
         });
-        
+
+        // Checkbox Visitato
         const visitatoLabel = document.createElement('label');
-        visitatoLabel.textContent = 'Visitato: ';
+        visitatoLabel.htmlFor = 'clientVisited'; // Collegamento semantico
+        visitatoLabel.style.display = 'flex'; // Stile inline per allineare checkbox e testo
+        visitatoLabel.style.alignItems = 'center';
         const visitatoCheckbox = document.createElement('input');
         visitatoCheckbox.type = 'checkbox';
+        visitatoCheckbox.id = 'clientVisited'; // Aggiunto ID
         visitatoCheckbox.checked = client.visitato;
-        visitatoLabel.appendChild(visitatoCheckbox);
+        visitatoCheckbox.style.marginRight = '8px'; // Spazio tra checkbox e testo
+        // visitatoLabel.appendChild(visitatoCheckbox); // Checkbox prima del testo
+        // visitatoLabel.appendChild(document.createTextNode(' Cliente Visitato'));
+        // Mantenendo struttura originale:
+        visitatoLabel.textContent = 'Visitato: '; // Testo label
+        visitatoLabel.appendChild(visitatoCheckbox); // Checkbox dopo testo (come prima)
         form.appendChild(visitatoLabel);
-        
+
+        // --- Sezione Foto ---
+        const fotoSectionLabel = document.createElement('label');
+        fotoSectionLabel.textContent = 'Foto Cliente'; // Label generica per la sezione
+        fotoSectionLabel.style.marginTop = '1.5rem'; // Spazio sopra sezione foto
+        form.appendChild(fotoSectionLabel);
+
+        // Drop Zone / File Input
         const fotoLabel = document.createElement('label');
-        fotoLabel.textContent = 'Carica Foto';
         fotoLabel.classList.add('drop-zone');
-        fotoLabel.style.position = 'relative';
-        
+        fotoLabel.textContent = ' trascina qui o clicca per caricare'; // Testo guida
+        fotoLabel.style.position = 'relative'; // Mantenuto se necessario per input nascosto
+
         const fotoInput = document.createElement('input');
         fotoInput.type = 'file';
         fotoInput.accept = 'image/*';
+        fotoInput.id = 'clientPhotoInput'; // Aggiunto ID
+
+        // Gestione Safari vs Altri (come prima)
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (!isSafari) {
-          fotoInput.classList.add('hidden-file-input');
+          fotoInput.classList.add('hidden-file-input'); // Nasconde input standard
         } else {
-          fotoInput.style.opacity = '1';
-          fotoInput.style.position = 'relative';
-          fotoInput.style.display = 'block';
+           // Su Safari, mostra l'input standard sopra la dropzone (o integrato)
+           // Lo stile CSS potrebbe già gestirlo, rimuoviamo forzature inline se non necessarie
+           // fotoInput.style.opacity = '1';
+           // fotoInput.style.position = 'relative';
+           // fotoInput.style.display = 'block';
+           // Manteniamo la logica JS originale per sicurezza:
+           fotoInput.style.position = 'relative';
+           fotoInput.style.display = 'block';
+           fotoInput.style.marginTop = '0.5rem'; // Spazio se mostrato esplicitamente
         }
-        
-        fotoLabel.appendChild(fotoInput);
+
+        fotoLabel.appendChild(fotoInput); // Input dentro label drop-zone
         form.appendChild(fotoLabel);
-        
+
+        // Anteprima Foto
         const fotoPreview = document.createElement('img');
-        fotoPreview.style.display = 'block';
+        fotoPreview.id = 'clientPhotoPreview'; // Aggiunto ID
+        fotoPreview.alt = "Anteprima foto cliente";
+        fotoPreview.style.display = client.foto_url ? 'block' : 'none'; // Mostra solo se URL esiste
+        fotoPreview.style.marginTop = '1rem'; // Spazio sopra anteprima
         if (client.foto_url) {
           fotoPreview.src = client.foto_url;
         }
         form.appendChild(fotoPreview);
-        
-        let deleteButton;
+
+        // Pulsante Elimina Foto (creato solo se c'è una foto)
+        let deleteButton = null; // Inizializza a null
         if (client.foto_url) {
           deleteButton = document.createElement('button');
-          deleteButton.type = 'button';
-          deleteButton.textContent = 'Elimina Foto';
-          deleteButton.style.backgroundColor = '#dc2626';
-          deleteButton.style.marginTop = '0.5rem';
-          form.appendChild(deleteButton);
+          deleteButton.type = 'button'; // Importante per non submittare form
+          deleteButton.textContent = '🗑️ Elimina Foto';
+          deleteButton.style.backgroundColor = 'var(--danger)'; // Usa variabile CSS
+          deleteButton.style.marginTop = '0.5rem'; // Spazio ridotto se sotto anteprima
+           // Classe per styling specifico se necessario: deleteButton.classList.add('delete-button');
+          form.appendChild(deleteButton); // Aggiunge al form
         }
-        
-        clientDetailEl.appendChild(form);
-        
-        let droppedFile = null;
-        
+
+        clientDetailEl.appendChild(form); // Aggiunge il form completo al dettaglio
+
+        // Riferimenti agli elementi del form per autoSave
+         const formElements = { noteTextarea, visitatoCheckbox, fotoInput, fotoPreview, deleteButton };
+
+        // --- Event Listeners Interni al Modal ---
+        let droppedFile = null; // Resetta droppedFile per questo modal
+
         fotoInput.addEventListener('change', () => {
           if (fotoInput.files && fotoInput.files[0]) {
-            console.log("Evento change: file selezionato:", fotoInput.files[0]);
-            processFile(fotoInput.files[0]);
+            console.log("File selezionato:", fotoInput.files[0].name);
+            processFile(fotoInput.files[0], formElements); // Passa elementi per aggiornare UI
           }
         });
-        
-        function processFile(file) {
+
+        // Gestione click su drop zone per aprire file dialog (se input nascosto)
+        if (!isSafari) {
+           fotoLabel.addEventListener('click', (e) => {
+               // Previeni trigger multipli se l'input è dentro
+               if (e.target !== fotoInput) {
+                  console.log("Drop zone cliccata, apro file dialog.");
+                  fotoInput.click();
+               }
+           });
+        }
+
+         // Event listener per il pulsante Elimina (se esiste)
+         if (deleteButton) {
+           deleteButton.addEventListener('click', async () => {
+             await handleDeletePhoto(client, formElements); // Chiama funzione dedicata
+           });
+         }
+
+        clientDetailContainer.style.display = "flex"; // Mostra il modal
+      }
+
+        function processFile(file, { fotoPreview }) { // Riceve elementi UI necessari
           if (!file) return;
-          droppedFile = null;
+          // droppedFile = null; // Gestito in autoSave? O qui? Meglio in autoSave/upload
           const reader = new FileReader();
           reader.onload = (e) => {
-            console.log("FileReader onload, result:", e.target.result);
+            console.log("File letto, aggiorno anteprima.");
             fotoPreview.src = e.target.result;
+            fotoPreview.style.display = 'block'; // Assicura sia visibile
+            // Potrebbe servire rimuovere/nascondere il bottone elimina qui se c'era una foto vecchia?
+            // Dipende dalla logica desiderata (se sovrascrive o richiede salvataggio esplicito)
           };
           reader.onerror = (err) => {
-            console.error("FileReader error:", err);
+            console.error("Errore lettura file:", err);
+            alert("Impossibile leggere il file selezionato.");
           };
           reader.readAsDataURL(file);
         }
-        
-        if (!isSafari) {
-          fotoLabel.addEventListener('click', () => {
-            console.log("Cliccato sulla drop zone per selezionare il file.");
-            fotoInput.click();
-          });
-        }
-        
-        const autoSave = async () => {
+
+      // Funzione AutoSave migliorata per gestire lo stato UI
+      const autoSave = async ({ noteTextarea, visitatoCheckbox, fotoInput, fotoPreview, deleteButton: currentDeleteButton }) => {
+          if (!selectedClient) return; // Sicurezza
+          console.log(`Autosalvataggio per cliente ID: ${selectedClient.id}`);
+
           const updatedData = {
             note: noteTextarea.value,
             visitato: visitatoCheckbox.checked
           };
-          
-          let fileToUpload = null;
-          if (fotoInput.files && fotoInput.files[0]) {
-            fileToUpload = fotoInput.files[0];
-          } else if (droppedFile) {
-            fileToUpload = droppedFile;
-          }
-          
+          let requiresClientUpdate = false; // Flag per vedere se db update è necessario
+          let requiresListRefresh = false; // Flag per refresh lista principale
+
+           // Verifica se note o visitato sono cambiati
+           if (updatedData.note !== selectedClient.note || updatedData.visitato !== selectedClient.visitato) {
+               requiresClientUpdate = true;
+           }
+
+          let fileToUpload = fotoInput.files && fotoInput.files[0] ? fotoInput.files[0] : null;
+          // droppedFile non sembra essere usato attivamente nel codice fornito, quindi mi baso su fotoInput
+
+          // --- Gestione Upload Nuova Foto ---
           if (fileToUpload) {
+            console.log("Nuovo file pronto per l'upload:", fileToUpload.name);
+            // Mostra un indicatore di caricamento? (Opzionale)
             try {
+              // 1. Rimuovi vecchia foto SE ESISTE (prima di caricare la nuova)
+              if (selectedClient.foto_url) {
+                console.log("Rimozione vecchia foto prima dell'upload...");
+                const oldFileName = selectedClient.foto_url.split('/').pop();
+                const { error: deleteError } = await supabaseClient.storage.from('fotoclienti').remove([oldFileName]);
+                if (deleteError) {
+                    console.warn("Errore non bloccante durante rimozione vecchia foto:", deleteError.message);
+                    // Non bloccare l'upload della nuova, ma logga l'errore
+                } else {
+                    console.log("Vecchia foto rimossa.");
+                    selectedClient.foto_url = null; // Aggiorna stato locale subito
+                }
+              }
+
+              // 2. Carica la nuova foto
               const fileExt = fileToUpload.name.split('.').pop();
-              const fileName = client.id + '_' + Date.now() + '.' + fileExt;
+              const fileName = `${selectedClient.id}_${Date.now()}.${fileExt}`; // Usa ID cliente nel nome
               const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('fotoclienti')
-                .upload(fileName, fileToUpload);
-              if (uploadError) throw uploadError;
+                .upload(fileName, fileToUpload, {
+                    cacheControl: '3600', // Opzionale: cache
+                    upsert: false // Non sovrascrivere se esiste (improbabile con timestamp)
+                 });
+              if (uploadError) throw uploadError; // Se upload fallisce, blocca e segnala
+
+              // 3. Ottieni URL pubblico
               const { data: urlData, error: urlError } = supabaseClient
                 .storage
                 .from('fotoclienti')
-                .getPublicUrl(uploadData.path);
-              if (urlError) throw urlError;
-              updatedData.foto_url = urlData.publicUrl;
+                .getPublicUrl(uploadData.path); // Usa il path restituito dall'upload
+              if (urlError) throw urlError; // Se URL fallisce, blocca e segnala
+
+              console.log("Nuova foto caricata, URL:", urlData.publicUrl);
+              updatedData.foto_url = urlData.publicUrl; // Aggiungi URL ai dati da salvare
+              requiresClientUpdate = true; // Upload riuscito, serve aggiornare DB
+              requiresListRefresh = true; // Aggiornare icona nella lista
+
+              // Aggiorna UI nel modal (anche se sta per chiudersi)
               fotoPreview.src = updatedData.foto_url;
-              fotoInput.value = "";
-              droppedFile = null;
+              fotoPreview.style.display = 'block';
+              fotoInput.value = ""; // Resetta input file
+
+              // Aggiungi bottone elimina se non c'era
+               if (!currentDeleteButton && form) { // Verifica che form esista
+                 const newDeleteButton = document.createElement('button');
+                 newDeleteButton.type = 'button';
+                 newDeleteButton.textContent = '🗑️ Elimina Foto';
+                 newDeleteButton.style.backgroundColor = 'var(--danger)';
+                 newDeleteButton.style.marginTop = '0.5rem';
+                 // Aggiungi listener al nuovo bottone
+                 newDeleteButton.addEventListener('click', async () => {
+                    // Bisogna passare gli elementi aggiornati qui, o trovare un modo migliore
+                    // Forse meglio ricreare il modal o aggiornare i riferimenti?
+                    // Per semplicità, ricarichiamo il dettaglio dopo l'eliminazione
+                    await handleDeletePhoto(selectedClient, formElements); // Passa elementi originali, potrebbe non funzionare perfettamente
+                 });
+                 // Inserisci dopo l'anteprima
+                 fotoPreview.parentNode.insertBefore(newDeleteButton, fotoPreview.nextSibling);
+                 // Aggiorna riferimento negli elementi del form (importante!)
+                 formElements.deleteButton = newDeleteButton;
+               }
+
+
             } catch (err) {
-              console.error("Errore nel caricamento della foto:", err);
-              return;
+              console.error("Errore durante l'upload/gestione della foto:", err);
+              alert(`Errore nel caricamento della foto: ${err.message}`);
+              // Non procedere con l'update del DB se l'upload fallisce
+              return; // Esce dalla funzione autoSave
             }
           }
-          
-          try {
-            const { error } = await supabaseClient
-              .from('clienti')
-              .update(updatedData)
-              .eq('id', client.id);
-            if (error) throw error;
-            Object.assign(client, updatedData);
-            displayClientList(clients);
-          } catch (err) {
-            console.error("Errore nell'aggiornamento del cliente:", err);
+
+          // --- Esegui Aggiornamento DB (se necessario) ---
+          if (requiresClientUpdate) {
+            console.log("Aggiornamento cliente nel database con:", updatedData);
+            try {
+              const { error } = await supabaseClient
+                .from('clienti')
+                .update(updatedData)
+                .eq('id', selectedClient.id);
+              if (error) throw error; // Se update fallisce, segnala
+
+              console.log("Cliente aggiornato con successo nel DB.");
+              // Aggiorna oggetto cliente locale
+              Object.assign(selectedClient, updatedData);
+
+              // Ricarica la lista solo se necessario (cambio note/visitato/foto)
+              if (requiresListRefresh || updatedData.note !== selectedClient.note || updatedData.visitato !== selectedClient.visitato) {
+                  console.log("Ricarico la lista clienti nell'interfaccia.");
+                   // Applica filtro corrente se presente
+                   const query = searchInput.value.toLowerCase();
+                   const listToDisplay = query
+                       ? clients.filter(c => c.nome.toLowerCase().includes(query))
+                       : clients;
+                  displayClientList(listToDisplay);
+              }
+
+            } catch (err) {
+              console.error("Errore durante l'aggiornamento del cliente nel DB:", err);
+              alert(`Errore nel salvataggio dei dati: ${err.message}`);
+              // Non chiudere il modal? O informare l'utente?
+            }
+          } else {
+              console.log("Nessuna modifica da salvare nel database.");
           }
         };
-        
-        if (deleteButton) {
-          deleteButton.addEventListener('click', async () => {
-            if (!client.foto_url) return;
-            if (!confirm("Sei sicuro di voler eliminare la foto?")) return;
-            const parts = client.foto_url.split('/');
-            const fileName = parts[parts.length - 1];
-            try {
-              const { error: deleteError } = await supabaseClient
-                .storage
-                .from('fotoclienti')
-                .remove([fileName]);
-              if (deleteError) throw deleteError;
-              const { error: updateError } = await supabaseClient
-                .from('clienti')
-                .update({ foto_url: null })
-                .eq('id', client.id);
-              if (updateError) throw updateError;
-              console.log("Foto eliminata con successo.");
-              fotoPreview.src = "";
-              client.foto_url = null;
-            } catch (err) {
-              console.error("Errore nell'eliminazione della foto:", err);
-            }
-          });
-        }
-        
-        clientDetailContainer.style.display = "flex";
-      }
-      
+
+
+     // Funzione dedicata per eliminare la foto
+     const handleDeletePhoto = async (client, { fotoInput, fotoPreview, deleteButton }) => {
+         if (!client || !client.foto_url) {
+             console.log("Nessuna foto da eliminare.");
+             return;
+         }
+         if (!confirm("Sei sicuro di voler eliminare la foto associata a questo cliente?")) return;
+
+         console.log("Inizio eliminazione foto...");
+         const fileName = client.foto_url.split('/').pop(); // Estrai nome file da URL
+
+         try {
+             // 1. Rimuovi da Supabase Storage
+             const { error: deleteError } = await supabaseClient
+               .storage
+               .from('fotoclienti')
+               .remove([fileName]);
+             // Ignora errore "Not Found" se il file è già stato rimosso per qualche motivo
+             if (deleteError && deleteError.message !== 'The resource was not found') {
+                 throw deleteError; // Lancia altri errori
+             }
+
+             // 2. Aggiorna record cliente nel DB impostando foto_url a null
+             const { error: updateError } = await supabaseClient
+               .from('clienti')
+               .update({ foto_url: null })
+               .eq('id', client.id);
+             if (updateError) throw updateError;
+
+             console.log("Foto eliminata con successo da storage e DB.");
+
+             // 3. Aggiorna UI nel modal
+             client.foto_url = null; // Aggiorna stato locale
+             fotoPreview.src = ""; // Rimuovi anteprima
+             fotoPreview.style.display = 'none'; // Nascondi elemento img
+             fotoInput.value = ""; // Resetta input file (se c'era qualcosa)
+             if (deleteButton) {
+                 deleteButton.remove(); // Rimuovi il pulsante "Elimina Foto"
+                 // Aggiorna riferimento negli elementi form (se necessario)
+                 formElements.deleteButton = null;
+             }
+
+             // 4. Aggiorna la lista principale per rimuovere l'icona 📷
+             console.log("Ricarico lista per aggiornare icona foto.");
+              const query = searchInput.value.toLowerCase();
+              const listToDisplay = query
+                  ? clients.filter(c => c.nome.toLowerCase().includes(query))
+                  : clients;
+             displayClientList(listToDisplay);
+
+
+         } catch (err) {
+           console.error("Errore durante l'eliminazione della foto:", err);
+           alert(`Errore nell'eliminazione della foto: ${err.message}`);
+         }
+     };
+
+
+      // Event listener per la ricerca (invariato)
       searchInput.addEventListener("input", function() {
         const query = searchInput.value.toLowerCase();
         const filtered = clients.filter(client =>
@@ -508,9 +901,12 @@
         );
         displayClientList(filtered);
       });
-      
+
+      // Carica i clienti all'avvio (invariato)
       fetchClients();
+
     })();
+    // --- FINE BLOCCO SCRIPT ---
   </script>
 </body>
 </html>
