@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Companion · Piano di viaggio Barcellona 3‑6 Maggio 2025</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+h1 { font-size: 1.4rem; margin-bottom: .2rem; }
+.day-card { border: 1px solid #ccc; border-radius: 6px; margin: .8rem 0; padding: .6rem; }
+.day-header { display: flex; justify-content: space-between; cursor: pointer; }
+.day-title { font-weight: 600; }
+section { margin: .4rem 0 .4rem 1rem; }
+time { font-weight: 600; }
+button { font-size: 1rem; }
+.search-box { width: 100%; padding: .4rem; font-size: 1rem; margin-bottom: .6rem; }
+.hidden { display:none; }
+footer { font-size: .8rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>Barcellona Companion<br><small>3&nbsp;–&nbsp;6&nbsp;Maggio&nbsp;2025</small></h1>
+
+<input class="search-box" id="search" placeholder="Cerca tappa o ristorante…" oninput="filterContent()"/>
+
+<div id="days"></div>
+
+<footer>
+  <p>Offline ready · Ultimo aggiornamento: 2025-04-19</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "title": "Companion · Piano di viaggio Barcellona 3‑6 Maggio 2025",
+    "created": "2025-04-19T19:37:33.235330Z"
+  },
+  "days": [
+    {
+      "date": "Sabato 3 Maggio",
+      "title": "Gaudí, vermut & rooftop",
+      "sections": [
+        {
+          "time": "Mattina",
+          "body": "Check‑in al Mihlton B&B • Caffè da Funky Bakers • Passeig de Gràcia con Casa Batlló e Casa Milà."
+        },
+        {
+          "time": "Pranzo",
+          "body": "Opzioni: La Pepita · Denassus · El Glop."
+        },
+        {
+          "time": "Pomeriggio",
+          "body": "Visita Sagrada Família, quindi vermut a Sant Antoni."
+        },
+        {
+          "time": "Tramonto",
+          "body": "Rooftop 360° Hotel Barceló Raval."
+        },
+        {
+          "time": "Cena",
+          "body": "Quimet & Quimet (pintxos) · Cinc Sentits (⭐️) · Gelida (osteria)."
+        },
+        {
+          "time": "Notte",
+          "body": "Concerto Sala Apolo o birra artigianale Garage Beer Co."
+        }
+      ]
+    },
+    {
+      "date": "Domenica 4 Maggio",
+      "title": "Gotico al mare + Feria de Abril",
+      "sections": [
+        {
+          "time": "Mattina",
+          "body": "Ramblas & Mercat Boqueria · Cattedrale · Passeggiata El Born."
+        },
+        {
+          "time": "Pranzo",
+          "body": "Cal Pep · El Xampanyet · Bar Cañete."
+        },
+        {
+          "time": "Pomeriggio",
+          "body": "Teleférico del Port → Montjuïc · Jardins Costa i Llobera · Castell."
+        },
+        {
+          "time": "Evento",
+          "body": "Feria de Abril al Parc del Fòrum (17:30‑20:30)."
+        },
+        {
+          "time": "Cena",
+          "body": "Besta (fusion) · Sense Pressa (⭐️) · Els Sortidors (low‑cost)."
+        },
+        {
+          "time": "Serata",
+          "body": "Font Màgica show 21:30."
+        }
+      ]
+    },
+    {
+      "date": "Lunedì 5 Maggio",
+      "title": "Escursioni o BCN alternativa",
+      "sections": [
+        {
+          "time": "Opzione A – Montserrat",
+          "body": "Treno FGC R5 08:36 da Espanya · Cremallera · Sant Joan · ritorno 16:36."
+        },
+        {
+          "time": "Opzione B – Girona",
+          "body": "AVE/AVANT 35 min o R11 1h15 min, centro medievale."
+        },
+        {
+          "time": "Opzione C – Alternativa BCN",
+          "body": "Street art Poblenou · spiaggia Nova Icària · sera a Gràcia con vermut & ramen."
+        }
+      ]
+    },
+    {
+      "date": "Martedì 6 Maggio",
+      "title": "Ultimi scorci & partenza",
+      "sections": [
+        {
+          "time": "Mattina",
+          "body": "Mercato Sant Antoni · Bunkers del Carmel."
+        },
+        {
+          "time": "Mezzogiorno",
+          "body": "Shopping rapido; Aerobús alle 12:30."
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "label": "Aerobús",
+      "url": "https://aerobusbarcelona.es"
+    },
+    {
+      "label": "Biglietti TMB",
+      "url": "https://www.tmb.cat"
+    },
+    {
+      "label": "Palo Market Fest",
+      "url": "https://palomarketfest.com"
+    }
+  ]
+}
