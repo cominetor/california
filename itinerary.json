@@ -1,0 +1,259 @@
+{
+  "meta": {
+    "title": "Companion · Piano di viaggio Barcellona 3‑6 Maggio 2025",
+    "created": "2025-04-19T20:38:32.202204Z"
+  },
+  "days": [
+    {
+      "date": "Sabato 3 Maggio",
+      "title": "Gaudí, vermut & rooftop",
+      "sections": [
+        {
+          "label": "Mattina",
+          "items": [
+            {
+              "text": "Check‑in al Mihlton B&B",
+              "place": "p1"
+            },
+            {
+              "text": "Caffè da Funky Bakers",
+              "place": "p2"
+            },
+            {
+              "text": "Passeig de Gràcia con Casa Batlló e Casa Milà",
+              "places": [
+                "p3",
+                "p4"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Pranzo",
+          "items": [
+            {
+              "text": "La Pepita",
+              "place": "p5"
+            },
+            {
+              "text": "Denassus",
+              "place": "p6"
+            },
+            {
+              "text": "El Glop",
+              "place": "p7"
+            }
+          ]
+        },
+        {
+          "label": "Pomeriggio",
+          "items": [
+            {
+              "text": "Visita Sagrada Família (prenotata)",
+              "place": ""
+            },
+            {
+              "text": "Vermut al Bar Calders",
+              "place": "p8"
+            }
+          ]
+        },
+        {
+          "label": "Tramonto",
+          "items": [
+            {
+              "text": "Rooftop 360° Hotel Barceló Raval",
+              "place": "p9"
+            }
+          ]
+        },
+        {
+          "label": "Cena",
+          "items": [
+            {
+              "text": "Quimet & Quimet (pintxos)",
+              "place": "p10"
+            },
+            {
+              "text": "Cinc Sentits ⭐️",
+              "place": "p11"
+            }
+          ]
+        },
+        {
+          "label": "Notte",
+          "items": [
+            {
+              "text": "Concerto live – Sala Apolo",
+              "place": "p25"
+            },
+            {
+              "text": "Birra artigianale da Garage Beer Co.",
+              "place": "p26"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "Domenica 4 Maggio",
+      "title": "Gotico & Born fino alla Feria de Abril",
+      "sections": [
+        {
+          "label": "Mattina",
+          "items": [
+            {
+              "text": "Mercat de la Boqueria (succo + tortilla)",
+              "place": "p13"
+            },
+            {
+              "text": "Cattedrale di Barcellona e quartiere Gotico",
+              "place": "p14"
+            }
+          ]
+        },
+        {
+          "label": "Pranzo",
+          "items": [
+            {
+              "text": "Cal Pep",
+              "place": "p15"
+            },
+            {
+              "text": "El Xampanyet",
+              "place": "p16"
+            },
+            {
+              "text": "Bar Cañete",
+              "place": "p17"
+            }
+          ]
+        },
+        {
+          "label": "Pomeriggio",
+          "items": [
+            {
+              "text": "Teleférico del Port",
+              "place": "p18"
+            },
+            {
+              "text": "Jardins Costa i Llobera",
+              "place": "p19"
+            },
+            {
+              "text": "Castell de Montjuïc",
+              "place": "p20"
+            }
+          ]
+        },
+        {
+          "label": "Evento",
+          "items": [
+            {
+              "text": "Feria de Abril al Parc del Fòrum",
+              "place": "p21"
+            }
+          ]
+        },
+        {
+          "label": "Cena",
+          "items": [
+            {
+              "text": "Besta (fusion)",
+              "place": "p22"
+            },
+            {
+              "text": "Sense Pressa",
+              "place": "p23"
+            },
+            {
+              "text": "Els Sortidors del Parlament",
+              "place": "p24"
+            }
+          ]
+        },
+        {
+          "label": "Serata",
+          "items": [
+            {
+              "text": "Font Màgica di Montjuïc (21:30)",
+              "place": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "Lunedì 5 Maggio",
+      "title": "Opzione Montserrat o Barcellona alternativa",
+      "sections": [
+        {
+          "label": "Opzione A – Montserrat",
+          "items": [
+            {
+              "text": "Treno FGC R5 da Plaça Espanya (08:36)",
+              "place": ""
+            },
+            {
+              "text": "Cremallera + sentiero Sant Joan",
+              "place": ""
+            }
+          ]
+        },
+        {
+          "label": "Opzione C – BCN alternativa",
+          "items": [
+            {
+              "text": "Palo Market Fest (street‑food & design)",
+              "place": "p28"
+            },
+            {
+              "text": "Vermut in Bodega Lo Pinyol (Gràcia)",
+              "place": "p29"
+            },
+            {
+              "text": "Cena ramen da Koku Kitchen",
+              "place": "p30"
+            },
+            {
+              "text": "Chitarre in Plaça del Sol",
+              "place": "p31"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "Martedì 6 Maggio",
+      "title": "Ultimi scorci & partenza",
+      "sections": [
+        {
+          "label": "Mattina",
+          "items": [
+            {
+              "text": "Mercat di Sant Antoni (colazione)",
+              "place": "p12"
+            },
+            {
+              "text": "Bunkers del Carmel per vista 360°",
+              "place": "p27"
+            }
+          ]
+        },
+        {
+          "label": "Partenza",
+          "items": [
+            {
+              "text": "Aerobús Plaça Catalunya → BCN Aeroporto",
+              "place": ""
+            },
+            {
+              "text": "Panino al Forn Baluard da portar via",
+              "place": "p32"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
