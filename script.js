@@ -1,4 +1,3 @@
-
 function initMap(){
   new google.maps.Map(document.getElementById('map'),{center:{lat:41.387,lng:2.17},zoom:13});
 }
