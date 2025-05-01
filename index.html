@@ -1,134 +1,92 @@
+
 <!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <title>Itinerario Barcellona • 3–6 Maggio 2025</title>
+  <title>Barcellona 3–6 Maggio 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark gradient-banner shadow-sm">
- <div class="container-fluid">
-   <span class="navbar-brand"><i class="fas fa-plane-departure me-2"></i>Barcellona · 3–6 Maggio 2025</span>
-   <div class="ms-auto d-flex align-items-center">
-     <button id="toggleDark" class="btn btn-sm btn-light"><i class="fas fa-moon"></i></button>
-     <a class="btn btn-sm btn-outline-light ms-2" href="#map"><i class="fas fa-map"></i> Mappa</a>
-   </div>
- </div>
+<nav class="navbar navbar-dark bg-primary mb-3">
+  <div class="container-fluid">
+    <span class="navbar-brand"><i class="fas fa-plane-departure me-2"></i>Itinerario Barcellona 2025</span>
+  </div>
 </nav>
-
-<div class="container py-4">
- <ul class="nav nav-pills justify-content-center flex-wrap mb-4" id="dayTabs">
-   <li class="nav-item"><button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1">Sab 3</button></li>
-   <li class="nav-item"><button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2">Dom 4</button></li>
-   <li class="nav-item"><button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3">Lun 5</button></li>
-   <li class="nav-item"><button class="nav-link" id="day4-tab" data-bs-toggle="pill" data-bs-target="#day4">Mar 6</button></li>
- </ul>
-
- <div class="tab-content">
-   <div class="tab-pane fade show active" id="day1"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-plane-arrival me-2 text-primary"></i>07:55 · Arrivo a Barcellona</h6><p class="mb-0"><strong>Trasporti:</strong> Aerobus 35′ o Taxi 30′</p><p class="mb-0"><strong>Visita:</strong> Deposito bagagli</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-tree me-2 text-primary"></i>09:45 · Parc Güell</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 15-20′ (opz. Metro L3+15′ a piedi)</p><p class="mb-0"><strong>Visita:</strong> Zona monumentale; prenota 10:00</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>12:00 · Sagrada Família</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 10-15′</p><p class="mb-0"><strong>Visita:</strong> Basilica con audioguida; opzione torri</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>13:30 · Pranzo leggero</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′</p><p class="mb-0"><strong>Food:</strong> La Paradeta o tapas veloci</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-hospital me-2 text-primary"></i>14:30 · Sant Pau</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′</p><p class="mb-0"><strong>Visita:</strong> Padiglioni modernisti (1 h)</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>16:00 · Casa Milà – La Pedrera</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L5 10′ o Taxi</p><p class="mb-0"><strong>Visita:</strong> Tetto camini 'guerrieri', fascia 16:30</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-leaf me-2 text-primary"></i>18:30 · Parc de la Ciutadella</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 15′ o Metro L4</p><p class="mb-0"><strong>Visita:</strong> Passeggiata al tramonto</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-wine-glass me-2 text-primary"></i>20:00 · Cena (Eixample)</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10-15′</p><p class="mb-0"><strong>Food:</strong> El Nacional o Cervesería Catalana</p></div></div></div>
-   <div class="tab-pane fade" id="day2"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>09:00 · Casa Batlló & Amatller</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′</p><p class="mb-0"><strong>Visita:</strong> Visita AR + facciata Amatller</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-mountain me-2 text-primary"></i>10:30 · Montjuïc / Plaça Espanya</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 10′</p><p class="mb-0"><strong>Visita:</strong> Panorama MNAC/Poble Espanyol</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>13:00 · Pranzo veloce</h6><p class="mb-0"><strong>Trasporti:</strong> Metro ritorno a Catalunya</p><p class="mb-0"><strong>Food:</strong> Cafè Viena o chioschi Montjuïc</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-walking me-2 text-primary"></i>14:30 · La Rambla</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi</p><p class="mb-0"><strong>Visita:</strong> Passeggiata, Plaça Reial</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-landmark me-2 text-primary"></i>16:00 · Barri Gòtic</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi</p><p class="mb-0"><strong>Visita:</strong> Cattedrale, Pont del Bisbe</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-bed me-2 text-primary"></i>18:00 · Relax in hotel</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 o Taxi</p><p class="mb-0"><strong>Visita:</strong> Riposo</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>20:00 · Cena + Fontana Magica</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi/taxi</p><p class="mb-0"><strong>Food:</strong> Los Caracoles; show Font Màgica 21:00</p></div></div></div>
-   <div class="tab-pane fade" id="day3"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-anchor me-2 text-primary"></i>09:30 · Port Vell</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 15′</p><p class="mb-0"><strong>Visita:</strong> Passeggiata lungomare</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-umbrella-beach me-2 text-primary"></i>11:30 · Spiaggia Barceloneta</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 15′</p><p class="mb-0"><strong>Visita:</strong> Relax e foto</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-fish me-2 text-primary"></i>13:00 · Pranzo Barceloneta</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi</p><p class="mb-0"><strong>Food:</strong> Bar Jai-Ca o chiringuito</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-clock me-2 text-primary"></i>15:00 · Pomeriggio libero</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi/Metro per rientro</p><p class="mb-0"><strong>Visita:</strong> Spiaggia o Born CC se pioggia</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>20:00 · Cena Porto/Gòtic</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi breve</p><p class="mb-0"><strong>Food:</strong> 7 Portes o La Fonda</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-guitar me-2 text-primary"></i>21:30 · Flamenco Los Tarantos</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi</p><p class="mb-0"><strong>Visita:</strong> Spettacolo 40′</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-cocktail me-2 text-primary"></i>22:30 · Doposerata</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi/taxi</p><p class="mb-0"><strong>Food:</strong> Cocktail Ocaña</p></div></div></div>
-   <div class="tab-pane fade" id="day4"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-shopping-basket me-2 text-primary"></i>09:00 · Mercato Boqueria</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 10′</p><p class="mb-0"><strong>Visita:</strong> Visita mercato</p><p class="mb-0"><strong>Food:</strong> Frullato + tapa</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>10:30 · El Born</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 15′</p><p class="mb-0"><strong>Visita:</strong> Santa Maria del Mar, Museo Picasso</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>12:30 · Cattedrale & Pranzo finale</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi</p><p class="mb-0"><strong>Visita:</strong> Visita tetto</p><p class="mb-0"><strong>Food:</strong> Cal Pep o Els 4 Gats</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-suitcase-rolling me-2 text-primary"></i>15:30 · Partenza aeroporto</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 30′ o Aerobus 35′</p></div>
-<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-plane-departure me-2 text-primary"></i>18:45 · Volo di rientro</h6><p class="mb-0"><strong>Trasporti:</strong> —</p></div></div></div>
- </div>
-
- <h4 class="mt-5 mb-3"><i class="fas fa-map-marked-alt me-2"></i>Itinerario su mappa</h4>
- <div id="map"></div>
+<div class="container">
+  <ul class="nav nav-pills justify-content-center mb-3" id="dayTabs">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#day1">Sab 3</button></li>
+    <li class="nav-item"><button class="nav-link " data-bs-toggle="pill" data-bs-target="#day2">Dom 4</button></li>
+    <li class="nav-item"><button class="nav-link " data-bs-toggle="pill" data-bs-target="#day3">Lun 5</button></li>
+    <li class="nav-item"><button class="nav-link " data-bs-toggle="pill" data-bs-target="#day4">Mar 6</button></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="day1">
+      <div class="list-group">
+        <div class="list-group-item" data-detail-key="boqueria">
+          <h6 class="mb-1"><i class="fas fa-shopping-basket me-2 text-primary"></i>La Rambla & Boqueria</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="barri-gotic">
+          <h6 class="mb-1"><i class="fas fa-landmark me-2 text-primary"></i>Barri Gòtic & Cattedrale</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="el-born">
+          <h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>El Born & Santa Maria del Mar</h6>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade " id="day2">
+      <div class="list-group">
+        <div class="list-group-item" data-detail-key="sagrada-familia">
+          <h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>Sagrada Família</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="parc-guell">
+          <h6 class="mb-1"><i class="fas fa-tree me-2 text-primary"></i>Parc Güell</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="casa-batllo">
+          <h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>Casa Batlló</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="casa-mila">
+          <h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>Casa Milà</h6>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade " id="day3">
+      <div class="list-group">
+        <div class="list-group-item" data-detail-key="port-vell">
+          <h6 class="mb-1"><i class="fas fa-anchor me-2 text-primary"></i>Port Vell</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="spiaggia-barceloneta">
+          <h6 class="mb-1"><i class="fas fa-umbrella-beach me-2 text-primary"></i>Spiaggia Barceloneta</h6>
+        </div>
+        <div class="list-group-item" data-detail-key="montjuic">
+          <h6 class="mb-1"><i class="fas fa-mountain me-2 text-primary"></i>Montjuïc & Poble Espanyol</h6>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade " id="day4">
+      <div class="list-group">
+        <div class="list-group-item" data-detail-key="partenza">
+          <h6 class="mb-1"><i class="fas fa-suitcase-rolling me-2 text-primary"></i>Partenza aeroporto</h6>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<button class="btn btn-primary rounded-circle floating-btn" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="script.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmp-N8-gpmGKjBFvt3TH7ciO3RLmB4WE0&callback=initMap" async defer></script>
-
-<!-- OFFCANVAS DETTAGLI -->
-<div class="offcanvas offcanvas-bottom h-75" tabindex="-1" id="detailCanvas" aria-labelledby="detailCanvasLabel">
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-bottom h-75" id="detailCanvas" tabindex="-1" aria-labelledby="detailCanvasLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="detailCanvasLabel"></h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body overflow-auto" id="detailBody">
-    <p class="text-center">Caricamento...</p>
+    <p class="text-center">Caricamento…</p>
   </div>
 </div>
 
-<!-- SCRIPT DETTAGLI -->
-<script>
-  const detailsMap = {
-  "arrivo": `<h6>Benvenuti!</h6><p>Sbarco alle 07:55 al T1. Aerobús A1 ogni 5' (€5,90) → <em>Plaça Catalunya</em> in 35'. Taxi fisso €35-38 / 30'.
-</p><h6>Suggerimenti</h6><p>Compra una T‑Casual (zona 1) se userai spesso la metro. Deposita i bagagli in hotel o nei locker vicino alla Rambla.</p>`,
-  "parc-guell": `<h6>Curiosità</h6><p>Parco fiabesco di Gaudí (1900‑14). Drac in trencadís, panchina‑serpente e colonne‑foresta. Patrimonio UNESCO.</p><h6>Trasporti</h6><p>Metro L3 Lesseps + 20′ salita / Bus 24. Prenotazione obbligatoria: €18.</p><h6>Suggerimenti</h6><p>Vista migliore al Turó de les Tres Creus. Golden hour ai Bunkers del Carmel.</p>`,
-  "sagrada-familia": `<h6>Curiosità</h6><p>Torre di Gesù 172,5 m (1 m in meno del Montjuïc). Quadrato magico=33. Conclusione prevista 2026.</p><h6>Info pratiche</h6><p>Biglietti online: basilica €26; +torri €36. Orari 9‑20.</p><h6>Suggerimenti</h6><p>Visita mattutina per vetrate colorate; foto dal laghetto di Plaça de Gaudí.</p>`,
-  "paradeta": `<h6>La Paradeta</h6><p>Self‑service di pesce fresco: scegli al banco, pesano, cucinano. Media €25 pp. Sede Sagrada Família (C/ Lepant 231).</p>`,
-  "sant-pau": `<h6>Recinto Modernista</h6><p>Ex ospedale (1905‑30) di Domènech i Montaner: padiglioni Liberty collegati da tunnel sotterranei.</p><h6>Info</h6><p>Ingresso €16; open 10‑18.</p>`,
-  "casa-mila": `<h6>Curiosità</h6><p>La Pedrera (1906‑12): facciata ondulata, patio ellittico, tetto con guerrieri.</p><h6>Visita</h6><p>Biglietto €25, open 9‑20:30. Audio in italiano incluso.</p>`,
-  "parc-ciutadella": `<h6>Parc de la Ciutadella</h6><p>Polmone verde con fontana monumentale (Gaudí assistente), lago a remi e Parlamento catalano.</p>`,
-  "cena-eixample": `<h6>Dove cenare</h6><p><strong>El Nacional</strong>: food‑court chic in ex garage (tapas, paella, ostriche).<br><strong>Cervecería Catalana</strong>: istituzione di tapas (no prenotazioni).</p>`,
-  "casa-batllo": `<h6>Curiosità</h6><p>Facciata a scaglie di drago e balconi‑ossa. Restyling totale 1904‑06.</p><h6>Visita</h6><p>Biglietto ~€35 con videoguida AR; open 9‑20:15.</p>`,
-  "montjuic": `<h6>Castello & Poble Espanyol</h6><p>Fortezza XVII sec. con vista 360°; villaggio del 1929 che replica piazze di Spagna.</p><h6>Trasporti</h6><p>Funicolare + Teleférico (€14 A/R) o bus 150.</p>`,
-  "pranzo-veloce": `<h6>Idea pranzo</h6><p><strong>Cafè Viena</strong> (Portal de l'Àngel): famoso hot‑dog <em>vienesa</em> – benedetto da Ferran Adrià.</p>`,
-  "la-rambla": `<h6>Curiosità</h6><p>1,4 km di vita barcellonese. Mosaico di Miró davanti al Liceu, lampioni di Gaudí in Plaça Reial.</p>`,
-  "barri-gotic": `<h6>Curiosità</h6><p>Cattedrale con 13 oche; resti della Barcino romana in Plaça Nova.</p><h6>Dove mangiare</h6><p>Churros da Granja Dulcinea; aperitivo da El Xampanyet.</p>`,
-  "relax-hotel": `<h6>Pausa</h6><p>Rientro in hotel per ricaricare telefoni e piedi — e prepararsi alla serata.</p>`,
-  "cena-fontana": `<h6>Serata Montjuïc</h6><p>Fontana Magica <em>(chiusa per lavori / siccità nel 2025)</em>. Plan B: rooftop dell'Hotel Catalonia Plaza.</p>`,
-  "port-vell": `<h6>Port Vell</h6><p>Marina storica con Rambla del Mar, centro Maremagnum e acquario.</p>`,
-  "spiaggia-barceloneta": `<h6>Barceloneta</h6><p>Spiaggia urbana per eccellenza. Docce, spogliatoi, bar <em>xiringuito</em> Vai Moana &amp; Bambú.</p>`,
-  "pranzo-barceloneta": `<h6>Dove mangiare</h6><p><strong>Can Ramonet</strong> (1753): paella e tapas di pesce. Prenota tavolo all'interno nei weekend.</p>`,
-  "pomeriggio-libero": `<h6>Idee</h6><p>Shopping su Passeig de Gràcia o visita MUHBA sotterraneo (scavi romani) — gratis dopo le 15 la domenica.</p>`,
-  "cena-porto": `<h6>Cena sul porto</h6><p><strong>7 Portes</strong> (Paella parellada) o <strong>La Fonda</strong> (menù fisso conveniente) a 2 min da Plaça Reial.</p>`,
-  "flamenco": `<h6>Spettacolo</h6><p><strong>Los Tarantos</strong> in Plaça Reial: 40 min di flamenco autentico, 21:30 e 22:30. Prenota online (€17).</p>`,
-  "doposerata": `<h6>Cocktail</h6><p><strong>Ocaña</strong> (Plaça Reial): atmosfera boho, gin‑tonic XXL.<br>In alternativa <em>Dr Stravinsky</em> (Born) per mixology creativa.</p>`,
-  "boqueria": `<h6>Mercato Boqueria</h6><p>1836, ingresso liberty. Paradiso di frutta tropicale, jamón e succhi freschi.</p><h6>Dove mangiare</h6><p><strong>El Quim</strong>: huevos con chipirones.</p>`,
-  "el-born": `<h6>Barrio hipster</h6><p>Santa Maria del Mar, boutique indipendenti e cocktail bar Paradiso (nascosto dietro frigo).</p>`,
-  "cattedrale": `<h6>Visita Cattedrale</h6><p>Ingresso gratis 8:30‑12 o 17:45‑19:30; €7 negli altri orari. Ascensore sul tetto per vista.</p>`,
-  "partenza": `<h6>Trasferimento</h6><p>Aerobús ogni 5'; considera traffico se scegli il taxi (~30'). Check‑in bagagli 2 h prima.</p>`,
-  "volo": `<h6>Buen viaje!</h6><p>Imbarco 18:15 → decollo 18:45. Tempo di volo 1 h 45.</p>`
-};
-
-  function slugify(text) {
-     return text.toLowerCase()
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .replace(/[^\w\s-]/g, '')
-        .trim().replace(/\s+/g, '-');
-  }
-
-  document.querySelectorAll('.list-group-item').forEach(item => {
-    item.style.cursor = 'pointer';
-    item.addEventListener('click', () => {
-      const title = item.querySelector('h6')?.innerText || '';
-      const key = item.dataset.detailKey || slugify(title);
-      const html = detailsMap[key] || '<p class="text-muted">Dettagli in arrivo…</p>';
-      document.getElementById('detailCanvasLabel').textContent = title;
-      document.getElementById('detailBody').innerHTML = html;
-      bootstrap.Offcanvas.getOrCreateInstance('#detailCanvas').show();
-    });
-  });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="details.js"></script>
 </body>
 </html>
