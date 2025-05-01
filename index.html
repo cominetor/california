@@ -66,5 +66,40 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmp-N8-gpmGKjBFvt3TH7ciO3RLmB4WE0&callback=initMap" async defer></script>
+
+<!-- OFFCANVAS DETTAGLI -->
+<div class="offcanvas offcanvas-bottom h-75" tabindex="-1" id="detailCanvas" aria-labelledby="detailCanvasLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="detailCanvasLabel"></h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body overflow-auto" id="detailBody">
+    <p class="text-center">Caricamento...</p>
+  </div>
+</div>
+
+<!-- SCRIPT DETTAGLI -->
+<script>
+  const detailsMap = {"parc-guell": "<h6>Curiosità</h6><p>Progettato da Gaudí come città‑giardino; famosa la panchina‑serpente in mosaico e la salamandra «el Drac».</p>", "sagrada-familia": "<h6>Curiosità</h6><p>Basilica iniziata nel 1882; la torre centrale toccherà 172,5 m, un metro in meno del Montjuïc.</p>"};
+
+  function slugify(text) {
+     return text.toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^\w\s-]/g, '')
+        .trim().replace(/\s+/g, '-');
+  }
+
+  document.querySelectorAll('.list-group-item').forEach(item => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => {
+      const title = item.querySelector('h6')?.innerText || '';
+      const key = item.dataset.detailKey || slugify(title);
+      const html = detailsMap[key] || '<p class="text-muted">Dettagli in arrivo…</p>';
+      document.getElementById('detailCanvasLabel').textContent = title;
+      document.getElementById('detailBody').innerHTML = html;
+      bootstrap.Offcanvas.getOrCreateInstance('#detailCanvas').show();
+    });
+  });
+</script>
 </body>
 </html>
