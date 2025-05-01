@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark gradient-banner shadow-sm">
  <div class="container-fluid">
-   <span class="navbar-brand"><i class="fas fa-plane-departure me-2"></i>Barcellona · 3‑6 Maggio 2025</span>
+   <span class="navbar-brand"><i class="fas fa-plane-departure me-2"></i>Barcellona · 3-6 Maggio 2025</span>
    <div class="ms-auto d-flex align-items-center">
      <button id="toggleDark" class="btn btn-sm btn-light"><i class="fas fa-moon"></i></button>
      <a class="btn btn-sm btn-outline-light ms-2" href="#map"><i class="fas fa-map"></i> Mappa</a>
@@ -20,7 +20,7 @@
 </nav>
 
 <div class="container py-4">
- <ul class="nav nav-pills justify-content-center flex-wrap mb-4" id="dayTabs" role="tablist">
+ <ul class="nav nav-pills justify-content-center flex-wrap mb-4" id="dayTabs">
    <li class="nav-item"><button class="nav-link active" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1">Sab 3</button></li>
    <li class="nav-item"><button class="nav-link" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2">Dom 4</button></li>
    <li class="nav-item"><button class="nav-link" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3">Lun 5</button></li>
@@ -28,16 +28,33 @@
  </ul>
 
  <div class="tab-content" id="dayTabsContent">
-   <div class="tab-pane fade show active" id="day1">
-     <div class="list-group">
-       <div class="list-group-item"><h5 class="mb-1"><i class="fas fa-plane-arrival me-2 text-secondary"></i>07:55 · Arrivo a Barcellona</h5><p class="mb-0"><strong>Trasporti:</strong> Aerobus (35′) o Taxi (30′) → B&B. &nbsp; <strong>Visita/Food:</strong> deposito bagagli.</p></div>
-       <div class="list-group-item"><h5 class="mb-1"><i class="fas fa-tree me-2 text-success"></i>09:45 · Parc Güell</h5><p class="mb-0"><strong>Trasporti:</strong> Taxi 15‑20′. &nbsp; <strong>Visita/Food:</strong> mosaici, prenota ore 10:00.</p></div>
-       <!-- altri eventi day1... -->
-     </div>
-   </div>
-   <div class="tab-pane fade" id="day2"><!-- eventi day2 --></div>
-   <div class="tab-pane fade" id="day3"><!-- eventi day3 --></div>
-   <div class="tab-pane fade" id="day4"><!-- eventi day4 --></div>
+   <div class="tab-pane fade show active" id="day1"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-plane-arrival me-2 text-primary"></i>07:55 · Arrivo a Barcellona</h6><p class="mb-0"><strong>Trasporti:</strong> Aerobus 35′ o Taxi 30′ &nbsp; <strong>Visita/Food:</strong> Deposito bagagli, preparazione giornata</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-tree me-2 text-primary"></i>09:45 · Parc Güell</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 15‑20′ (opz. Metro L3+15′ a piedi) &nbsp; <strong>Visita/Food:</strong> Zona monumentale; prenota 10:00; Casa Vicens se pioggia</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>12:00 · Sagrada Família</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 10‑15′ &nbsp; <strong>Visita/Food:</strong> Basilica con audioguida; opzione torri</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>13:30 · Pranzo leggero</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′ su Av. Gaudí &nbsp; <strong>Visita/Food:</strong> La Paradeta o tapas veloci</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-hospital me-2 text-primary"></i>14:30 · Sant Pau</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′ &nbsp; <strong>Visita/Food:</strong> Padiglioni modernisti (1 h)</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>16:00 · Casa Milà – La Pedrera</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L5 10′ o Taxi &nbsp; <strong>Visita/Food:</strong> Tetto camini 'guerrieri', fascia 16:30</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-leaf me-2 text-primary"></i>18:30 · Parc de la Ciutadella</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 15′ o Metro L4 &nbsp; <strong>Visita/Food:</strong> Passeggiata al tramonto; Acquario se maltempo</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-wine-glass me-2 text-primary"></i>20:00 · Cena (Eixample)</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10‑15′ &nbsp; <strong>Visita/Food:</strong> El Nacional o Cervesería Catalana</p></div></div></div>
+   <div class="tab-pane fade" id="day2"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-building me-2 text-primary"></i>09:00 · Casa Batlló & Amatller</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 10′ &nbsp; <strong>Visita/Food:</strong> Visita AR + cioccolata Faborit</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-mountain me-2 text-primary"></i>10:30 · Montjuïc / Plaça Espanya</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 10′ &nbsp; <strong>Visita/Food:</strong> Panorama dal MNAC o Poble Espanyol</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>13:00 · Pranzo veloce</h6><p class="mb-0"><strong>Trasporti:</strong> Metro ritorno a Catalunya &nbsp; <strong>Visita/Food:</strong> Cafè Viena o chioschi Montjuïc</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-walking me-2 text-primary"></i>14:30 · La Rambla</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi &nbsp; <strong>Visita/Food:</strong> Artist street, Plaça Reial, Boqueria chiusa</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-landmark me-2 text-primary"></i>16:00 · Barri Gòtic</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi &nbsp; <strong>Visita/Food:</strong> Cattedrale, Pont del Bisbe, churros</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-bed me-2 text-primary"></i>18:00 · Relax in hotel</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 o Taxi &nbsp; <strong>Visita/Food:</strong> Siesta e cambio</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>20:00 · Cena + Fontana Magica</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi/taxi &nbsp; <strong>Visita/Food:</strong> Los Caracoles; show Font Màgica 21:00</p></div></div></div>
+   <div class="tab-pane fade" id="day3"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-anchor me-2 text-primary"></i>09:30 · Port Vell</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 15′ &nbsp; <strong>Visita/Food:</strong> Passeggiata lungomare; Acquario opz.</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-umbrella-beach me-2 text-primary"></i>11:30 · Spiaggia Barceloneta</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 15′ &nbsp; <strong>Visita/Food:</strong> Relax e foto scultura 'El Peix'</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-fish me-2 text-primary"></i>13:00 · Pranzo Barceloneta</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi &nbsp; <strong>Visita/Food:</strong> Bar Jai‑Ca o chiringuito in spiaggia</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-clock me-2 text-primary"></i>15:00 · Pomeriggio libero</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi/Metro per rientro &nbsp; <strong>Visita/Food:</strong> Spiaggia o Born CC se pioggia</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>20:00 · Cena Porto/Gòtic</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi breve &nbsp; <strong>Visita/Food:</strong> 7 Portes o La Fonda</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-guitar me-2 text-primary"></i>21:30 · Flamenco Los Tarantos</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi (Plaça Reial) &nbsp; <strong>Visita/Food:</strong> Spettacolo 40′, prenotare</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-cocktail me-2 text-primary"></i>22:30 · Doposerata</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi/taxi &nbsp; <strong>Visita/Food:</strong> Cocktail Ocaña, rientro in hotel</p></div></div></div>
+   <div class="tab-pane fade" id="day4"><div class="list-group"><div class="list-group-item"><h6 class="mb-1"><i class="fas fa-shopping-basket me-2 text-primary"></i>09:00 · Mercato Boqueria</h6><p class="mb-0"><strong>Trasporti:</strong> Metro L3 10′ &nbsp; <strong>Visita/Food:</strong> Colazione frullato + tapa, shopping</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-church me-2 text-primary"></i>10:30 · El Born</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi 15′ &nbsp; <strong>Visita/Food:</strong> Santa Maria del Mar, Museu Picasso opz.</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-utensils me-2 text-primary"></i>12:30 · Cattedrale & Pranzo finale</h6><p class="mb-0"><strong>Trasporti:</strong> A piedi &nbsp; <strong>Visita/Food:</strong> Visita tetto; tapas Cal Pep o Els 4 Gats</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-suitcase-rolling me-2 text-primary"></i>15:30 · Partenza aeroporto</h6><p class="mb-0"><strong>Trasporti:</strong> Taxi 30′ o Aerobus 35′ &nbsp; <strong>Visita/Food:</strong> Recupero bagagli, check-out</p></div>
+<div class="list-group-item"><h6 class="mb-1"><i class="fas fa-plane-departure me-2 text-primary"></i>18:45 · Volo di rientro</h6><p class="mb-0"><strong>Trasporti:</strong> — &nbsp; <strong>Visita/Food:</strong> Decollo per MXP 20:30 arrivo</p></div></div></div>
  </div>
 
  <h4 class="mt-5 mb-3"><i class="fas fa-map-marked-alt me-2"></i>Itinerario su mappa</h4>
